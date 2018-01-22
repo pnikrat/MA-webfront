@@ -1,0 +1,1 @@
+The webfront for master's degree project created using ReactJS
