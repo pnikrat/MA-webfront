@@ -1,13 +1,10 @@
 import { combineReducers } from 'redux';
+import { reduxTokenAuthReducer } from 'redux-token-auth';
 import { reducer as form } from 'redux-form';
 
 const appReducer = combineReducers({
   form,
+  reduxTokenAuth: reduxTokenAuthReducer
 });
 
-export default function (state, action) {
-  if (action.type === 'LOGOUT') {
-    return appReducer(undefined, action);
-  }
-  return appReducer(state, action);
-}
+export default appReducer;
