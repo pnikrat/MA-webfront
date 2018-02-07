@@ -1,9 +1,9 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { registerUser } from '../../auth-config';
-import SignupForm from '../../components/SignupForm';
-import Navbar from '../../components/Navbar';
+import { registerUser } from '../auth-config';
+import SignupForm from './SignupForm';
+import Navbar from '../common/Navbar';
 
 class Signup extends Component {
   handleSignup(e) {

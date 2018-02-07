@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
+import Navbar from '../common/Navbar';
 
 type Props = {
   logout: () => void,

@@ -1,10 +1,9 @@
 // @flow
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Home from '../Home';
-import NotFound from '../../components/NotFound';
-// import Login from '../Login';
-import Signup from '../Signup';
+import Home from './Home';
+import NotFound from '../common/NotFound';
+import Signup from '../authentication/Signup';
 
 function App() {
   return (
