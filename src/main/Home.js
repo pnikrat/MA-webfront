@@ -19,7 +19,8 @@ class Home extends Component<Props> {
         <Navbar />
         { !currentUser.isSignedIn &&
           <ul>
-            <li><Link to="/signup">Signup</Link></li>
+            <li><Link to="/signup">Sign up</Link></li>
+            <li><Link to="/signin">Sign in</Link></li>
           </ul>
         }
         { currentUser.isSignedIn && <ListsContainer />}
@@ -28,10 +29,10 @@ class Home extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state) => {
-  return ({
+const mapStateToProps = state => (
+  {
     currentUser: state.reduxTokenAuth.currentUser,
-  });
-};
+  }
+);
 
 export default connect(mapStateToProps, null)(Home);

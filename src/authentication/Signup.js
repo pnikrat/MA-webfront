@@ -33,6 +33,7 @@ const mapDispatchToProps = dispatch => (
   {
     redirect: () => dispatch(push('/')),
     sendRegistrationRequest: data => dispatch(registerUser(data))
-  });
+  }
+);
 
 export default connect(null, mapDispatchToProps)(Signup);

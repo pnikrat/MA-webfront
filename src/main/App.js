@@ -6,6 +6,7 @@ import { generateRequireSignInWrapper } from 'redux-token-auth';
 import Home from './Home';
 import NotFound from '../common/NotFound';
 import Signup from '../authentication/Signup';
+import Signin from '../authentication/Signin';
 import history from '../router/History';
 
 const requireSignIn = generateRequireSignInWrapper({
@@ -19,6 +20,7 @@ function App() {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/signup" component={Signup} />
+          <Route path="/signin" component={Signin} />
           <Route component={NotFound} />
         </Switch>
       </div>
