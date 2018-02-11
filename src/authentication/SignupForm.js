@@ -4,19 +4,18 @@ import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
 
 type Props = {
-  onSubmit: () => void,
+  onSubmit: (data: Object) => void,
   submitting: boolean,
-  handleSubmit: () => void
+  handleSubmit: (data: Object) => void
 }
 
 class SignupForm extends Component<Props> {
   props: Props
-  handleSubmit = data => this.props.onSubmit(data);
 
   render() {
-    const { handleSubmit, submitting } = this.props;
+    const { submitting } = this.props;
     return (
-      <form onSubmit={handleSubmit(this.handleSubmit)}>
+      <form onSubmit={this.props.handleSubmit}>
         <h3>Create an account</h3>
         <Field
           name="email"
@@ -30,6 +29,13 @@ class SignupForm extends Component<Props> {
           type="password"
           component="input"
           placeholder="Password"
+          className="form-control"
+        />
+        <Field
+          name="passwordConfirmation"
+          type="password"
+          component="input"
+          placeholder="Password confirmation"
           className="form-control"
         />
         <Field
@@ -53,10 +59,6 @@ class SignupForm extends Component<Props> {
         >
           {submitting ? 'Submitting...' : 'Sign up'}
         </button>
-        <hr />
-        <Link to="/login" className="btn btn-block btn-secondary">
-          Login to your account
-        </Link>
       </form>
     );
   }
@@ -69,6 +71,9 @@ const validate = (values) => {
   }
   if (!values.email) {
     errors.email = 'Required';
+  }
+  if (values.password !== values.passwordConfirmation) {
+    errors.passwordConfirmation = 'Passwords do not match';
   }
   if (!values.password) {
     errors.password = 'Required';

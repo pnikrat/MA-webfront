@@ -5,6 +5,7 @@ const initialState = {
       isSignedIn: false,
       attributes: {
         firstName: null,
+        lastName: null,
       },
     },
   },

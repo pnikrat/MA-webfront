@@ -1,30 +1,38 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import { registerUser } from '../auth-config';
 import SignupForm from './SignupForm';
 import Navbar from '../common/Navbar';
 
-class Signup extends Component {
-  handleSignup(e) {
-    e.preventDefault();
-    const {
-      email,
-      firstName,
-      password,
-    } = this.state;
-    registerUser({ email, firstName, password })
-  }
+type Props = {
+  redirect: () => void,
+  sendRegistrationRequest: (Object) => Promise<void>
+}
+
+class Signup extends Component<Props> {
+  props: Props
+
+  handleSignup = (data) => {
+    const { redirect, sendRegistrationRequest } = this.props;
+    sendRegistrationRequest(data).then(() => redirect());
+  };
 
   render() {
-    const { handleSignup } = this;
     return (
       <div>
         <Navbar />
-        <SignupForm onSubmit={handleSignup} />
+        <SignupForm onSubmit={this.handleSignup} />
       </div>
     );
   }
 }
 
-export default connect(null, { registerUser })(Signup);
+const mapDispatchToProps = dispatch => (
+  {
+    redirect: () => dispatch(push('/')),
+    sendRegistrationRequest: data => dispatch(registerUser(data))
+  });
+
+export default connect(null, mapDispatchToProps)(Signup);

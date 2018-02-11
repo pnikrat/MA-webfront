@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux';
-import { reduxTokenAuthReducer } from 'redux-token-auth';
+import { reduxTokenAuthReducer as reduxTokenAuth } from 'redux-token-auth';
 import { reducer as form } from 'redux-form';
+import { routerReducer as router } from 'react-router-redux';
 
-// user reduxTokenAuth ES6 shortcut???
 const appReducer = combineReducers({
   form,
-  reduxTokenAuth: reduxTokenAuthReducer
+  reduxTokenAuth,
+  router
 });
 
 export default appReducer;

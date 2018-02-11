@@ -1,13 +1,20 @@
 // @flow
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+import { ConnectedRouter } from 'react-router-redux';
+import { generateRequireSignInWrapper } from 'redux-token-auth';
 import Home from './Home';
 import NotFound from '../common/NotFound';
 import Signup from '../authentication/Signup';
+import history from '../router/History';
+
+const requireSignIn = generateRequireSignInWrapper({
+  redirectPathIfNotSignedIn: '/signup',
+});
 
 function App() {
   return (
-    <Router>
+    <ConnectedRouter history={history}>
       <div>
         <Switch>
           <Route path="/" exact component={Home} />
@@ -15,7 +22,7 @@ function App() {
           <Route component={NotFound} />
         </Switch>
       </div>
-    </Router>
+    </ConnectedRouter>
   );
 }
 
