@@ -13,11 +13,12 @@ class SignupForm extends Component<Props> {
   props: Props
 
   render() {
-    const { submitting, handleSubmit } = this.props;
+    const { error, submitting, handleSubmit } = this.props;
     return (
       <div>
         <form onSubmit={handleSubmit}>
           <h3>Create an account</h3>
+          { error && <strong>{error}</strong> }
           <Field
             name="email"
             type="email"
