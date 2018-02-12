@@ -22,7 +22,7 @@ class Signin extends Component<Props> {
   };
 
   handleInvalidSignin = (error) => {
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       throw new SubmissionError({
         _error: 'Login failed!'
       });

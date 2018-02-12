@@ -22,7 +22,7 @@ class Signup extends Component<Props> {
   };
 
   handleInvalidSignup = (error) => {
-    if (error.response.status === 422) {
+    if (error.response && error.response.status === 422) {
       throw new SubmissionError(error.response.data.errors);
     } else {
       throw new SubmissionError({

@@ -1,25 +1,30 @@
 // @flow
 import React from 'react';
 import type { FieldProps } from 'redux-form';
+import { Form, Label } from 'semantic-ui-react';
 
 type Props = {
   label?: string,
   type?: string,
+  required?: boolean,
   placeholder?: string,
 } & FieldProps
 
 const Input = ({
-  input, label, type, placeholder, meta
+  input, label, type, placeholder, required, meta
 }: Props) => (
-  <div>
-    {label && <label htmlFor={input.name}>{label}</label>}
-    <input
+  <div style={{ marginBottom: '15px' }}>
+    <Form.Field
       {...input}
+      control="input"
       type={type}
+      label={label}
+      required={required}
+      error={meta.touched && meta.error && true}
       placeholder={placeholder}
       className="form-control"
     />
-    {meta.touched && meta.error && <div>{meta.error}</div>}
+    {meta.touched && meta.error && <Label basic pointing="above">{meta.error}</Label>}
   </div>
 );
 
