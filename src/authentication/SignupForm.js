@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import type { FormProps } from 'redux-form';
 import { Link } from 'react-router-dom';
+import Input from '../common/Input';
 
 type Props = {
   onSubmit: (data: Object) => void,
@@ -20,35 +21,35 @@ class SignupForm extends Component<Props> {
           <Field
             name="email"
             type="email"
-            component="input"
+            component={Input}
             placeholder="Email"
             className="form-control"
           />
           <Field
             name="password"
             type="password"
-            component="input"
+            component={Input}
             placeholder="Password"
             className="form-control"
           />
           <Field
             name="passwordConfirmation"
             type="password"
-            component="input"
+            component={Input}
             placeholder="Password confirmation"
             className="form-control"
           />
           <Field
             name="firstName"
             type="text"
-            component="input"
+            component={Input}
             placeholder="First name"
             className="form-control"
           />
           <Field
             name="lastName"
             type="text"
-            component="input"
+            component={Input}
             placeholder="Last name"
             className="form-control"
           />
