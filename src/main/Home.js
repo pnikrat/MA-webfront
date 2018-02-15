@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Button, Container } from 'semantic-ui-react';
 import Navbar from '../common/Navbar';
 import ListsContainer from '../lists/ListsContainer';
 
@@ -18,10 +19,10 @@ class Home extends Component<Props> {
       <div>
         <Navbar />
         { !currentUser.isSignedIn &&
-          <ul>
-            <li><Link to="/signup">Sign up</Link></li>
-            <li><Link to="/signin">Sign in</Link></li>
-          </ul>
+          <Container>
+            <Button as={Link} to="/signup">Sign up</Button>
+            <Button as={Link} to="/signin">Sign in</Button>
+          </Container>
         }
         { currentUser.isSignedIn && <ListsContainer />}
       </div>

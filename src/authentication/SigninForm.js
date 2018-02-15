@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import type { FormProps } from 'redux-form';
 import { Link } from 'react-router-dom';
+import { Container, Form, Header, Message, Segment } from 'semantic-ui-react';
 import Input from '../common/Input';
 
 type Props = {
@@ -15,36 +16,42 @@ class SigninForm extends Component<Props> {
   render() {
     const { error, submitting, handleSubmit } = this.props;
     return (
-      <div>
-        <form onSubmit={handleSubmit}>
-          <h3>Login to your account</h3>
-          { error && <strong>{error}</strong> }
-          <Field
-            name="email"
-            type="email"
-            component={Input}
-            placeholder="Email"
-            className="form-control"
-          />
-          <Field
-            name="password"
-            type="password"
-            component={Input}
-            placeholder="Password"
-            className="form-control"
-          />
-          <button
-            type="submit"
-            disabled={submitting}
-            className="btn btn-block btn-primary"
-          >
-            {submitting ? 'Submitting...' : 'Sign in'}
-          </button>
-        </form>
-        <div>
-          <Link to="/signup">Don't have an account?</Link>
-        </div>
-      </div>
+      <Container>
+        <Header as="h3" attached="top">Login to your account</Header>
+        <Segment attached padded color="blue">
+          <Form onSubmit={handleSubmit}>
+            { error && <Message negative>{error}</Message> }
+            <Field
+              name="email"
+              type="email"
+              label="Email address"
+              required
+              component={Input}
+              placeholder="your-mail@domain.com"
+              className="form-control"
+            />
+            <Field
+              name="password"
+              type="password"
+              label="Password"
+              required
+              component={Input}
+              placeholder="Password"
+              className="form-control"
+            />
+            <Form.Button
+              type="submit"
+              disabled={submitting}
+              color="blue"
+            >
+              {submitting ? 'Submitting...' : 'Sign in'}
+            </Form.Button>
+          </Form>
+          <div>
+            <Link to="/signup">Don't have an account?</Link>
+          </div>
+        </Segment>
+      </Container>
     );
   }
 }

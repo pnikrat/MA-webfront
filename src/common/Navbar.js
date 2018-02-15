@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Icon, Menu } from 'semantic-ui-react';
 import { signOutUser } from '../auth-config';
 
 type Props = {
@@ -20,14 +21,18 @@ class Navbar extends Component<Props> {
   render() {
     const { currentUser } = this.props;
     return (
-      <nav>
-        <Link to="/">Shopping App</Link>
+      <Menu>
+        <Menu.Item as={Link} to="/">
+          <Icon name="home" />
+          Home
+        </Menu.Item>
         { currentUser.isSignedIn &&
-          <button onClick={this.handleSignOut}>
-            <Link to="/">Sign out</Link>
-          </button>
+          <Menu.Item position="right" as={Link} to="/" onClick={this.handleSignOut}>
+            <Icon name="sign out" />
+            Sign out
+          </Menu.Item>
         }
-      </nav>
+      </Menu>
     );
   }
 }
