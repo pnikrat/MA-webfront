@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'semantic-ui-react';
-import Navbar from '../common/Navbar';
 import ListsContainer from '../lists/ListsContainer';
 
 type Props = {
@@ -17,7 +16,6 @@ class Home extends Component<Props> {
     const { currentUser } = this.props;
     return (
       <div>
-        <Navbar />
         { !currentUser.isSignedIn &&
           <Container>
             <Button as={Link} to="/signup">Sign up</Button>

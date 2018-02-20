@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container } from 'semantic-ui-react';
 import { reset } from 'redux-form';
+import { push } from 'react-router-redux';
 import api from '../services/api';
 import { setLists, addList, removeList } from './ListsActions';
 import Lists from './Lists';
@@ -14,6 +15,7 @@ type Props = {
   handleListAdd: (Object) => void,
   clearForm: () => void,
   handleListDelete: (Number) => void,
+  openList: (Number) => void,
 }
 
 class ListsContainer extends Component<Props> {
@@ -39,7 +41,11 @@ class ListsContainer extends Component<Props> {
     return (
       <Container>
         <ListsForm onSubmit={this.handleListAdd} />
-        <Lists lists={this.props.lists} onListDelete={this.onListDelete} />
+        <Lists
+          lists={this.props.lists}
+          onListDelete={this.onListDelete}
+          onListClick={this.props.openList}
+        />
       </Container>
     );
   }
@@ -57,6 +63,7 @@ const mapDispatchToProps = dispatch => (
     handleListAdd: list => dispatch(addList(list)),
     clearForm: () => dispatch(reset('lists')),
     handleListDelete: id => dispatch(removeList(id)),
+    openList: id => dispatch(push(`/list/${id}`)),
   }
 );
 

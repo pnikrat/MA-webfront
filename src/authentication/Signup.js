@@ -5,7 +5,6 @@ import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
 import { registerUser } from '../auth-config';
 import SignupForm from './SignupForm';
-import Navbar from '../common/Navbar';
 
 type Props = {
   redirect: () => void,
@@ -35,7 +34,6 @@ class Signup extends Component<Props> {
   render() {
     return (
       <div>
-        <Navbar />
         <SignupForm onSubmit={this.handleSignup} />
       </div>
     );
