@@ -1,11 +1,27 @@
 // @flow
-import React from 'react';
+import React, { Component } from 'react';
+import connect from 'react-redux';
+import { Container } from 'semantic-ui-react';
 
-const ListsContainer = () =>
-  (
-    <div>
-      <h1>Hello! These are your shopping lists:</h1>
-    </div>
-  );
+class ListsContainer extends Component<Props> {
 
-export default ListsContainer;
+  componentDidMount = () => {
+    // fetch all user lists
+  }
+
+  render() {
+    return (
+      <Container>
+        <h1>Hello! These are your shopping lists:</h1>
+      </Container>
+    );
+  }
+}
+
+const mapStateToProps = state => (
+  {
+    lists: state.myReducer.lists,
+  }
+);
+
+export default connect(mapStateToProps, null)(ListsContainer);
