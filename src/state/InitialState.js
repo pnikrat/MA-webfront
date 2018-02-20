@@ -9,7 +9,9 @@ const initialState = {
       },
     },
   },
-  // All your other state
+  listsReducer: {
+    lists: [],
+  }
 };
 
 export default initialState;

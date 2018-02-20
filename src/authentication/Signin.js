@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
 import { signInUser } from '../auth-config';
-import Navbar from '../common/Navbar';
 import SigninForm from './SigninForm';
 
 type Props = {
@@ -37,7 +36,6 @@ class Signin extends Component<Props> {
   render() {
     return (
       <div>
-        <Navbar />
         <SigninForm onSubmit={this.handleSignin} />
       </div>
     );
