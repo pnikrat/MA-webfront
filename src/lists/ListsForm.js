@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import type { FormProps } from 'redux-form';
 import { Container, Form, Header, Message, Segment } from 'semantic-ui-react';
 import Input from '../common/Input';
+import '../styles/lists.css';
 
 type Props = {
   onSubmit: (data: Object) => void,
@@ -15,7 +16,7 @@ class ListsForm extends Component<Props> {
   render() {
     const { error, submitting, handleSubmit } = this.props;
     return (
-      <Container style={{ marginBottom: '20px' }}>
+      <Container className="form-container">
         <Header as="h5" attached="top">Add shopping list</Header>
         <Segment attached padded color="blue">
           <Form onSubmit={handleSubmit}>

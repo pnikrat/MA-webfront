@@ -1,0 +1,8 @@
+.list-segment {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-container {
+  margin-bottom: 20px;
+}

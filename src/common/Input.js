@@ -2,6 +2,7 @@
 import React from 'react';
 import type { FieldProps } from 'redux-form';
 import { Form, Label } from 'semantic-ui-react';
+import '../styles/common.css';
 
 type Props = {
   label?: string,
@@ -13,7 +14,7 @@ type Props = {
 const Input = ({
   input, label, type, placeholder, required, meta
 }: Props) => (
-  <div style={{ marginBottom: '15px' }}>
+  <div className="form-input">
     <Form.Field
       {...input}
       control="input"
