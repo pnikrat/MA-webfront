@@ -6,6 +6,8 @@ import '../styles/common.css';
 
 type Props = {
   withoutErrors?: boolean,
+  min?: number,
+  step?: number,
   label?: string,
   type?: string,
   required?: boolean,
@@ -13,7 +15,7 @@ type Props = {
 } & FieldProps
 
 const Input = ({
-  withoutErrors, input, label, type, placeholder, required, meta
+  withoutErrors, input, label, type, placeholder, required, meta, min, step
 }: Props) => (
   <div className="form-input">
     <Form.Field
@@ -21,6 +23,8 @@ const Input = ({
       control="input"
       type={type}
       label={label}
+      min={min}
+      step={step}
       required={required}
       error={meta.touched && meta.error && true}
       placeholder={placeholder}

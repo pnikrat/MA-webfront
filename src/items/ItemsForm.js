@@ -46,8 +46,11 @@ class ItemsForm extends Component<Props> {
               />
               <Field
                 name="price"
+                parse={value => Number(value)}
                 type="number"
                 label="Price"
+                min="0.00"
+                step="0.01"
                 component={Input}
               />
             </div>
