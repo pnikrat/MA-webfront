@@ -1,6 +1,7 @@
 const SET_CURRENT_LIST = 'SET_CURRENT_LIST';
 const SET_ITEMS = 'SET_ITEMS';
 const ADD_ITEM = 'ADD_ITEM';
+const REMOVE_ITEM = 'REMOVE_ITEM';
 
 function setCurrentList(list) {
   return {
@@ -23,11 +24,20 @@ function addItem(item) {
   };
 }
 
+function removeItem(id) {
+  return {
+    type: REMOVE_ITEM,
+    payload: id,
+  };
+}
+
 export {
   SET_CURRENT_LIST,
   SET_ITEMS,
   ADD_ITEM,
+  REMOVE_ITEM,
   setCurrentList,
   setItems,
   addItem,
+  removeItem,
 };

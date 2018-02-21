@@ -1,10 +1,11 @@
 // @flow
 import React, { Component } from 'react';
-import { Container, List, Radio, Segment } from 'semantic-ui-react';
+import { Container, Dropdown, List, Radio, Segment } from 'semantic-ui-react';
 import '../styles/items.css';
 
 type Props = {
   items: Object,
+  onItemDelete: (Number) => void,
 }
 
 class Items extends Component<Props> {
@@ -18,8 +19,16 @@ class Items extends Component<Props> {
             <Radio toggle />
           </List.Icon>
           <List.Content className="full-width">
-            <List.Header>
+            <List.Header className="flexed">
               <div>{item.name}</div>
+              <Dropdown text="">
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    text="Delete"
+                    onClick={() => this.props.onItemDelete(item.id)}
+                  />
+                </Dropdown.Menu>
+              </Dropdown>
             </List.Header>
             <List.Description className="flexed">
               <div>{item.quantity && `Quantity: ${item.quantity} ${item.unit}`}</div>

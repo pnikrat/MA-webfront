@@ -4,7 +4,7 @@ import { Container, Header, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import api from '../services/api';
-import { setCurrentList, setItems, addItem } from './ItemsActions';
+import { setCurrentList, setItems, addItem, removeItem } from './ItemsActions';
 import Items from './Items';
 import ItemsForm from './ItemsForm';
 
@@ -16,6 +16,7 @@ type Props = {
   handleItemsFetch: (Object) => void,
   clearForm: () => void,
   handleItemAdd: (Object) => void,
+  handleItemDelete: (Number) => void,
 }
 
 class ItemsContainer extends Component<Props> {
@@ -26,6 +27,12 @@ class ItemsContainer extends Component<Props> {
       return api.get(`/lists/${listId}/items`).then(resp =>
         this.props.handleItemsFetch(resp.data));
     });
+  }
+
+  onItemDelete = (id) => {
+    const listId = this.props.currentList.id;
+    api.delete(`/lists/${listId}/items/${String(id)}`).then(() =>
+      this.props.handleItemDelete(id));
   }
 
   handleItemAdd = (data) => {
@@ -50,6 +57,7 @@ class ItemsContainer extends Component<Props> {
         {this.props.items.length > 0 &&
           <Items
             items={this.props.items}
+            onItemDelete={this.onItemDelete}
           />
         }
       </Container>
@@ -70,6 +78,7 @@ const mapDispatchToProps = dispatch => (
     handleItemsFetch: items => dispatch(setItems(items)),
     clearForm: () => dispatch(reset('items')),
     handleItemAdd: item => dispatch(addItem(item)),
+    handleItemDelete: id => dispatch(removeItem(id)),
   }
 );
 
