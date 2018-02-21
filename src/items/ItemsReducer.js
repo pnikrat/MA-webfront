@@ -1,4 +1,4 @@
-import { SET_CURRENT_LIST, SET_ITEMS } from './ItemsActions';
+import { SET_CURRENT_LIST, SET_ITEMS, ADD_ITEM } from './ItemsActions';
 
 function itemsReducer(state = {}, action) {
   switch (action.type) {
@@ -10,6 +10,14 @@ function itemsReducer(state = {}, action) {
       return Object.assign({}, state, {
         currentList: state.currentList,
         items: action.items
+      });
+    case ADD_ITEM:
+      return Object.assign({}, state, {
+        currentList: state.currentList,
+        items: [
+          ...state.items,
+          action.item
+        ]
       });
     default:
       return state;
