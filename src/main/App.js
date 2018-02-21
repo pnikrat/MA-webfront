@@ -25,7 +25,10 @@ function App() {
           <Route path="/" exact component={Home} />
           <Route path="/signup" component={Signup} />
           <Route path="/signin" component={Signin} />
-          <Route path="/list/:id" component={requireSignIn(ItemsContainer)} />
+          <Route
+            path="/list/:id/items"
+            component={requireSignIn(ItemsContainer)}
+          />
           <Route component={NotFound} />
         </Switch>
       </div>

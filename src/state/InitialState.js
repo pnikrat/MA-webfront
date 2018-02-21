@@ -11,6 +11,10 @@ const initialState = {
   },
   listsReducer: {
     lists: [],
+  },
+  itemsReducer: {
+    currentList: null,
+    items: [],
   }
 };
 
