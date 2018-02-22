@@ -10,6 +10,7 @@ import Signin from '../authentication/Signin';
 import history from '../router/History';
 import ItemsContainer from '../items/ItemsContainer';
 import Navbar from '../common/Navbar';
+import '../styles/common.css';
 
 
 const requireSignIn = generateRequireSignInWrapper({

@@ -21,7 +21,7 @@ class Navbar extends Component<Props> {
   render() {
     const { currentUser } = this.props;
     return (
-      <Menu>
+      <Menu className="custom">
         <Menu.Item as={Link} to="/">
           <Icon name="home" />
           Home

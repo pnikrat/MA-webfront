@@ -6,3 +6,15 @@
   margin: 2rem auto;
   text-align: center;
 }
+
+.ui.menu.custom {
+  border-top: 2px solid #8C8CDD;
+}
+
+body {
+  background-color: #f6f8f8;
+}
+
+.ui.list-segment, .ui.form-container {
+  box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2)!important;
+}

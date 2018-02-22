@@ -29,6 +29,7 @@ class ListsForm extends Component<Props> {
               component={Input}
               placeholder="My new shopping list"
               className="form-control"
+              withoutErrors="true"
             />
             <Form.Button
               type="submit"

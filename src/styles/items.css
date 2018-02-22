@@ -12,3 +12,8 @@
   text-decoration: line-through;
   border-radius: 5px;
 }
+
+.flexed > .form-input {
+  width: 100%;
+  margin-right: 10px;
+}
