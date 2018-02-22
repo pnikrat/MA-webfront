@@ -6,17 +6,32 @@ import '../styles/items.css';
 type Props = {
   items: Object,
   onItemDelete: (Number) => void,
+  onItemToggle: (Object) => void,
 }
 
 class Items extends Component<Props> {
   props: Props
 
+  compare = (x: Object, y: Object) => {
+    if (x.aasm_state === y.aasm_state) {
+      if (x.id < y.id) {
+        return -1;
+      }
+      return 1;
+    }
+    return x.aasm_state === 'to_buy' ? -1 : 1;
+  }
+
   render() {
-    const itemsComponents = this.props.items.map(item =>
+    const itemsComponents = this.props.items.sort(this.compare).map(item =>
       (
-        <List.Item key={item.id}>
+        <List.Item key={item.id} className={item.aasm_state === 'bought' ? 'bought' : ''}>
           <List.Icon verticalAlign="middle">
-            <Radio toggle />
+            <Radio
+              toggle
+              onClick={() => this.props.onItemToggle(item)}
+              checked={item.aasm_state === 'bought'}
+            />
           </List.Icon>
           <List.Content className="full-width">
             <List.Header className="flexed">

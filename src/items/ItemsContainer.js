@@ -4,7 +4,7 @@ import { Container, Header, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import api from '../services/api';
-import { setCurrentList, setItems, addItem, removeItem } from './ItemsActions';
+import { setCurrentList, setItems, addItem, removeItem, toggleItem } from './ItemsActions';
 import Items from './Items';
 import ItemsForm from './ItemsForm';
 
@@ -17,6 +17,7 @@ type Props = {
   clearForm: () => void,
   handleItemAdd: (Object) => void,
   handleItemDelete: (Number) => void,
+  handleItemToggle: (Number) => void,
 }
 
 class ItemsContainer extends Component<Props> {
@@ -33,6 +34,15 @@ class ItemsContainer extends Component<Props> {
     const listId = this.props.currentList.id;
     api.delete(`/lists/${listId}/items/${String(id)}`).then(() =>
       this.props.handleItemDelete(id));
+  }
+
+  onItemToggle = (item) => {
+    const listId = this.props.currentList.id;
+    const { id } = item;
+    const event = item.aasm_state === 'to_buy' ? 'buy' : 'cancel_buy';
+    const data = { state: event };
+    api.put(`/lists/${listId}/items/${id}/toggle`, data).then(() =>
+      this.props.handleItemToggle(id));
   }
 
   handleItemAdd = (data) => {
@@ -58,6 +68,7 @@ class ItemsContainer extends Component<Props> {
           <Items
             items={this.props.items}
             onItemDelete={this.onItemDelete}
+            onItemToggle={this.onItemToggle}
           />
         }
       </Container>
@@ -79,6 +90,7 @@ const mapDispatchToProps = dispatch => (
     clearForm: () => dispatch(reset('items')),
     handleItemAdd: item => dispatch(addItem(item)),
     handleItemDelete: id => dispatch(removeItem(id)),
+    handleItemToggle: id => dispatch(toggleItem(id)),
   }
 );
 

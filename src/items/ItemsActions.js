@@ -2,6 +2,7 @@ const SET_CURRENT_LIST = 'SET_CURRENT_LIST';
 const SET_ITEMS = 'SET_ITEMS';
 const ADD_ITEM = 'ADD_ITEM';
 const REMOVE_ITEM = 'REMOVE_ITEM';
+const TOGGLE_ITEM = 'TOGGLE_ITEM';
 
 function setCurrentList(list) {
   return {
@@ -31,13 +32,22 @@ function removeItem(id) {
   };
 }
 
+function toggleItem(id) {
+  return {
+    type: TOGGLE_ITEM,
+    payload: id,
+  };
+}
+
 export {
   SET_CURRENT_LIST,
   SET_ITEMS,
   ADD_ITEM,
   REMOVE_ITEM,
+  TOGGLE_ITEM,
   setCurrentList,
   setItems,
   addItem,
   removeItem,
+  toggleItem,
 };

@@ -8,6 +8,7 @@
 }
 
 .bought {
-  background-color: rgba(0,0,0, 0.1);
+  background-color: hsl(360, 0%, 92%);
   text-decoration: line-through;
+  border-radius: 5px;
 }
