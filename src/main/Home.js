@@ -18,8 +18,8 @@ class Home extends Component<Props> {
       <div>
         { !currentUser.isSignedIn &&
           <Container>
-            <Button as={Link} to="/signup">Sign up</Button>
-            <Button as={Link} to="/signin">Sign in</Button>
+            <Button primary as={Link} to="/signup">Sign up</Button>
+            <Button primary as={Link} to="/signin">Sign in</Button>
           </Container>
         }
         { currentUser.isSignedIn && <ListsContainer />}

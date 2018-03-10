@@ -1,0 +1,19 @@
+.ui.list>.item .description.flexed, .ui.list>.item .header.flexed, .flexed {
+  display: flex;
+  justify-content: space-between;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.bought {
+  background-color: hsl(360, 0%, 92%);
+  text-decoration: line-through;
+  border-radius: 5px;
+}
+
+.flexed > .form-input {
+  width: 100%;
+  margin-right: 10px;
+}

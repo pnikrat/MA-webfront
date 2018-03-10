@@ -63,7 +63,7 @@ const mapDispatchToProps = dispatch => (
     handleListAdd: list => dispatch(addList(list)),
     clearForm: () => dispatch(reset('lists')),
     handleListDelete: id => dispatch(removeList(id)),
-    openList: id => dispatch(push(`/list/${id}`)),
+    openList: id => dispatch(push(`/list/${id}/items`)),
   }
 );
 

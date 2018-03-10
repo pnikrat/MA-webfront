@@ -10,6 +10,7 @@ import Signin from '../authentication/Signin';
 import history from '../router/History';
 import ItemsContainer from '../items/ItemsContainer';
 import Navbar from '../common/Navbar';
+import '../styles/common.css';
 
 
 const requireSignIn = generateRequireSignInWrapper({
@@ -25,7 +26,10 @@ function App() {
           <Route path="/" exact component={Home} />
           <Route path="/signup" component={Signup} />
           <Route path="/signin" component={Signin} />
-          <Route path="/list/:id" component={requireSignIn(ItemsContainer)} />
+          <Route
+            path="/list/:id/items"
+            component={requireSignIn(ItemsContainer)}
+          />
           <Route component={NotFound} />
         </Switch>
       </div>
