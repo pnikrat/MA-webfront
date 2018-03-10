@@ -27,7 +27,6 @@ class Signup extends Component<Props> {
       throw new SubmissionError({
         _error: 'Server error, please try again later.'
       });
-      // appsignal
     }
   }
 

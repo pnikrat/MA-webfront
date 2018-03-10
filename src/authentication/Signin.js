@@ -29,7 +29,6 @@ class Signin extends Component<Props> {
       throw new SubmissionError({
         _error: 'Server error, please try again later.'
       });
-      // use Appsignal to report in production
     }
   }
 
