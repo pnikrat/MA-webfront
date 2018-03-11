@@ -28,7 +28,6 @@ class ItemsForm extends Component<Props> {
               required
               component={Input}
               placeholder="Type any item..."
-              withoutErrors="true"
             />
             <div className="flexed">
               <Field

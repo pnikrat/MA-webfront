@@ -5,7 +5,6 @@ import { Form, Label } from 'semantic-ui-react';
 import '../styles/common.css';
 
 type Props = {
-  withoutErrors?: boolean,
   min?: number,
   step?: number,
   label?: string,
@@ -15,7 +14,7 @@ type Props = {
 } & FieldProps
 
 const Input = ({
-  withoutErrors, input, label, type, placeholder, required, meta, min, step
+  input, label, type, placeholder, required, meta, min, step
 }: Props) => (
   <div className="form-input">
     <Form.Field
@@ -26,11 +25,11 @@ const Input = ({
       min={min}
       step={step}
       required={required}
-      error={meta.touched && meta.error && true}
+      error={meta.submitFailed && meta.error && true}
       placeholder={placeholder}
       className="form-control"
     />
-    {!withoutErrors && meta.touched && meta.error &&
+    { meta.submitFailed && meta.error &&
     <Label basic pointing="above">{meta.error}</Label>}
   </div>
 );
