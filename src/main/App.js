@@ -6,7 +6,7 @@ import { generateRequireSignInWrapper } from 'redux-token-auth';
 import Home from './Home';
 import NotFound from '../common/NotFound';
 import Signup from '../authentication/Signup';
-import Signin from '../authentication/Signin';
+import SigninContainer from '../authentication/SigninContainer';
 import history from '../router/History';
 import ItemsContainer from '../items/ItemsContainer';
 import Navbar from '../common/Navbar';
@@ -25,7 +25,7 @@ function App() {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/signup" component={Signup} />
-          <Route path="/signin" component={Signin} />
+          <Route path="/signin" component={SigninContainer} />
           <Route
             path="/list/:id/items"
             component={requireSignIn(ItemsContainer)}

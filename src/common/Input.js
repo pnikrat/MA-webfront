@@ -27,10 +27,9 @@ const Input = ({
       required={required}
       error={meta.submitFailed && meta.error && true}
       placeholder={placeholder}
-      className="form-control"
     />
     { meta.submitFailed && meta.error &&
-    <Label basic pointing="above">{meta.error}</Label>}
+    <Label basic pointing="above">{meta.error}</Label> }
   </div>
 );
 

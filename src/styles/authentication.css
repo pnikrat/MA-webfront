@@ -1,0 +1,13 @@
+h3, .ui.header.with-divider {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #2185d0;
+}
+
+.ui.segment {
+  box-shadow: 0 3px 4px 0 hsla(0, 0%, 0%, 0.2);
+}
+
+.larger-top-margin {
+  margin-top: 10px;
+}

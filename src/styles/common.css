@@ -7,8 +7,9 @@
   text-align: center;
 }
 
-.ui.menu.custom {
-  border-top: 2px solid #8C8CDD;
+.ui.menu.custom-menu {
+  border-top: 2px solid #2185d0;
+  border-radius: 0;
 }
 
 body {
@@ -16,5 +17,5 @@ body {
 }
 
 .ui.list-segment, .ui.form-container {
-  box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+  box-shadow: 0 3px 4px 0 hsla(0, 0%, 0%, 0.2);
 }
