@@ -11,16 +11,18 @@ type Props = {
   clickCallback?: () => Object,
 }
 
-function MenuItem(props: Props) {
+function MenuItem({
+  position, path, clickCallback, iconName, text
+}: Props) {
   return (
     <Menu.Item
-      position={props.position}
+      position={position}
       as={Link}
-      to={props.path}
-      onClick={props.clickCallback}
+      to={path}
+      onClick={clickCallback}
     >
-      <Icon name={props.iconName} />
-      {props.text}
+      <Icon name={iconName} />
+      {text}
     </Menu.Item>
   );
 }

@@ -5,7 +5,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import { generateRequireSignInWrapper } from 'redux-token-auth';
 import Home from './Home';
 import NotFound from '../common/NotFound';
-import Signup from '../authentication/Signup';
+import SignupContainer from '../authentication/SignupContainer';
 import SigninContainer from '../authentication/SigninContainer';
 import history from '../router/History';
 import ItemsContainer from '../items/ItemsContainer';
@@ -24,7 +24,7 @@ function App() {
         <Navbar />
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/signup" component={Signup} />
+          <Route path="/signup" component={SignupContainer} />
           <Route path="/signin" component={SigninContainer} />
           <Route
             path="/list/:id/items"
