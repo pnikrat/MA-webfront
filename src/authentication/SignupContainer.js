@@ -5,7 +5,7 @@ import { push } from 'react-router-redux';
 import { Redirect } from 'react-router-dom';
 import { registerUser } from '../auth-config';
 import SignupForm from './SignupForm';
-import withAuth from './withAuth';
+import withAuth from './WithAuth';
 import '../styles/authentication.css';
 
 type Props = {

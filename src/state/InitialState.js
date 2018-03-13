@@ -15,6 +15,11 @@ const initialState = {
   itemsReducer: {
     currentList: null,
     items: [],
+  },
+  modalsReducer: {
+    lists: {
+      isOpen: false,
+    },
   }
 };
 

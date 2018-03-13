@@ -1,9 +1,11 @@
 // @flow
 import React, { Component } from 'react';
 import { Container, Icon, Segment } from 'semantic-ui-react';
+import ConfirmationModal from '../common/ConfirmationModal';
 import '../styles/lists.css';
 
 type Props = {
+  isConfirmationModalOpen: boolean,
   lists: Object,
   onListDelete: (Number) => void,
   onListClick: (Number) => void,
@@ -14,8 +16,6 @@ class Lists extends Component<Props> {
     e.stopPropagation();
     this.props.onListDelete(id);
   }
-
-  props: Props
 
   render() {
     const listsItems = this.props.lists.map(list =>
@@ -36,10 +36,17 @@ class Lists extends Component<Props> {
         </Segment>
       )
     );
-
+    const { isConfirmationModalOpen } = this.props;
     return (
       <Container>
         {listsItems}
+        <ConfirmationModal
+          isOpen={isConfirmationModalOpen}
+          header="Delete shopping list"
+          content="Deleting the list will delete all shopping items inside. Do you want to continue?"
+          negativeButtonText="No"
+          positiveButtonText="Yes"
+        />
       </Container>
     );
   }

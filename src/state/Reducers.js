@@ -4,13 +4,15 @@ import { reducer as form } from 'redux-form';
 import { routerReducer as router } from 'react-router-redux';
 import listsReducer from '../lists/ListsReducer';
 import itemsReducer from '../items/ItemsReducer';
+import { modalsReducer } from './ModalsReducer';
 
 const appReducer = combineReducers({
   form,
   reduxTokenAuth,
   router,
   listsReducer,
-  itemsReducer
+  itemsReducer,
+  modalsReducer,
 });
 
 export default appReducer;

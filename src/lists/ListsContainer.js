@@ -11,6 +11,7 @@ import ListsForm from './ListsForm';
 
 type Props = {
   lists: Object,
+  isConfirmationModalOpen: boolean,
   handleListsFetch: (Object) => void,
   handleListAdd: (Object) => void,
   clearForm: () => void,
@@ -35,36 +36,33 @@ class ListsContainer extends Component<Props> {
       this.props.handleListAdd(response.data));
   }
 
-  props: Props
-
   render() {
+    const { isConfirmationModalOpen, lists, openList } = this.props;
     return (
       <Container>
         <ListsForm onSubmit={this.handleListAdd} />
         <Lists
-          lists={this.props.lists}
+          isConfirmationModalOpen={isConfirmationModalOpen}
+          lists={lists}
           onListDelete={this.onListDelete}
-          onListClick={this.props.openList}
+          onListClick={openList}
         />
       </Container>
     );
   }
 }
 
-const mapStateToProps = state => (
-  {
-    lists: state.listsReducer.lists,
-  }
-);
+const mapStateToProps = state => ({
+  lists: state.listsReducer.lists,
+  isConfirmationModalOpen: state.modalsReducer.lists.isOpen
+});
 
-const mapDispatchToProps = dispatch => (
-  {
-    handleListsFetch: lists => dispatch(setLists(lists)),
-    handleListAdd: list => dispatch(addList(list)),
-    clearForm: () => dispatch(reset('lists')),
-    handleListDelete: id => dispatch(removeList(id)),
-    openList: id => dispatch(push(`/list/${id}/items`)),
-  }
-);
+const mapDispatchToProps = dispatch => ({
+  handleListsFetch: lists => dispatch(setLists(lists)),
+  handleListAdd: list => dispatch(addList(list)),
+  clearForm: () => dispatch(reset('lists')),
+  handleListDelete: id => dispatch(removeList(id)),
+  openList: id => dispatch(push(`/list/${id}/items`))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListsContainer);
