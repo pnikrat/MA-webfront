@@ -6,7 +6,6 @@ import { Redirect } from 'react-router-dom';
 import { registerUser } from '../auth-config';
 import SignupForm from './SignupForm';
 import withAuth from './WithAuth';
-import '../styles/authentication.css';
 
 type Props = {
   currentUser: Object,

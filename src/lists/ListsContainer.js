@@ -1,14 +1,16 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container } from 'semantic-ui-react';
+import { Container, Header, Segment } from 'semantic-ui-react';
 import { reset } from 'redux-form';
 import { push } from 'react-router-redux';
 import api from '../services/api';
-import { setLists, addList, removeList } from './ListsActions';
+import { setLists, addList, removeList } from './ListsState';
 import Lists from './Lists';
 import ListsForm from './ListsForm';
-import { closeListsModal, openListsModal } from '../state/ModalsReducer';
+import { closeListsModal, openListsModal } from '../state/ModalsState';
+import ConfirmationModal from '../common/ConfirmationModal';
+
 
 type Props = {
   lists: Object,
@@ -29,12 +31,12 @@ class ListsContainer extends Component<Props> {
       this.props.handleListsFetch(response.data));
   }
 
-  onListDelete = (id) => {
+  onListDelete = (id: Number) => {
     api.delete(`/lists/${String(id)}`).then(() =>
       this.props.handleListDelete(id));
   }
 
-  handleListAdd = (data) => {
+  handleListAdd = (data: Object) => {
     this.props.clearForm();
     api.post('/lists', data).then(response =>
       this.props.handleListAdd(response.data));
@@ -47,15 +49,26 @@ class ListsContainer extends Component<Props> {
     } = this.props;
     return (
       <Container>
-        <ListsForm onSubmit={this.handleListAdd} />
+        <Container className="form-container">
+          <Segment>
+            <Header as="h3" className="with-divider">Add shopping list</Header>
+            <ListsForm onSubmit={this.handleListAdd} />
+          </Segment>
+        </Container>
         <Lists
-          isConfirmationModalOpen={isConfirmationModalOpen}
           lists={lists}
-          onListDelete={this.onListDelete}
           onListClick={openList}
           openConfirmationModal={openConfirmationModal}
-          closeConfirmationModal={closeConfirmationModal}
-          confirmationModalListId={confirmationModalListId}
+        />
+        <ConfirmationModal
+          isOpen={isConfirmationModalOpen}
+          onClose={closeConfirmationModal}
+          objectId={confirmationModalListId}
+          onConfirm={this.onListDelete}
+          header="Delete shopping list"
+          content="Deleting the list will delete all shopping items inside. Do you want to continue?"
+          negativeButtonText="No"
+          positiveButtonText="Yes"
         />
       </Container>
     );

@@ -1,6 +1,9 @@
-.list-segment {
+.ui.segment.list-segment {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  min-height: 65px;
+  font-size: 1.2rem;
 }
 
 .list-segment:hover {
