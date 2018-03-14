@@ -8,15 +8,19 @@ import api from '../services/api';
 import { setLists, addList, removeList } from './ListsActions';
 import Lists from './Lists';
 import ListsForm from './ListsForm';
+import { closeListsModal, openListsModal } from '../state/ModalsReducer';
 
 type Props = {
   lists: Object,
   isConfirmationModalOpen: boolean,
+  confirmationModalListId: Number,
   handleListsFetch: (Object) => void,
   handleListAdd: (Object) => void,
   clearForm: () => void,
   handleListDelete: (Number) => void,
   openList: (Number) => void,
+  closeConfirmationModal: () => void,
+  openConfirmationModal: (Object, Number) => void,
 }
 
 class ListsContainer extends Component<Props> {
@@ -37,7 +41,10 @@ class ListsContainer extends Component<Props> {
   }
 
   render() {
-    const { isConfirmationModalOpen, lists, openList } = this.props;
+    const {
+      isConfirmationModalOpen, lists, openList, openConfirmationModal,
+      closeConfirmationModal, confirmationModalListId
+    } = this.props;
     return (
       <Container>
         <ListsForm onSubmit={this.handleListAdd} />
@@ -46,6 +53,9 @@ class ListsContainer extends Component<Props> {
           lists={lists}
           onListDelete={this.onListDelete}
           onListClick={openList}
+          openConfirmationModal={openConfirmationModal}
+          closeConfirmationModal={closeConfirmationModal}
+          confirmationModalListId={confirmationModalListId}
         />
       </Container>
     );
@@ -54,7 +64,8 @@ class ListsContainer extends Component<Props> {
 
 const mapStateToProps = state => ({
   lists: state.listsReducer.lists,
-  isConfirmationModalOpen: state.modalsReducer.lists.isOpen
+  isConfirmationModalOpen: state.modalsReducer.lists.isOpen,
+  confirmationModalListId: state.modalsReducer.lists.id,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -62,7 +73,9 @@ const mapDispatchToProps = dispatch => ({
   handleListAdd: list => dispatch(addList(list)),
   clearForm: () => dispatch(reset('lists')),
   handleListDelete: id => dispatch(removeList(id)),
-  openList: id => dispatch(push(`/list/${id}/items`))
+  openList: id => dispatch(push(`/list/${id}/items`)),
+  closeConfirmationModal: () => dispatch(closeListsModal()),
+  openConfirmationModal: (e, id) => dispatch(openListsModal(e, id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListsContainer);

@@ -4,19 +4,26 @@ import { Button, Modal } from 'semantic-ui-react';
 
 type Props = {
   isOpen: boolean,
+  objectId: Number,
   header: string,
   content: string,
   negativeButtonText: string,
-  positiveButtonText: string
+  positiveButtonText: string,
+  onClose: () => void,
+  onConfirm: (Number) => void,
 }
 
 function ConfirmationModal({
-  isOpen, header, content, negativeButtonText, positiveButtonText
+  isOpen, header, content, negativeButtonText, positiveButtonText,
+  onClose, objectId, onConfirm
 }: Props) {
-  const actionClicked = (e, data) => { debugger };
+  const modalConfirmed = (id) => {
+    onConfirm(id);
+    onClose();
+  };
 
   return (
-    <Modal size="mini" open={isOpen} onActionClick={actionClicked}>
+    <Modal size="mini" open={isOpen} onClose={onClose}>
       <Modal.Header>
         {header}
       </Modal.Header>
@@ -24,8 +31,18 @@ function ConfirmationModal({
         <p>{content}</p>
       </Modal.Content>
       <Modal.Actions>
-        <Button negative content={negativeButtonText} />
-        <Button positive icon="checkmark" labelPosition="right" content={positiveButtonText} />
+        <Button
+          negative
+          content={negativeButtonText}
+          onClick={onClose}
+        />
+        <Button
+          positive
+          icon="checkmark"
+          labelPosition="right"
+          content={positiveButtonText}
+          onClick={() => modalConfirmed(objectId)}
+        />
       </Modal.Actions>
     </Modal>
   );

@@ -6,14 +6,16 @@ import '../styles/lists.css';
 
 type Props = {
   isConfirmationModalOpen: boolean,
+  confirmationModalListId: Number,
   lists: Object,
   onListDelete: (Number) => void,
   onListClick: (Number) => void,
+  closeConfirmationModal: () => void,
+  openConfirmationModal: (Object, Number) => void,
 }
 
 class Lists extends Component<Props> {
-  onListDelete = (e: Object, id: Number) => {
-    e.stopPropagation();
+  onListDelete = (id: Number) => {
     this.props.onListDelete(id);
   }
 
@@ -31,17 +33,20 @@ class Lists extends Component<Props> {
             link
             name="delete"
             onMouseDown={e => e.stopPropagation()}
-            onClick={e => this.onListDelete(e, list.id)}
+            onClick={e => this.props.openConfirmationModal(e, list.id)}
           />
         </Segment>
       )
     );
-    const { isConfirmationModalOpen } = this.props;
+    const { isConfirmationModalOpen, closeConfirmationModal, confirmationModalListId } = this.props;
     return (
       <Container>
         {listsItems}
         <ConfirmationModal
           isOpen={isConfirmationModalOpen}
+          onClose={closeConfirmationModal}
+          objectId={confirmationModalListId}
+          onConfirm={this.onListDelete}
           header="Delete shopping list"
           content="Deleting the list will delete all shopping items inside. Do you want to continue?"
           negativeButtonText="No"
