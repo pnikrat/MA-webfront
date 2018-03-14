@@ -1,7 +1,6 @@
 // @flow
 import React, { Component } from 'react';
 import { Container, Icon, Segment } from 'semantic-ui-react';
-import '../styles/lists.css';
 
 type Props = {
   lists: Object,

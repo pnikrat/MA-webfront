@@ -2,7 +2,6 @@
 import React from 'react';
 import type { FieldProps } from 'redux-form';
 import { Form, Label } from 'semantic-ui-react';
-import '../styles/common.css';
 
 type Props = {
   min?: number,

@@ -10,7 +10,7 @@ import Lists from './Lists';
 import ListsForm from './ListsForm';
 import { closeListsModal, openListsModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
-
+import '../styles/lists.css';
 
 type Props = {
   lists: Object,
