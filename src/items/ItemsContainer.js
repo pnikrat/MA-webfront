@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Container, Header, Icon } from 'semantic-ui-react';
+import { Container, Header, Icon, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import api from '../services/api';
@@ -63,7 +63,12 @@ class ItemsContainer extends Component<Props> {
             {this.props.currentList && this.props.currentList.name}
           </Header.Content>
         </Header>
-        <ItemsForm onSubmit={this.handleItemAdd} />
+        <Container className="form-container">
+          <Segment>
+            <Header as="h3" className="with-divider">Add shopping items</Header>
+            <ItemsForm onSubmit={this.handleItemAdd} />
+          </Segment>
+        </Container>
         {this.props.items.length > 0 &&
           <Items
             items={this.props.items}
@@ -76,22 +81,18 @@ class ItemsContainer extends Component<Props> {
   }
 }
 
-const mapStateToProps = state => (
-  {
-    items: state.itemsReducer.items,
-    currentList: state.itemsReducer.currentList,
-  }
-);
+const mapStateToProps = state => ({
+  items: state.itemsReducer.items,
+  currentList: state.itemsReducer.currentList
+});
 
-const mapDispatchToProps = dispatch => (
-  {
-    handleSetCurrentList: list => dispatch(setCurrentList(list)),
-    handleItemsFetch: items => dispatch(setItems(items)),
-    clearForm: () => dispatch(reset('items')),
-    handleItemAdd: item => dispatch(addItem(item)),
-    handleItemDelete: id => dispatch(removeItem(id)),
-    handleItemToggle: id => dispatch(toggleItem(id)),
-  }
-);
+const mapDispatchToProps = dispatch => ({
+  handleSetCurrentList: list => dispatch(setCurrentList(list)),
+  handleItemsFetch: items => dispatch(setItems(items)),
+  clearForm: () => dispatch(reset('items')),
+  handleItemAdd: item => dispatch(addItem(item)),
+  handleItemDelete: id => dispatch(removeItem(id)),
+  handleItemToggle: id => dispatch(toggleItem(id))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemsContainer);
