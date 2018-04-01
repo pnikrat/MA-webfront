@@ -5,7 +5,7 @@ import { Container, Header, Segment } from 'semantic-ui-react';
 import { reset } from 'redux-form';
 import { push } from 'react-router-redux';
 import api from '../services/api';
-import { setLists, addList, removeList } from './ListsState';
+import { setLists, addList, removeList } from './ListsActions';
 import Lists from './Lists';
 import ListsForm from './ListsForm';
 import { closeListsModal, openListsModal } from '../state/ModalsState';
