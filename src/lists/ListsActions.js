@@ -1,6 +1,4 @@
-const SET_LISTS = 'SET_LISTS';
-const ADD_LIST = 'ADD_LIST';
-const REMOVE_LIST = 'REMOVE_LIST';
+import { SET_LISTS, ADD_LIST, REMOVE_LIST } from '../state/constants';
 
 function setLists(lists) {
   return {
@@ -27,7 +25,4 @@ export {
   setLists,
   addList,
   removeList,
-  SET_LISTS,
-  ADD_LIST,
-  REMOVE_LIST,
 };

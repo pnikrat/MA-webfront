@@ -1,5 +1,4 @@
-const OPEN_LISTS_MODAL = 'OPEN_LISTS_MODAL';
-const CLOSE_LISTS_MODAL = 'CLOSE_LISTS_MODAL';
+import { OPEN_LISTS_MODAL, CLOSE_LISTS_MODAL } from './constants';
 
 const openListsModal = (e, id) => {
   e.stopPropagation(); // prevents overlapping onClick events

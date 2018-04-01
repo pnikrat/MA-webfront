@@ -1,4 +1,4 @@
-import { SET_LISTS, ADD_LIST, REMOVE_LIST } from './ListsActions';
+import { SET_LISTS, ADD_LIST, REMOVE_LIST } from '../state/constants';
 
 function listsReducer(state = [], action) {
   switch (action.type) {
