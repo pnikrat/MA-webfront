@@ -7,6 +7,7 @@ import api from '../services/api';
 import { setCurrentList, setItems, addItem, removeItem, toggleItem } from './ItemsActions';
 import Items from './Items';
 import ItemsForm from './ItemsForm';
+import '../styles/items.css';
 
 type Props = {
   match: Object,

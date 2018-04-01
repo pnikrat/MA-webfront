@@ -4,7 +4,6 @@ import { Field, reduxForm } from 'redux-form';
 import type { FormProps } from 'redux-form';
 import { Form, Message } from 'semantic-ui-react';
 import Input from '../common/Input';
-import '../styles/items.css';
 
 type Props = {
   onSubmit: (data: Object) => void,
