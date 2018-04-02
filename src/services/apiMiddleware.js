@@ -1,4 +1,4 @@
-import apiService from '../services/api';
+import call from '../services/api';
 import { apiStart, apiStop, apiThrowError, apiRemoveError } from './apiActions';
 
 const apiMiddleware = ({ dispatch }) => next => (action) => {
@@ -11,7 +11,7 @@ const apiMiddleware = ({ dispatch }) => next => (action) => {
 
   const { payload } = action;
   const { success } = action.meta;
-  return apiService.call(payload).then((response) => {
+  return call(payload).then((response) => {
     dispatch(apiStop());
     dispatch(apiRemoveError());
     dispatch(success(response));

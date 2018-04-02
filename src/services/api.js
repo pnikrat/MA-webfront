@@ -24,42 +24,43 @@ const instance = axios.create({
   headers: setHeaders()
 });
 
-export default {
-  get(url, params = {}) {
-    instance.defaults.headers = setHeaders();
-    return instance.get(url, params);
-  },
+function get(url, params = {}) {
+  instance.defaults.headers = setHeaders();
+  return instance.get(url, params);
+}
 
-  post(url, data) {
-    const body = JSON.stringify(data);
-    instance.defaults.headers = setHeaders();
-    return instance.post(url, body);
-  },
+function post(url, data) {
+  const body = JSON.stringify(data);
+  instance.defaults.headers = setHeaders();
+  return instance.post(url, body);
+}
 
-  put(url, data) {
-    const body = JSON.stringify(data);
-    instance.defaults.headers = setHeaders();
-    return instance.put(url, body);
-  },
+function put(url, data) {
+  const body = JSON.stringify(data);
+  instance.defaults.headers = setHeaders();
+  return instance.put(url, body);
+}
 
-  delete(url) {
-    instance.defaults.headers = setHeaders();
-    return instance.delete(url);
-  },
+// delete is JS reserved word
+function apiDelete(url) {
+  instance.defaults.headers = setHeaders();
+  return instance.delete(url);
+}
 
-  call(payload) {
-    const { url, method, data } = payload;
-    switch (method) {
-      case GET:
-        return this.get(url);
-      case POST:
-        return this.post(url, data);
-      case PUT:
-        return this.put(url, data);
-      case DELETE:
-        return this.delete(url);
-      default:
-        return Promise.reject();
-    }
+function call(payload) {
+  const { url, method, data } = payload;
+  switch (method) {
+    case GET:
+      return get(url);
+    case POST:
+      return post(url, data);
+    case PUT:
+      return put(url, data);
+    case DELETE:
+      return apiDelete(url);
+    default:
+      return Promise.reject();
   }
-};
+}
+
+export default call;
