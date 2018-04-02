@@ -20,7 +20,7 @@ function setHeaders() {
 
 const instance = axios.create({
   baseURL: BASE_URL,
-  timeout: 1000,
+  timeout: 5000,
   headers: setHeaders()
 });
 

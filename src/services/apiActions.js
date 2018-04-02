@@ -1,4 +1,5 @@
-import { API_CALL, API_START, API_STOP, SET_API_ERROR, REMOVE_API_ERROR } from '../state/constants';
+import { API_CALL, API_START, API_STOP,
+  SET_API_ERROR, REMOVE_API_ERROR, API_LOADING } from '../state/constants';
 
 function apiCall(url, success, method, data = {}) {
   return {
@@ -27,6 +28,12 @@ function apiStop() {
   };
 }
 
+function apiShowLoading() {
+  return {
+    type: API_LOADING
+  };
+}
+
 function apiThrowError(error) {
   return {
     type: SET_API_ERROR,
@@ -44,6 +51,7 @@ export {
   apiCall,
   apiStart,
   apiStop,
+  apiShowLoading,
   apiThrowError,
   apiRemoveError,
 };

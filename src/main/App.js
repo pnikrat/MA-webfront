@@ -12,7 +12,7 @@ import ItemsContainer from '../items/ItemsContainer';
 import Navbar from '../common/Navbar';
 import '../styles/common.css';
 import ErrorContainer from '../common/ErrorContainer';
-
+import Loading from '../common/Loading';
 
 const requireSignIn = generateRequireSignInWrapper({
   redirectPathIfNotSignedIn: '/signin',
@@ -24,6 +24,7 @@ function App() {
       <div>
         <Navbar />
         <ErrorContainer />
+        <Loading />
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/signup" component={SignupContainer} />

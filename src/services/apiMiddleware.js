@@ -1,5 +1,5 @@
 import call from '../services/api';
-import { apiStart, apiStop, apiThrowError, apiRemoveError } from './apiActions';
+import { apiStart, apiStop, apiThrowError, apiRemoveError, apiShowLoading } from './apiActions';
 
 const apiMiddleware = ({ dispatch }) => next => (action) => {
   const { api } = action.meta || false;
@@ -8,6 +8,7 @@ const apiMiddleware = ({ dispatch }) => next => (action) => {
   }
 
   dispatch(apiStart());
+  setTimeout(() => dispatch(apiShowLoading()), 1000);
 
   const { payload } = action;
   const { success } = action.meta;

@@ -24,6 +24,10 @@ const initialState = {
   },
   apiErrorReducer: {
     apiError: null,
+  },
+  apiLoadingReducer: {
+    loading: false,
+    isFetching: false,
   }
 };
 

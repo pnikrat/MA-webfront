@@ -6,6 +6,7 @@ import listsReducer from '../lists/ListsReducer';
 import itemsReducer from '../items/ItemsReducer';
 import { modalsReducer } from './ModalsState';
 import apiErrorReducer from '../services/apiErrorReducer';
+import apiLoadingReducer from '../services/apiLoadingReducer';
 
 const appReducer = combineReducers({
   form,
@@ -15,6 +16,7 @@ const appReducer = combineReducers({
   itemsReducer,
   modalsReducer,
   apiErrorReducer,
+  apiLoadingReducer,
 });
 
 export default appReducer;
