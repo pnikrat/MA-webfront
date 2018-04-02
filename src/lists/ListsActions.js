@@ -1,23 +1,23 @@
 import { SET_LISTS, ADD_LIST, REMOVE_LIST } from '../state/constants';
 
-function setLists(lists) {
+function setLists(response) {
   return {
     type: SET_LISTS,
-    lists
+    lists: response.data,
   };
 }
 
-function addList(list) {
+function addList(response) {
   return {
     type: ADD_LIST,
-    list
+    list: response.data,
   };
 }
 
 function removeList(id) {
   return {
     type: REMOVE_LIST,
-    payload: id
+    payload: id,
   };
 }
 

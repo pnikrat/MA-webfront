@@ -5,6 +5,7 @@ import { routerReducer as router } from 'react-router-redux';
 import listsReducer from '../lists/ListsReducer';
 import itemsReducer from '../items/ItemsReducer';
 import { modalsReducer } from './ModalsState';
+import apiErrorReducer from '../services/apiErrorReducer';
 
 const appReducer = combineReducers({
   form,
@@ -13,6 +14,7 @@ const appReducer = combineReducers({
   listsReducer,
   itemsReducer,
   modalsReducer,
+  apiErrorReducer,
 });
 
 export default appReducer;

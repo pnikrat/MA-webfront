@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { Container, Header, Segment } from 'semantic-ui-react';
 import { reset } from 'redux-form';
 import { push } from 'react-router-redux';
-import api from '../services/api';
+import { apiCall } from '../services/apiActions';
+import { GET, POST, DELETE } from '../state/constants';
 import { setLists, addList, removeList } from './ListsActions';
 import Lists from './Lists';
 import ListsForm from './ListsForm';
@@ -16,7 +17,7 @@ type Props = {
   lists: Object,
   isConfirmationModalOpen: boolean,
   confirmationModalListId: Number,
-  handleListsFetch: (Object) => void,
+  handleListsFetch: () => void,
   handleListAdd: (Object) => void,
   clearForm: () => void,
   handleListDelete: (Number) => void,
@@ -27,19 +28,16 @@ type Props = {
 
 class ListsContainer extends Component<Props> {
   componentDidMount = () => {
-    api.get('/lists').then(response =>
-      this.props.handleListsFetch(response.data));
+    this.props.handleListsFetch();
   }
 
   onListDelete = (id: Number) => {
-    api.delete(`/lists/${String(id)}`).then(() =>
-      this.props.handleListDelete(id));
+    this.props.handleListDelete(id);
   }
 
   handleListAdd = (data: Object) => {
     this.props.clearForm();
-    api.post('/lists', data).then(response =>
-      this.props.handleListAdd(response.data));
+    this.props.handleListAdd(data);
   }
 
   render() {
@@ -82,10 +80,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  handleListsFetch: lists => dispatch(setLists(lists)),
-  handleListAdd: list => dispatch(addList(list)),
+  handleListsFetch: () => dispatch(apiCall('/lists', setLists, GET)),
+  handleListAdd: list => dispatch(apiCall('/lists', addList, POST, list)),
   clearForm: () => dispatch(reset('lists')),
-  handleListDelete: id => dispatch(removeList(id)),
+  handleListDelete: id => dispatch(apiCall(`/lists/${String(id)}`, () => removeList(id), DELETE)),
   openList: id => dispatch(push(`/list/${id}/items`)),
   closeConfirmationModal: () => dispatch(closeListsModal()),
   openConfirmationModal: (e, id) => dispatch(openListsModal(e, id)),

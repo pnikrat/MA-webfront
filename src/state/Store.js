@@ -5,8 +5,9 @@ import { routerMiddleware } from 'react-router-redux';
 import reducers from './Reducers';
 import initialState from './InitialState';
 import history from '../router/History';
+import apiMiddleware from '../services/apiMiddleware';
 
-const middleWare = [thunk, routerMiddleware(history)];
+const middleWare = [thunk, apiMiddleware, routerMiddleware(history)];
 const store = createStore(
   reducers, initialState, composeWithDevTools(applyMiddleware(...middleWare))
 );

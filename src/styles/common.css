@@ -2,7 +2,8 @@ body {
   background-color: #f6f8f8;
 }
 
-.form-input {
+.form-input,
+.larger-bottom-margin {
   margin-bottom: 15px;
 }
 

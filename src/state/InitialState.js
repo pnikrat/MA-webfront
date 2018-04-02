@@ -21,6 +21,9 @@ const initialState = {
       isOpen: false,
       id: null,
     },
+  },
+  apiErrorReducer: {
+    apiError: null,
   }
 };
 

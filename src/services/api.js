@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { GET, POST, PUT, DELETE } from '../state/constants';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -44,5 +45,21 @@ export default {
   delete(url) {
     instance.defaults.headers = setHeaders();
     return instance.delete(url);
+  },
+
+  call(payload) {
+    const { url, method, data } = payload;
+    switch (method) {
+      case GET:
+        return this.get(url);
+      case POST:
+        return this.post(url, data);
+      case PUT:
+        return this.put(url, data);
+      case DELETE:
+        return this.delete(url);
+      default:
+        return Promise.reject();
+    }
   }
 };
