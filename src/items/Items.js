@@ -1,7 +1,6 @@
 // @flow
 import React, { Component } from 'react';
 import { Container, Dropdown, List, Radio, Segment } from 'semantic-ui-react';
-import '../styles/items.css';
 
 type Props = {
   items: Object,

@@ -1,6 +1,6 @@
-import { SET_LISTS, ADD_LIST, REMOVE_LIST } from './ListsActions';
+import { SET_LISTS, ADD_LIST, REMOVE_LIST } from '../state/constants';
 
-function listsReducer(state = [], action) {
+function listsReducer(state = {}, action) {
   switch (action.type) {
     case SET_LISTS:
       return Object.assign({}, state, {
@@ -8,10 +8,7 @@ function listsReducer(state = [], action) {
       });
     case ADD_LIST:
       return Object.assign({}, state, {
-        lists: [
-          ...state.lists,
-          action.list
-        ]
+        lists: [...state.lists, action.list]
       });
     case REMOVE_LIST:
       return Object.assign({}, state, {

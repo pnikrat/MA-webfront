@@ -1,42 +1,36 @@
 // @flow
 import React, { Component } from 'react';
 import { Container, Icon, Segment } from 'semantic-ui-react';
-import '../styles/lists.css';
 
 type Props = {
   lists: Object,
-  onListDelete: (Number) => void,
   onListClick: (Number) => void,
+  openConfirmationModal: (Object, Number) => void,
 }
 
 class Lists extends Component<Props> {
-  onListDelete = (e: Object, id: Number) => {
-    e.stopPropagation();
-    this.props.onListDelete(id);
-  }
-
-  props: Props
-
   render() {
-    const listsItems = this.props.lists.map(list =>
+    const { lists, onListClick, openConfirmationModal } = this.props;
+    const listsItems = lists.map(list =>
       (
         <Segment
           color="blue"
           key={list.id}
           className="list-segment"
-          onClick={() => this.props.onListClick(list.id)}
+          onClick={() => onListClick(list.id)}
         >
-          <p>{list.name}</p>
+          <div>
+            <p>{list.name}</p>
+          </div>
           <Icon
             link
             name="delete"
             onMouseDown={e => e.stopPropagation()}
-            onClick={e => this.onListDelete(e, list.id)}
+            onClick={e => openConfirmationModal(e, list.id)}
           />
         </Segment>
       )
     );
-
     return (
       <Container>
         {listsItems}

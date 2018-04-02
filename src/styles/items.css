@@ -1,4 +1,6 @@
-.ui.list>.item .description.flexed, .ui.list>.item .header.flexed, .flexed {
+.ui.list .item .description.flexed,
+.ui.list .item .header.flexed,
+.flexed {
   display: flex;
   justify-content: space-between;
 }
@@ -13,7 +15,7 @@
   border-radius: 5px;
 }
 
-.flexed > .form-input {
+.flexed .form-input {
   width: 100%;
   margin-right: 10px;
 }

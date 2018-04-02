@@ -1,4 +1,7 @@
 {
+  "env": {
+    "es6": true
+  },
 	"parser": "babel-eslint",
 	"plugins": ["react", "flowtype"],
 	"extends": ["airbnb", "plugin:flowtype/recommended"],
@@ -6,12 +9,16 @@
 		"react/jsx-filename-extension": 0,
 		"import/prefer-default-export": 0,
 		"react/no-unused-prop-types": 0,
-    "function-paren-newline": 0,
-    "comma-dangle": 0,
-    "react/prefer-stateless-function": 0,
-    "jsx-a11y/anchor-is-valid": ["error", {
-      "specialLink": ["to"],
-    }],
+		"react/require-default-props": 0,
+		"function-paren-newline": 0,
+		"comma-dangle": 0,
+		"react/prefer-stateless-function": 0,
+		"jsx-a11y/anchor-is-valid": ["error", {
+      "specialLink": ["to"]
+		}],
+		"object-property-newline": ["error", {
+			"allowAllPropertiesOnSameLine": true
+		}]
 	},
 	"globals": {
 		"fetch": true,

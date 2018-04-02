@@ -1,5 +1,5 @@
 import { SET_CURRENT_LIST, SET_ITEMS, ADD_ITEM,
-  REMOVE_ITEM, TOGGLE_ITEM } from './ItemsActions';
+  REMOVE_ITEM, TOGGLE_ITEM } from '../state/constants';
 
 function nextItemState(aasmState) {
   return aasmState === 'to_buy' ? 'bought' : 'to_buy';

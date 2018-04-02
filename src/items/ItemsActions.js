@@ -1,27 +1,34 @@
-const SET_CURRENT_LIST = 'SET_CURRENT_LIST';
-const SET_ITEMS = 'SET_ITEMS';
-const ADD_ITEM = 'ADD_ITEM';
-const REMOVE_ITEM = 'REMOVE_ITEM';
-const TOGGLE_ITEM = 'TOGGLE_ITEM';
+import { SET_CURRENT_LIST, SET_ITEMS,
+  ADD_ITEM, REMOVE_ITEM, TOGGLE_ITEM, GET } from '../state/constants';
+import { apiCall } from '../services/apiActions';
 
-function setCurrentList(list) {
+
+function setCurrentList(response) {
   return {
     type: SET_CURRENT_LIST,
-    list,
+    list: response.data,
   };
 }
 
-function setItems(items) {
+function setItems(response) {
   return {
     type: SET_ITEMS,
-    items,
+    items: response.data,
   };
 }
 
-function addItem(item) {
+function setCurrentListAndFetchItems(response) {
+  return (dispatch) => {
+    const { id } = response.data;
+    dispatch(setCurrentList(response));
+    dispatch(apiCall(`/lists/${id}/items`, setItems, GET));
+  };
+}
+
+function addItem(response) {
   return {
     type: ADD_ITEM,
-    item,
+    item: response.data,
   };
 }
 
@@ -40,13 +47,9 @@ function toggleItem(id) {
 }
 
 export {
-  SET_CURRENT_LIST,
-  SET_ITEMS,
-  ADD_ITEM,
-  REMOVE_ITEM,
-  TOGGLE_ITEM,
   setCurrentList,
   setItems,
+  setCurrentListAndFetchItems,
   addItem,
   removeItem,
   toggleItem,

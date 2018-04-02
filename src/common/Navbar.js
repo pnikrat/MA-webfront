@@ -1,9 +1,9 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Icon, Menu } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 import { signOutUser } from '../auth-config';
+import MenuItem from './MenuItem';
 
 type Props = {
   currentUser: Object,
@@ -11,42 +11,33 @@ type Props = {
 }
 
 class Navbar extends Component<Props> {
-  props: Props
-
-  handleSignOut = () => {
-    const { sendLogoutRequest } = this.props;
-    sendLogoutRequest();
-  }
+  handleSignOut = () => this.props.sendLogoutRequest();
 
   render() {
     const { currentUser } = this.props;
     return (
-      <Menu className="custom">
-        <Menu.Item as={Link} to="/">
-          <Icon name="home" />
-          Home
-        </Menu.Item>
+      <Menu stackable className="custom-menu">
+        <MenuItem position="left" path="/" iconName="home" text="Home" />
         { currentUser.isSignedIn &&
-          <Menu.Item position="right" as={Link} to="/" onClick={this.handleSignOut}>
-            <Icon name="sign out" />
-            Sign out
-          </Menu.Item>
+          <MenuItem
+            position="right"
+            path="/"
+            iconName="sign out"
+            text="Sign out"
+            clickCallback={this.handleSignOut}
+          />
         }
       </Menu>
     );
   }
 }
 
-const mapStateToProps = state => (
-  {
-    currentUser: state.reduxTokenAuth.currentUser
-  }
-);
+const mapStateToProps = state => ({
+  currentUser: state.reduxTokenAuth.currentUser
+});
 
-const mapDispatchToProps = dispatch => (
-  {
-    sendLogoutRequest: () => dispatch(signOutUser())
-  }
-);
+const mapDispatchToProps = dispatch => ({
+  sendLogoutRequest: () => dispatch(signOutUser())
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

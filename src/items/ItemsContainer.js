@@ -1,39 +1,35 @@
 // @flow
 import React, { Component } from 'react';
-import { Container, Header, Icon } from 'semantic-ui-react';
+import { Container, Header, Icon, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
-import api from '../services/api';
-import { setCurrentList, setItems, addItem, removeItem, toggleItem } from './ItemsActions';
+import { apiCall } from '../services/apiActions';
+import { GET, POST, PUT, DELETE } from '../state/constants';
+import { addItem, removeItem, toggleItem, setCurrentListAndFetchItems } from './ItemsActions';
 import Items from './Items';
 import ItemsForm from './ItemsForm';
+import '../styles/items.css';
 
 type Props = {
   match: Object,
   currentList: Object,
   items: Object,
-  handleSetCurrentList: (Object) => void,
-  handleItemsFetch: (Object) => void,
+  handleSetCurrentList: (Number) => void,
   clearForm: () => void,
-  handleItemAdd: (Object) => void,
-  handleItemDelete: (Number) => void,
-  handleItemToggle: (Number) => void,
+  handleItemAdd: (Number, Object) => void,
+  handleItemDelete: (Number, Number) => void,
+  handleItemToggle: (Number, Number, Object) => void,
 }
 
 class ItemsContainer extends Component<Props> {
   componentDidMount = () => {
     const listId = this.props.match.params.id;
-    api.get(`/lists/${listId}`).then((response) => {
-      this.props.handleSetCurrentList(response.data);
-      return api.get(`/lists/${listId}/items`).then(resp =>
-        this.props.handleItemsFetch(resp.data));
-    });
+    this.props.handleSetCurrentList(listId);
   }
 
   onItemDelete = (id) => {
     const listId = this.props.currentList.id;
-    api.delete(`/lists/${listId}/items/${String(id)}`).then(() =>
-      this.props.handleItemDelete(id));
+    this.props.handleItemDelete(listId, id);
   }
 
   onItemToggle = (item) => {
@@ -41,15 +37,13 @@ class ItemsContainer extends Component<Props> {
     const { id } = item;
     const event = item.aasm_state === 'to_buy' ? 'buy' : 'cancel_buy';
     const data = { state: event };
-    api.put(`/lists/${listId}/items/${id}/toggle`, data).then(() =>
-      this.props.handleItemToggle(id));
+    this.props.handleItemToggle(listId, id, data);
   }
 
   handleItemAdd = (data) => {
     this.props.clearForm();
     const listId = this.props.currentList.id;
-    api.post(`/lists/${listId}/items`, data).then(response =>
-      this.props.handleItemAdd(response.data));
+    this.props.handleItemAdd(listId, data);
   }
 
   props: Props
@@ -63,7 +57,12 @@ class ItemsContainer extends Component<Props> {
             {this.props.currentList && this.props.currentList.name}
           </Header.Content>
         </Header>
-        <ItemsForm onSubmit={this.handleItemAdd} />
+        <Container className="form-container">
+          <Segment>
+            <Header as="h3" className="with-divider">Add shopping items</Header>
+            <ItemsForm onSubmit={this.handleItemAdd} />
+          </Segment>
+        </Container>
         {this.props.items.length > 0 &&
           <Items
             items={this.props.items}
@@ -76,22 +75,21 @@ class ItemsContainer extends Component<Props> {
   }
 }
 
-const mapStateToProps = state => (
-  {
-    items: state.itemsReducer.items,
-    currentList: state.itemsReducer.currentList,
-  }
-);
+const mapStateToProps = state => ({
+  items: state.itemsReducer.items,
+  currentList: state.itemsReducer.currentList
+});
 
-const mapDispatchToProps = dispatch => (
-  {
-    handleSetCurrentList: list => dispatch(setCurrentList(list)),
-    handleItemsFetch: items => dispatch(setItems(items)),
-    clearForm: () => dispatch(reset('items')),
-    handleItemAdd: item => dispatch(addItem(item)),
-    handleItemDelete: id => dispatch(removeItem(id)),
-    handleItemToggle: id => dispatch(toggleItem(id)),
-  }
-);
+const mapDispatchToProps = dispatch => ({
+  handleSetCurrentList: id => dispatch(apiCall(`/lists/${id}`, setCurrentListAndFetchItems, GET)),
+  clearForm: () => dispatch(reset('items')),
+  handleItemAdd: (listId, data) => dispatch(apiCall(`/lists/${listId}/items`, addItem, POST, data)),
+  handleItemDelete: (listId, id) => {
+    dispatch(apiCall(`/lists/${listId}/items/${String(id)}`, () => removeItem(id), DELETE));
+  },
+  handleItemToggle: (listId, id, data) => {
+    dispatch(apiCall(`/lists/${listId}/items/${id}/toggle`, () => toggleItem(id), PUT, data));
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemsContainer);

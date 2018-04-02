@@ -15,6 +15,19 @@ const initialState = {
   itemsReducer: {
     currentList: null,
     items: [],
+  },
+  modalsReducer: {
+    lists: {
+      isOpen: false,
+      id: null,
+    },
+  },
+  apiErrorReducer: {
+    apiError: null,
+  },
+  apiLoadingReducer: {
+    loading: false,
+    isFetching: false,
   }
 };
 
