@@ -142,4 +142,13 @@ describe('Authentication module', () => {
       cy.url().should('include', '/signin');
     });
   });
+
+  context('Logout', () => {
+    it('can logout and is returned to landing page', () => {
+      cy.login();
+      cy.contains('Sign out').click();
+      cy.contains('Sign in');
+      cy.should('not.contain', 'Sign out');
+    });
+  });
 });
