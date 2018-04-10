@@ -67,5 +67,21 @@ describe('Items module', () => {
         cy.get('div[role=listitem]').should('have.length', numberOfItems);
       });
     });
+
+    it('can change item state to bought from to buy', () => {
+      cy.get('div[role=listitem]:not(.bought)').last().within(() => {
+        cy.get('.checkbox').click();
+        cy.root().as('toggled');
+      });
+      cy.get('@toggled').should('have.class', 'bought');
+    });
+
+    it('can change item state from to buy to bought', () => {
+      cy.get('div[role=listitem].bought').last().within(() => {
+        cy.get('.checkbox').click();
+        cy.root().as('untoggled');
+      });
+      cy.get('@untoggled').should('not.have.class', 'bought');
+    });
   });
 });
