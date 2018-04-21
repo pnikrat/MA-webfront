@@ -39,10 +39,10 @@ function removeItem(id) {
   };
 }
 
-function toggleItem(id) {
+function toggleItem(response) {
   return {
     type: TOGGLE_ITEM,
-    payload: id,
+    payload: response.data,
   };
 }
 
