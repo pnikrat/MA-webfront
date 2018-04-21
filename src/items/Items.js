@@ -1,11 +1,12 @@
 // @flow
 import React, { Component } from 'react';
-import { Container, Dropdown, List, Radio, Segment } from 'semantic-ui-react';
+import { Container, Dropdown, List, Segment } from 'semantic-ui-react';
+import ItemActionButton from './ItemActionButton';
 
 type Props = {
   items: Object,
   onItemDelete: (Number) => void,
-  onItemToggle: (Object) => void,
+  onItemStateChange: (Object, string) => void,
 }
 
 class Items extends Component<Props> {
@@ -25,19 +26,33 @@ class Items extends Component<Props> {
     const itemsComponents = this.props.items.sort(this.compare).map(item =>
       (
         <List.Item key={item.id} className={item.aasm_state === 'bought' ? 'bought' : ''}>
-          <List.Icon verticalAlign="middle">
-            <Radio
-              toggle
-              onClick={() => this.props.onItemToggle(item)}
-              checked={item.aasm_state === 'bought'}
+          { item.aasm_state === 'to_buy' &&
+            <ItemActionButton
+              color="olive"
+              iconName="checkmark"
+              onClick={() => this.props.onItemStateChange(item, 'bought')}
             />
-          </List.Icon>
+          }
+          { item.aasm_state === 'to_buy' &&
+            <ItemActionButton
+              iconName="minus"
+              onClick={() => this.props.onItemStateChange(item, 'missing')}
+            />
+          }
+          { (item.aasm_state === 'bought' || item.aasm_state === 'missing') &&
+            <ItemActionButton
+              color="grey"
+              iconName="undo"
+              onClick={() => this.props.onItemStateChange(item, 'to_buy')}
+            />
+          }
           <List.Content className="full-width">
             <List.Header className="flexed">
               <div>{item.name}</div>
               <Dropdown text="">
                 <Dropdown.Menu>
                   <Dropdown.Item
+                    icon="trash outline"
                     text="Delete"
                     onClick={() => this.props.onItemDelete(item.id)}
                   />

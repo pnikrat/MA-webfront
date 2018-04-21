@@ -32,10 +32,9 @@ class ItemsContainer extends Component<Props> {
     this.props.handleItemDelete(listId, id);
   }
 
-  onItemToggle = (item) => {
+  onItemStateChange = (item, desiredState) => {
     const listId = this.props.currentList.id;
     const { id } = item;
-    const desiredState = item.aasm_state === 'to_buy' ? 'bought' : 'to_buy';
     const data = { state: desiredState };
     this.props.handleItemToggle(listId, id, data);
   }
@@ -67,7 +66,7 @@ class ItemsContainer extends Component<Props> {
           <Items
             items={this.props.items}
             onItemDelete={this.onItemDelete}
-            onItemToggle={this.onItemToggle}
+            onItemStateChange={this.onItemStateChange}
           />
         }
       </Container>
