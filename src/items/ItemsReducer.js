@@ -1,10 +1,6 @@
 import { SET_CURRENT_LIST, SET_ITEMS, ADD_ITEM,
   REMOVE_ITEM, TOGGLE_ITEM } from '../state/constants';
 
-function nextItemState(aasmState) {
-  return aasmState === 'to_buy' ? 'bought' : 'to_buy';
-}
-
 function itemsReducer(state = {}, action) {
   switch (action.type) {
     case SET_CURRENT_LIST:
@@ -33,8 +29,7 @@ function itemsReducer(state = {}, action) {
       return Object.assign({}, state, {
         currentList: state.currentList,
         items: state.items.map((i) => {
-          return (i.id === action.payload)
-            ? { ...i, aasm_state: nextItemState(i.aasm_state) } : i
+          return (i.id === action.payload.id) ? { ...i, aasm_state: action.payload.aasm_state } : i;
         })
       });
     default:

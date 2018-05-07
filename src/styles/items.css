@@ -1,6 +1,7 @@
 .ui.list .item .description.flexed,
 .ui.list .item .header.flexed,
-.flexed {
+.flexed,
+.ui.container.all-items-container {
   display: flex;
   justify-content: space-between;
 }
@@ -9,13 +10,53 @@
   width: 100%;
 }
 
+.all-items-container {
+  margin-bottom: 30px;
+}
+
+.ui.segment.sublist {
+  width: 100%;
+  margin: 0px 5px 0px 5px;
+  flex-grow: 1;
+}
+
+.ui.segment.sublist.first-sublist {
+  margin-left: 0px;
+}
+
+.ui.segment.sublist.second-sublist {
+  margin-right: 0px;
+}
+
+.ui.divided.relaxed.list .item {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
 .bought {
   background-color: hsl(360, 0%, 92%);
   text-decoration: line-through;
   border-radius: 5px;
 }
 
+.missing {
+  background-color: rgba(113, 150, 219, 0.301);
+  border-radius: 5px;
+}
+
 .flexed .form-input {
   width: 100%;
   margin-right: 10px;
+}
+
+@media all and (max-width: 640px) {
+  .all-items-container {
+    flex-flow: column;
+  }
+
+  .ui.segment.sublist {
+    margin: 5px 0px 5px 0px;
+  }
 }

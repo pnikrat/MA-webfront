@@ -32,11 +32,10 @@ class ItemsContainer extends Component<Props> {
     this.props.handleItemDelete(listId, id);
   }
 
-  onItemToggle = (item) => {
+  onItemStateChange = (item, desiredState) => {
     const listId = this.props.currentList.id;
     const { id } = item;
-    const event = item.aasm_state === 'to_buy' ? 'buy' : 'cancel_buy';
-    const data = { state: event };
+    const data = { state: desiredState };
     this.props.handleItemToggle(listId, id, data);
   }
 
@@ -67,7 +66,7 @@ class ItemsContainer extends Component<Props> {
           <Items
             items={this.props.items}
             onItemDelete={this.onItemDelete}
-            onItemToggle={this.onItemToggle}
+            onItemStateChange={this.onItemStateChange}
           />
         }
       </Container>
@@ -88,7 +87,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(apiCall(`/lists/${listId}/items/${String(id)}`, () => removeItem(id), DELETE));
   },
   handleItemToggle: (listId, id, data) => {
-    dispatch(apiCall(`/lists/${listId}/items/${id}/toggle`, () => toggleItem(id), PUT, data));
+    dispatch(apiCall(`/lists/${listId}/items/${id}`, toggleItem, PUT, data));
   },
 });
 
