@@ -41,15 +41,15 @@ class Items extends Component<Props> {
       .map(item => this.singleItem(item));
 
     return (
-      <Container>
-        <Segment>
+      <Container className="all-items-container">
+        <Segment className="first-sublist sublist">
           <Header as="h3" className="with-divider">To buy / Bought</Header>
           <List divided relaxed>
             {activeComponents}
           </List>
         </Segment>
         { unavailableComponents.length > 0 &&
-          <Segment>
+          <Segment className="second-sublist sublist">
             <Header as="h3" className="with-divider">Unavailable in shop</Header>
             <List divided relaxed>
               { unavailableComponents }
