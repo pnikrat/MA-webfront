@@ -5,11 +5,10 @@ import ItemActionButton from './ItemActionButton';
 
 type Props = {
   item: Object,
-  onItemDelete: (Number) => void,
   onItemStateChange: (Object, string) => void,
 }
 
-function SingleItem({ item, onItemDelete, onItemStateChange }: Props) {
+function SingleItem({ item, onItemStateChange }: Props) {
   return (
     <List.Item key={item.id} className={item.aasm_state}>
       { item.aasm_state === 'to_buy' &&
@@ -40,7 +39,7 @@ function SingleItem({ item, onItemDelete, onItemStateChange }: Props) {
               <Dropdown.Item
                 icon="trash outline"
                 text="Delete"
-                onClick={() => onItemDelete(item.id)}
+                onClick={() => onItemStateChange(item, 'deleted')}
               />
             </Dropdown.Menu>
           </Dropdown>

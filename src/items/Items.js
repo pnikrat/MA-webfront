@@ -5,7 +5,6 @@ import SingleItem from './SingleItem';
 
 type Props = {
   items: Object,
-  onItemDelete: (Number) => void,
   onItemStateChange: (Object, string) => void,
 }
 
@@ -28,7 +27,6 @@ class Items extends Component<Props> {
   singleItem = (item: Object) => (
     <SingleItem
       item={item}
-      onItemDelete={this.props.onItemDelete}
       onItemStateChange={this.props.onItemStateChange}
     />
   );
