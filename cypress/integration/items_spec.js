@@ -37,15 +37,6 @@ describe('Items module', () => {
       cy.contains('3.4$');
     });
 
-    it('can remove an item', () => {
-      cy.get('div[role=listitem]').then(($el) => {
-        const numberOfItems = $el.length;
-        cy.get('.ui.dropdown').first().click();
-        cy.contains('Delete').click();
-        cy.get('div[role=listitem]').should('have.length', numberOfItems - 1);
-      });
-    });
-
     it('can add item by specifying just a name', () => {
       cy.get('div[role=listitem]').then(($el) => {
         const numberOfItems = $el.length;
@@ -68,20 +59,46 @@ describe('Items module', () => {
       });
     });
 
-    it('can change item state to bought from to buy', () => {
-      cy.get('div[role=listitem]:not(.bought)').last().within(() => {
-        cy.get('.checkbox').click();
+    it('can change item state to_buy to bought', () => {
+      cy.get('div[role=listitem].to_buy').last().within(() => {
+        cy.get('button.olive').click();
         cy.root().as('toggled');
       });
       cy.get('@toggled').should('have.class', 'bought');
     });
 
-    it('can change item state from to buy to bought', () => {
+    it('can change item state from bought to to_buy', () => {
       cy.get('div[role=listitem].bought').last().within(() => {
-        cy.get('.checkbox').click();
+        cy.get('button.grey').click();
         cy.root().as('untoggled');
       });
-      cy.get('@untoggled').should('not.have.class', 'bought');
+      cy.get('@untoggled').should('not.have.class', 'bought').should('have.class', 'to_buy');
+    });
+
+    it('can change item state from to_buy to missing', () => {
+      cy.get('div[role=listitem].to_buy').last().within(() => {
+        cy.get('button:not(.olive)').click();
+      });
+      cy.get('.second-sublist').should('exist');
+      cy.get('div[role=listitem].missing').should('have.length', 1);
+      cy.contains('Unavailable in shop');
+    });
+
+    it('can change item state from missing to to_buy', () => {
+      cy.get('div[role=listitem].missing').last().within(() => {
+        cy.get('button.grey').click();
+      });
+      cy.get('.second-sublist').should('not.exist');
+      cy.get('div[role=listitem].missing').should('have.length', 0);
+    });
+
+    it('can remove an item', () => {
+      cy.get('div[role=listitem]').then(($el) => {
+        const numberOfItems = $el.length;
+        cy.get('.ui.dropdown').first().click();
+        cy.contains('Delete').click();
+        cy.get('div[role=listitem]').should('have.length', numberOfItems - 1);
+      });
     });
   });
 });
