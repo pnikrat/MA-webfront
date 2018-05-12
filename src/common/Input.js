@@ -24,10 +24,10 @@ const Input = ({
       min={min}
       step={step}
       required={required}
-      error={meta.submitFailed && meta.error && true}
+      error={meta && meta.submitFailed && meta.error && true}
       placeholder={placeholder}
     />
-    { meta.submitFailed && meta.error &&
+    { meta && meta.submitFailed && meta.error &&
     <Label basic pointing="above">{meta.error}</Label> }
   </div>
 );

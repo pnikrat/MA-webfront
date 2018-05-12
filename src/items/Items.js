@@ -26,6 +26,7 @@ class Items extends Component<Props> {
 
   singleItem = (item: Object) => (
     <SingleItem
+      key={item.id}
       item={item}
       onItemStateChange={this.props.onItemStateChange}
     />
