@@ -1,5 +1,6 @@
 import { SET_CURRENT_LIST, SET_ITEMS,
-  ADD_ITEM, REMOVE_ITEM, TOGGLE_ITEM, SET_SEARCH_RESULTS, GET } from '../state/constants';
+  ADD_ITEM, REMOVE_ITEM, TOGGLE_ITEM, SET_SEARCH_RESULTS,
+  SET_SEARCH_FIELD_VALUE, GET } from '../state/constants';
 import { apiCall } from '../services/apiActions';
 
 
@@ -53,6 +54,13 @@ function setSearchResults(response) {
   };
 }
 
+function setSearchFieldValue(value) {
+  return {
+    type: SET_SEARCH_FIELD_VALUE,
+    value,
+  };
+}
+
 export {
   setCurrentList,
   setItems,
@@ -61,4 +69,5 @@ export {
   removeItem,
   toggleItem,
   setSearchResults,
+  setSearchFieldValue,
 };

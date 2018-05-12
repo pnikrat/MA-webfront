@@ -1,4 +1,4 @@
-import { SET_SEARCH_RESULTS } from '../state/constants';
+import { SET_SEARCH_RESULTS, SET_SEARCH_FIELD_VALUE } from '../state/constants';
 
 function mapToSearchResult(results) {
   return results.map((result) => {
@@ -13,6 +13,10 @@ function searchReducer(state = {}, action) {
       return Object.assign({}, state, {
         open: true,
         results: action.payload === null ? [] : mapToSearchResult(action.payload),
+      });
+    case SET_SEARCH_FIELD_VALUE:
+      return Object.assign({}, state, {
+        value: action.value,
       });
     default:
       return state;

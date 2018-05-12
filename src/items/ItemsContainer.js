@@ -6,7 +6,7 @@ import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
 import { addItem, removeItem, toggleItem,
-  setCurrentListAndFetchItems, setSearchResults } from './ItemsActions';
+  setCurrentListAndFetchItems, setSearchResults, setSearchFieldValue } from './ItemsActions';
 import Items from './Items';
 import ItemsForm from './ItemsForm';
 import '../styles/items.css';
@@ -17,12 +17,14 @@ type Props = {
   items: Object,
   searchResults: Array<Object>,
   displayResults: boolean,
+  searchFieldValue: string,
   handleSetCurrentList: (Number) => void,
   clearForm: () => void,
   handleItemAdd: (Number, Object) => void,
   handleItemDelete: (Number, Number) => void,
   handleItemToggle: (Number, Number, Object) => void,
   handleItemsSearch: (Number, String) => void,
+  handleSetSearchFieldValue: (string) => void,
 }
 
 class ItemsContainer extends Component<Props> {
@@ -46,10 +48,12 @@ class ItemsContainer extends Component<Props> {
   onSearchChange = (event, data) => {
     const listId = this.props.currentList.id;
     const { value } = data;
+    this.props.handleSetSearchFieldValue(value);
     this.props.handleItemsSearch(listId, value);
   }
 
   onResultSelect = (event, data) => {
+    this.props.handleSetSearchFieldValue('');
     this.props.clearForm();
     const listId = this.props.currentList.id;
     const { id } = data.result;
@@ -58,6 +62,7 @@ class ItemsContainer extends Component<Props> {
   }
 
   handleItemAdd = (data) => {
+    this.props.handleSetSearchFieldValue('');
     this.props.clearForm();
     const listId = this.props.currentList.id;
     this.props.handleItemAdd(listId, data);
@@ -67,7 +72,7 @@ class ItemsContainer extends Component<Props> {
 
   render() {
     const {
-      currentList, items, searchResults, displayResults
+      currentList, items, searchResults, displayResults, searchFieldValue
     } = this.props;
     return (
       <Container>
@@ -86,6 +91,7 @@ class ItemsContainer extends Component<Props> {
               onResultSelect={this.onResultSelect}
               results={searchResults}
               open={displayResults}
+              searchFieldValue={searchFieldValue}
             />
           </Segment>
         </Container>
@@ -106,6 +112,7 @@ const mapStateToProps = state => ({
   currentList: state.itemsReducer.currentList,
   searchResults: state.searchReducer.results,
   displayResults: state.searchReducer.open,
+  searchFieldValue: state.searchReducer.value,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -120,7 +127,10 @@ const mapDispatchToProps = dispatch => ({
   },
   handleItemsSearch: (listId, query) => {
     dispatch(apiCall(`/lists/${listId}/items/?name=${query}`, setSearchResults, GET));
-  }
+  },
+  handleSetSearchFieldValue: (value) => {
+    dispatch(setSearchFieldValue(value));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemsContainer);

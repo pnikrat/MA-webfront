@@ -32,6 +32,7 @@ const initialState = {
   searchReducer: {
     open: false,
     results: [],
+    value: '',
   }
 };
 
