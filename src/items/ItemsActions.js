@@ -1,5 +1,5 @@
 import { SET_CURRENT_LIST, SET_ITEMS,
-  ADD_ITEM, REMOVE_ITEM, TOGGLE_ITEM, GET } from '../state/constants';
+  ADD_ITEM, REMOVE_ITEM, TOGGLE_ITEM, SET_SEARCH_RESULTS, GET } from '../state/constants';
 import { apiCall } from '../services/apiActions';
 
 
@@ -46,6 +46,13 @@ function toggleItem(response) {
   };
 }
 
+function setSearchResults(response) {
+  return {
+    type: SET_SEARCH_RESULTS,
+    payload: response.data,
+  };
+}
+
 export {
   setCurrentList,
   setItems,
@@ -53,4 +60,5 @@ export {
   addItem,
   removeItem,
   toggleItem,
+  setSearchResults,
 };

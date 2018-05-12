@@ -4,16 +4,24 @@ import { Field, reduxForm } from 'redux-form';
 import type { FormProps } from 'redux-form';
 import { Form, Message } from 'semantic-ui-react';
 import Input from '../common/Input';
+import SearchInput from '../common/SearchInput';
 
 type Props = {
   onSubmit: (data: Object) => void,
+  onSearchChange: (event: Object, data: Object) => void,
+  onResultSelect: (event: Object, data: Object) => void,
+  results: Array<Object>,
+  open: boolean,
 } & FormProps
 
 class ItemsForm extends Component<Props> {
   props: Props
 
   render() {
-    const { error, submitting, handleSubmit } = this.props;
+    const {
+      error, submitting, handleSubmit, onSearchChange, results, open, onResultSelect
+    } = this.props;
+
     return (
       <Form onSubmit={handleSubmit}>
         { error && <Message negative>{error}</Message> }
@@ -22,8 +30,12 @@ class ItemsForm extends Component<Props> {
           type="text"
           label="Item name"
           required
-          component={Input}
-          placeholder="Type any item..."
+          component={SearchInput}
+          results={results}
+          open={open}
+          onSearchChange={onSearchChange}
+          onResultSelect={onResultSelect}
+          placeholder="Type to search previous or add new..."
         />
         <div className="flexed">
           <Field

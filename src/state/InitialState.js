@@ -28,6 +28,10 @@ const initialState = {
   apiLoadingReducer: {
     loading: false,
     isFetching: false,
+  },
+  searchReducer: {
+    open: false,
+    results: [],
   }
 };
 
