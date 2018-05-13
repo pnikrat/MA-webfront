@@ -1,4 +1,6 @@
-import { SET_SEARCH_RESULTS, SET_SEARCH_FIELD_VALUE } from '../state/constants';
+import {
+  SET_SEARCH_RESULTS, SET_SEARCH_FIELD_VALUE, SET_SEARCH_MENU_VISIBILITY
+} from '../state/constants';
 
 function searchReducer(state = {}, action) {
   switch (action.type) {
@@ -11,6 +13,11 @@ function searchReducer(state = {}, action) {
       return Object.assign({}, state, {
         open: action.value !== '',
         value: action.value,
+      });
+    case SET_SEARCH_MENU_VISIBILITY:
+      return Object.assign({}, state, {
+        open: action.value,
+        results: action.value ? state.results : [],
       });
     default:
       return state;

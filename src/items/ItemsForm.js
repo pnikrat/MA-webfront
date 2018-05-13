@@ -11,6 +11,7 @@ type Props = {
   onSearchChange: (event: Object, data: Object) => void,
   onResultSelect: (data: Object) => void,
   onItemDelete: (id: number) => void,
+  onBlur: (event: Object) => void,
   results: Array<Object>,
   open: boolean,
   searchFieldValue: string,
@@ -22,7 +23,7 @@ class ItemsForm extends Component<Props> {
   render() {
     const {
       error, submitting, handleSubmit, onSearchChange, results, open,
-      onResultSelect, searchFieldValue, onItemDelete
+      onResultSelect, searchFieldValue, onItemDelete, onBlur
     } = this.props;
 
     return (
@@ -36,11 +37,12 @@ class ItemsForm extends Component<Props> {
           component={SearchInput}
           results={results}
           open={open}
+          placeholder="Type to search previous or add new..."
           onSearchChange={onSearchChange}
           onResultSelect={onResultSelect}
           searchFieldValue={searchFieldValue}
           onItemDelete={onItemDelete}
-          placeholder="Type to search previous or add new..."
+          onBlur={onBlur}
         />
         <div className="flexed">
           <Field

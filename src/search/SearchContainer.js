@@ -11,13 +11,30 @@ type Props = {
   onSearchChange: (event: Object, data: Object) => void,
   onResultSelect: (data: Object) => void,
   onItemDelete: (id: number) => void,
+  onBlur: (event: Object) => void,
 }
 
 class SearchContainer extends Component<Props> {
+  checkKeyAndFireAction = (e: Object) => {
+    switch (e.keyCode) {
+      case 40: // arrow down
+        // decrease selected index
+        break;
+      case 38: // arrow up
+        // increase selected index
+        break;
+      case 13: // enter
+        // onResultSelect with index of selection (??)
+        break;
+      default:
+        break;
+    }
+  }
+
   render() {
     const {
       placeholder, results, onSearchChange,
-      onResultSelect, searchFieldValue, onItemDelete, open
+      onResultSelect, searchFieldValue, onItemDelete, open, onBlur
     } = this.props;
     return (
       <div>
@@ -26,6 +43,8 @@ class SearchContainer extends Component<Props> {
           value={searchFieldValue}
           placeholder={placeholder}
           onChange={onSearchChange}
+          onBlur={onBlur}
+          onKeyDown={e => this.checkKeyAndFireAction(e)}
         />
         { open &&
           <SearchMenu

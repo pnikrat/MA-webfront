@@ -6,8 +6,10 @@ import { reset } from 'redux-form';
 import _ from 'lodash';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
-import { addItem, removeItem, toggleItem,
-  setCurrentListAndFetchItems, setSearchResults, setSearchFieldValue } from './ItemsActions';
+import { addItem, removeItem, toggleItem, setCurrentListAndFetchItems } from './ItemsActions';
+import {
+  setSearchResults, setSearchFieldValue, setSearchMenuVisibility
+} from '../search/SearchActions';
 import Items from './Items';
 import ItemsForm from './ItemsForm';
 import '../styles/items.css';
@@ -26,6 +28,7 @@ type Props = {
   handleItemToggle: (Number, Number, Object) => void,
   handleItemsSearch: (Number, string) => void,
   handleSetSearchFieldValue: (string) => void,
+  handleSetSearchMenuVisibility: (boolean) => void,
 }
 
 class ItemsContainer extends Component<Props> {
@@ -33,6 +36,7 @@ class ItemsContainer extends Component<Props> {
     const listId = this.props.match.params.id;
     this.props.handleSetCurrentList(listId);
     this.props.handleSetSearchFieldValue('');
+    this.props.handleSetSearchMenuVisibility(false);
     this.debouncedItemsSearch = _.debounce(this.props.handleItemsSearch, 500);
   }
 
@@ -78,7 +82,8 @@ class ItemsContainer extends Component<Props> {
 
   render() {
     const {
-      currentList, items, searchResults, displayResults, searchFieldValue
+      currentList, items, searchResults, displayResults, searchFieldValue,
+      handleSetSearchMenuVisibility
     } = this.props;
     return (
       <Container>
@@ -99,6 +104,7 @@ class ItemsContainer extends Component<Props> {
               open={displayResults}
               onItemDelete={this.onItemDelete}
               searchFieldValue={searchFieldValue}
+              onBlur={() => handleSetSearchMenuVisibility(false)}
             />
           </Segment>
         </Container>
@@ -134,9 +140,8 @@ const mapDispatchToProps = dispatch => ({
   handleItemsSearch: (listId, query) => {
     dispatch(apiCall(`/lists/${listId}/items/?name=${query}`, setSearchResults, GET));
   },
-  handleSetSearchFieldValue: (value) => {
-    dispatch(setSearchFieldValue(value));
-  },
+  handleSetSearchFieldValue: value => dispatch(setSearchFieldValue(value)),
+  handleSetSearchMenuVisibility: value => dispatch(setSearchMenuVisibility(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemsContainer);

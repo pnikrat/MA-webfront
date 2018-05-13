@@ -15,13 +15,14 @@ type Props = {
   onSearchChange: (event: Object, data: Object) => void,
   onResultSelect: (data: Object) => void,
   onItemDelete: (id: number) => void,
+  onBlur: (event: Object) => void,
 } & FieldProps
 
 class SearchInput extends Component<Props> {
   render() {
     const {
       input, label, placeholder, required, results, onSearchChange,
-      onResultSelect, searchFieldValue, onItemDelete, open
+      onResultSelect, searchFieldValue, onItemDelete, open, onBlur
     } = this.props;
     return (
       <div className="form-input">
@@ -36,6 +37,7 @@ class SearchInput extends Component<Props> {
             onResultSelect={onResultSelect}
             resultRenderer={SearchResult}
             searchFieldValue={searchFieldValue}
+            onBlur={onBlur}
           />
         </Form.Field>
       </div>
