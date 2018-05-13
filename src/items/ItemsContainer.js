@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Container, Header, Icon, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
+import _ from 'lodash';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
 import { addItem, removeItem, toggleItem,
@@ -23,7 +24,7 @@ type Props = {
   handleItemAdd: (Number, Object) => void,
   handleItemDelete: (Number, Number) => void,
   handleItemToggle: (Number, Number, Object) => void,
-  handleItemsSearch: (Number, String) => void,
+  handleItemsSearch: (Number, string) => void,
   handleSetSearchFieldValue: (string) => void,
 }
 
@@ -31,6 +32,8 @@ class ItemsContainer extends Component<Props> {
   componentDidMount = () => {
     const listId = this.props.match.params.id;
     this.props.handleSetCurrentList(listId);
+    this.props.handleItemsSearch(listId, '');
+    this.debouncedItemsSearch = _.debounce(this.props.handleItemsSearch, 500);
   }
 
   onItemDelete = (id) => {
@@ -49,7 +52,7 @@ class ItemsContainer extends Component<Props> {
     const listId = this.props.currentList.id;
     const { value } = data;
     this.props.handleSetSearchFieldValue(value);
-    this.props.handleItemsSearch(listId, value);
+    this.debouncedItemsSearch(listId, value);
   }
 
   onResultSelect = (event, data) => {
@@ -69,6 +72,7 @@ class ItemsContainer extends Component<Props> {
   }
 
   props: Props
+  debouncedItemsSearch: ((Number: any, string: any) => void) & _.Cancelable
 
   render() {
     const {
