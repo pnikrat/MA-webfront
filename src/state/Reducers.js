@@ -7,7 +7,7 @@ import itemsReducer from '../items/ItemsReducer';
 import { modalsReducer } from './ModalsState';
 import apiErrorReducer from '../services/apiErrorReducer';
 import apiLoadingReducer from '../services/apiLoadingReducer';
-import searchReducer from '../items/SearchReducer';
+import searchReducer from '../search/SearchReducer';
 
 const appReducer = combineReducers({
   form,

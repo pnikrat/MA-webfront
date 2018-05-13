@@ -4,12 +4,13 @@ import { Field, reduxForm } from 'redux-form';
 import type { FormProps } from 'redux-form';
 import { Form, Message } from 'semantic-ui-react';
 import Input from '../common/Input';
-import SearchInput from '../common/SearchInput';
+import SearchInput from '../search/SearchInput';
 
 type Props = {
   onSubmit: (data: Object) => void,
   onSearchChange: (event: Object, data: Object) => void,
-  onResultSelect: (event: Object, data: Object) => void,
+  onResultSelect: (data: Object) => void,
+  onItemDelete: (id: number) => void,
   results: Array<Object>,
   open: boolean,
   searchFieldValue: string,
@@ -21,7 +22,7 @@ class ItemsForm extends Component<Props> {
   render() {
     const {
       error, submitting, handleSubmit, onSearchChange, results, open,
-      onResultSelect, searchFieldValue
+      onResultSelect, searchFieldValue, onItemDelete
     } = this.props;
 
     return (
@@ -38,6 +39,7 @@ class ItemsForm extends Component<Props> {
           onSearchChange={onSearchChange}
           onResultSelect={onResultSelect}
           searchFieldValue={searchFieldValue}
+          onItemDelete={onItemDelete}
           placeholder="Type to search previous or add new..."
         />
         <div className="flexed">

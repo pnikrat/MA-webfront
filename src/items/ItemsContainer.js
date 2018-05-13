@@ -32,11 +32,13 @@ class ItemsContainer extends Component<Props> {
   componentDidMount = () => {
     const listId = this.props.match.params.id;
     this.props.handleSetCurrentList(listId);
-    this.props.handleItemsSearch(listId, '');
+    this.props.handleSetSearchFieldValue('');
     this.debouncedItemsSearch = _.debounce(this.props.handleItemsSearch, 500);
   }
 
   onItemDelete = (id) => {
+    this.props.handleSetSearchFieldValue('');
+    this.props.clearForm();
     const listId = this.props.currentList.id;
     this.props.handleItemDelete(listId, id);
   }
@@ -55,11 +57,11 @@ class ItemsContainer extends Component<Props> {
     this.debouncedItemsSearch(listId, value);
   }
 
-  onResultSelect = (event, data) => {
+  onResultSelect = (data) => {
     this.props.handleSetSearchFieldValue('');
     this.props.clearForm();
     const listId = this.props.currentList.id;
-    const { id } = data.result;
+    const { id } = data;
     const stateParams = { state: 'to_buy' };
     this.props.handleItemToggle(listId, id, stateParams);
   }
@@ -95,6 +97,7 @@ class ItemsContainer extends Component<Props> {
               onResultSelect={this.onResultSelect}
               results={searchResults}
               open={displayResults}
+              onItemDelete={this.onItemDelete}
               searchFieldValue={searchFieldValue}
             />
           </Segment>
@@ -102,7 +105,6 @@ class ItemsContainer extends Component<Props> {
         {items.length > 0 &&
           <Items
             items={items}
-            onItemDelete={this.onItemDelete}
             onItemStateChange={this.onItemStateChange}
           />
         }
