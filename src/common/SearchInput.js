@@ -21,7 +21,7 @@ const SearchInput = ({
 }: Props) => (
   <div className="form-input">
     <Form.Field {...input} required={required}>
-      <label>{label}</label>
+      <label htmlFor="name">{label}</label>
       <Search
         results={results}
         icon=""
