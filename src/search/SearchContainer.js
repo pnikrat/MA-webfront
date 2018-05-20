@@ -1,20 +1,40 @@
 // @flow
 import React, { Component } from 'react';
 import { Input } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import _ from 'lodash';
 import SearchMenu from './SearchMenu';
+import { GET } from '../state/constants';
+import { apiCall } from '../services/apiActions';
+import { setSearchResults, setSearchFieldValue, setSearchMenuVisibility } from './SearchActions';
 
 type Props = {
-  results: Array<Object>,
-  open?: boolean,
+  currentList: Object,
+  displayResults: boolean,
   placeholder?: string,
   searchFieldValue: string,
-  onSearchChange: (event: Object, data: Object) => void,
+  searchResults: Array<Object>,
   onResultSelect: (data: Object) => void,
   onItemDelete: (id: number) => void,
-  onBlur: (event: Object) => void,
+  handleItemsSearch: (Number, string) => void,
+  handleSetSearchFieldValue: (string) => void,
+  handleSetSearchMenuVisibility: (boolean) => void,
 }
 
 class SearchContainer extends Component<Props> {
+  componentDidMount = () => {
+    this.props.handleSetSearchFieldValue('');
+    this.props.handleSetSearchMenuVisibility(false);
+    this.debouncedItemsSearch = _.debounce(this.props.handleItemsSearch, 500);
+  }
+
+  onSearchChange = (event, data) => {
+    const listId = this.props.currentList.id;
+    const { value } = data;
+    this.props.handleSetSearchFieldValue(value);
+    this.debouncedItemsSearch(listId, value);
+  }
+
   checkKeyAndFireAction = (e: Object) => {
     switch (e.keyCode) {
       case 40: // arrow down
@@ -31,10 +51,12 @@ class SearchContainer extends Component<Props> {
     }
   }
 
+  debouncedItemsSearch: ((Number: any, string: any) => void) & _.Cancelable
+
   render() {
     const {
-      placeholder, results, onSearchChange,
-      onResultSelect, searchFieldValue, onItemDelete, open, onBlur
+      placeholder, handleSetSearchMenuVisibility,
+      onResultSelect, searchFieldValue, onItemDelete, displayResults, searchResults,
     } = this.props;
     return (
       <div>
@@ -42,13 +64,13 @@ class SearchContainer extends Component<Props> {
           className="search-relative"
           value={searchFieldValue}
           placeholder={placeholder}
-          onChange={onSearchChange}
-          onBlur={onBlur}
+          onChange={this.onSearchChange}
+          // onBlur={() => handleSetSearchMenuVisibility(false)}
           onKeyDown={e => this.checkKeyAndFireAction(e)}
         />
-        { open &&
+        { displayResults &&
           <SearchMenu
-            results={results}
+            results={searchResults}
             onResultSelect={onResultSelect}
             onItemDelete={onItemDelete}
           />
@@ -58,4 +80,19 @@ class SearchContainer extends Component<Props> {
   }
 }
 
-export default SearchContainer;
+const mapStateToProps = state => ({
+  currentList: state.itemsReducer.currentList,
+  searchResults: state.searchReducer.results,
+  displayResults: state.searchReducer.open,
+  searchFieldValue: state.searchReducer.value,
+});
+
+const mapDispatchToProps = dispatch => ({
+  handleSetSearchFieldValue: value => dispatch(setSearchFieldValue(value)),
+  handleSetSearchMenuVisibility: value => dispatch(setSearchMenuVisibility(value)),
+  handleItemsSearch: (listId, query) => {
+    dispatch(apiCall(`/lists/${listId}/items/?name=${query}`, setSearchResults, GET));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchContainer);

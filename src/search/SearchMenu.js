@@ -30,6 +30,8 @@ class SearchMenu extends Component<Props> {
             result={{ id: -1 }}
             title="No previous items found."
             description="A new item will be added"
+            onResultSelect={() => undefined}
+            onItemDelete={() => undefined}
           />
         }
       </div>

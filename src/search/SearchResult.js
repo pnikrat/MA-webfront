@@ -4,8 +4,8 @@ import { Button } from 'semantic-ui-react';
 
 type Props = {
   result: Object,
-  onResultSelect?: (data: Object) => void,
-  onItemDelete?: (id: number) => void,
+  onResultSelect: (data: Object) => void,
+  onItemDelete: (id: number) => void,
   title?: string,
   description?: string,
 }
@@ -17,7 +17,13 @@ function SearchResult({
     id, name, price, unit, quantity
   } = result;
   return (
-    <div key={id} className="flexed search-result" onClick={() => onResultSelect(result)}>
+    <div
+      className="flexed search-result"
+      role="menuitem"
+      tabIndex="-1"
+      onClick={() => onResultSelect(result)}
+      onKeyDown={e => (e.keyCode === 13 ? onResultSelect(result) : undefined)}
+    >
       <div className="content">
         {name && <div className="title">{name}</div>}
         {title && <div className="title">{title}</div>}
