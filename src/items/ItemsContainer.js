@@ -87,6 +87,7 @@ class ItemsContainer extends Component<Props> {
           <Items
             items={items}
             onItemStateChange={this.onItemStateChange}
+            // openEditModal={openEditModal}
           />
         }
       </Container>

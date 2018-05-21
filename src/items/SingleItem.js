@@ -6,9 +6,10 @@ import ItemActionButton from './ItemActionButton';
 type Props = {
   item: Object,
   onItemStateChange: (Object, string) => void,
+  openEditModal: (Object) => void,
 }
 
-function SingleItem({ item, onItemStateChange }: Props) {
+function SingleItem({ item, onItemStateChange, openEditModal }: Props) {
   return (
     <List.Item className={item.aasm_state}>
       { item.aasm_state === 'to_buy' &&
@@ -40,6 +41,11 @@ function SingleItem({ item, onItemStateChange }: Props) {
                 icon="trash outline"
                 text="Delete"
                 onClick={() => onItemStateChange(item, 'deleted')}
+              />
+              <Dropdown.Item
+                icon="edit"
+                text="Edit item"
+                onClick={() => openEditModal(item)}
               />
             </Dropdown.Menu>
           </Dropdown>
