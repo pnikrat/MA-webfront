@@ -1,5 +1,5 @@
 import {
-  SET_SEARCH_RESULTS, SET_SEARCH_FIELD_VALUE, SET_SEARCH_MENU_VISIBILITY
+  SET_SEARCH_RESULTS, SET_SEARCH_FIELD_VALUE, SET_SEARCH_MENU_VISIBILITY, CHANGE_FOCUS,
 } from '../state/constants';
 
 function searchReducer(state = {}, action) {
@@ -8,6 +8,7 @@ function searchReducer(state = {}, action) {
       return Object.assign({}, state, {
         open: true,
         results: action.payload === null ? [] : action.payload,
+        cursor: 0,
       });
     case SET_SEARCH_FIELD_VALUE:
       return Object.assign({}, state, {
@@ -18,6 +19,11 @@ function searchReducer(state = {}, action) {
       return Object.assign({}, state, {
         open: action.value,
         results: action.value ? state.results : [],
+        cursor: 0,
+      });
+    case CHANGE_FOCUS:
+      return Object.assign({}, state, {
+        cursor: action.value,
       });
     default:
       return state;

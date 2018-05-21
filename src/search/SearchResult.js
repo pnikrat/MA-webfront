@@ -20,7 +20,7 @@ function SearchResult({
     <div
       className="flexed search-result unblurrable"
       role="menuitem"
-      tabIndex="-1"
+      tabIndex="0"
       onClick={() => onResultSelect(result)}
       onKeyDown={e => (e.keyCode === 13 ? onResultSelect(result) : undefined)}
     >
@@ -35,10 +35,12 @@ function SearchResult({
         { !title &&
           <Button
             circular
+            tabIndex="-1"
             className="unblurrable"
             icon="delete"
             size="mini"
             onMouseDown={e => e.stopPropagation()}
+            onKeyDown={e => e.stopPropagation()}
             onClick={(e) => {
               e.stopPropagation();
               onItemDelete(id);

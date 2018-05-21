@@ -33,6 +33,7 @@ const initialState = {
     open: false,
     results: [],
     value: '',
+    cursor: 0,
   }
 };
 

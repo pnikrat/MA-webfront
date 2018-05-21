@@ -6,11 +6,13 @@ import _ from 'lodash';
 import SearchMenu from './SearchMenu';
 import { GET } from '../state/constants';
 import { apiCall } from '../services/apiActions';
-import { setSearchResults, setSearchFieldValue, setSearchMenuVisibility } from './SearchActions';
+import { setSearchResults, setSearchFieldValue,
+  setSearchMenuVisibility, changeSearchResultFocus } from './SearchActions';
 
 type Props = {
   currentList: Object,
   displayResults: boolean,
+  cursor: number,
   placeholder?: string,
   searchFieldValue: string,
   searchResults: Array<Object>,
@@ -19,6 +21,7 @@ type Props = {
   handleItemsSearch: (Number, string) => void,
   handleSetSearchFieldValue: (string) => void,
   handleSetSearchMenuVisibility: (boolean) => void,
+  handleSearchFocus: (number) => void,
 }
 
 class SearchContainer extends Component<Props> {
@@ -38,13 +41,14 @@ class SearchContainer extends Component<Props> {
   checkKeyAndFireAction = (e: Object) => {
     switch (e.keyCode) {
       case 40: // arrow down
-        // decrease selected index
+        if (this.props.cursor < this.props.searchResults.length - 1) {
+          this.props.handleSearchFocus(this.props.cursor + 1);
+        }
         break;
       case 38: // arrow up
-        // increase selected index
-        break;
-      case 13: // enter
-        // onResultSelect with index of selection (??)
+        if (this.props.cursor > 0) {
+          this.props.handleSearchFocus(this.props.cursor - 1);
+        }
         break;
       default:
         break;
@@ -94,6 +98,7 @@ const mapStateToProps = state => ({
   searchResults: state.searchReducer.results,
   displayResults: state.searchReducer.open,
   searchFieldValue: state.searchReducer.value,
+  cursor: state.searchReducer.cursor,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -102,6 +107,7 @@ const mapDispatchToProps = dispatch => ({
   handleItemsSearch: (listId, query) => {
     dispatch(apiCall(`/lists/${listId}/items/?name=${query}`, setSearchResults, GET));
   },
+  handleSearchFocus: value => dispatch(changeSearchResultFocus(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchContainer);

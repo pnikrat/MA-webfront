@@ -1,5 +1,5 @@
 import {
-  SET_SEARCH_RESULTS, SET_SEARCH_FIELD_VALUE, SET_SEARCH_MENU_VISIBILITY
+  SET_SEARCH_RESULTS, SET_SEARCH_FIELD_VALUE, SET_SEARCH_MENU_VISIBILITY, CHANGE_FOCUS
 } from '../state/constants';
 
 function setSearchResults(response) {
@@ -23,8 +23,16 @@ function setSearchMenuVisibility(value) {
   };
 }
 
+function changeSearchResultFocus(value) {
+  return {
+    type: CHANGE_FOCUS,
+    value,
+  };
+}
+
 export {
   setSearchResults,
   setSearchFieldValue,
   setSearchMenuVisibility,
+  changeSearchResultFocus,
 };
