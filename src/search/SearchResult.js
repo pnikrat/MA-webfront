@@ -18,7 +18,7 @@ function SearchResult({
   } = result;
   return (
     <div
-      className="flexed search-result"
+      className="flexed search-result unblurrable"
       role="menuitem"
       tabIndex="-1"
       onClick={() => onResultSelect(result)}
@@ -35,6 +35,7 @@ function SearchResult({
         { !title &&
           <Button
             circular
+            className="unblurrable"
             icon="delete"
             size="mini"
             onMouseDown={e => e.stopPropagation()}

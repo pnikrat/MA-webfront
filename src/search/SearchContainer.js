@@ -51,12 +51,21 @@ class SearchContainer extends Component<Props> {
     }
   }
 
+  handleInputFocusOut = (e: Object) => {
+    if (e.relatedTarget !== undefined && e.relatedTarget !== null) {
+      if (e.relatedTarget.classList.contains('unblurrable')) {
+        return;
+      }
+    }
+    this.props.handleSetSearchMenuVisibility(false);
+  }
+
   debouncedItemsSearch: ((Number: any, string: any) => void) & _.Cancelable
 
   render() {
     const {
-      placeholder, handleSetSearchMenuVisibility,
-      onResultSelect, searchFieldValue, onItemDelete, displayResults, searchResults,
+      placeholder, onResultSelect, searchFieldValue,
+      onItemDelete, displayResults, searchResults,
     } = this.props;
     return (
       <div>
@@ -65,7 +74,7 @@ class SearchContainer extends Component<Props> {
           value={searchFieldValue}
           placeholder={placeholder}
           onChange={this.onSearchChange}
-          // onBlur={() => handleSetSearchMenuVisibility(false)}
+          onBlur={e => this.handleInputFocusOut(e)}
           onKeyDown={e => this.checkKeyAndFireAction(e)}
         />
         { displayResults &&
