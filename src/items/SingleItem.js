@@ -10,7 +10,7 @@ type Props = {
 
 function SingleItem({ item, onItemStateChange }: Props) {
   return (
-    <List.Item key={item.id} className={item.aasm_state}>
+    <List.Item className={item.aasm_state}>
       { item.aasm_state === 'to_buy' &&
         <ItemActionButton
           color="olive"

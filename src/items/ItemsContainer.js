@@ -6,6 +6,7 @@ import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
 import { addItem, removeItem, toggleItem, setCurrentListAndFetchItems } from './ItemsActions';
+import { setSearchFieldValue } from '../search/SearchActions';
 import Items from './Items';
 import ItemsForm from './ItemsForm';
 import '../styles/items.css';
@@ -19,6 +20,7 @@ type Props = {
   handleItemAdd: (Number, Object) => void,
   handleItemDelete: (Number, Number) => void,
   handleItemToggle: (Number, Number, Object) => void,
+  handleSetSearchFieldValue: (string) => void,
 }
 
 class ItemsContainer extends Component<Props> {
@@ -28,6 +30,8 @@ class ItemsContainer extends Component<Props> {
   }
 
   onItemDelete = (id) => {
+    this.props.handleSetSearchFieldValue('');
+    this.props.clearForm();
     const listId = this.props.currentList.id;
     this.props.handleItemDelete(listId, id);
   }
@@ -39,7 +43,17 @@ class ItemsContainer extends Component<Props> {
     this.props.handleItemToggle(listId, id, data);
   }
 
+  onResultSelect = (data) => {
+    this.props.handleSetSearchFieldValue('');
+    this.props.clearForm();
+    const listId = this.props.currentList.id;
+    const { id } = data;
+    const stateParams = { state: 'to_buy' };
+    this.props.handleItemToggle(listId, id, stateParams);
+  }
+
   handleItemAdd = (data) => {
+    this.props.handleSetSearchFieldValue('');
     this.props.clearForm();
     const listId = this.props.currentList.id;
     this.props.handleItemAdd(listId, data);
@@ -48,24 +62,30 @@ class ItemsContainer extends Component<Props> {
   props: Props
 
   render() {
+    const {
+      currentList, items,
+    } = this.props;
     return (
       <Container>
         <Header as="h2">
           <Icon name="shopping cart" />
           <Header.Content>
-            {this.props.currentList && this.props.currentList.name}
+            {currentList && currentList.name}
           </Header.Content>
         </Header>
         <Container className="form-container">
           <Segment>
             <Header as="h3" className="with-divider">Add shopping items</Header>
-            <ItemsForm onSubmit={this.handleItemAdd} />
+            <ItemsForm
+              onSubmit={this.handleItemAdd}
+              onResultSelect={this.onResultSelect}
+              onItemDelete={this.onItemDelete}
+            />
           </Segment>
         </Container>
-        {this.props.items.length > 0 &&
+        {items.length > 0 &&
           <Items
-            items={this.props.items}
-            onItemDelete={this.onItemDelete}
+            items={items}
             onItemStateChange={this.onItemStateChange}
           />
         }
@@ -76,7 +96,7 @@ class ItemsContainer extends Component<Props> {
 
 const mapStateToProps = state => ({
   items: state.itemsReducer.items,
-  currentList: state.itemsReducer.currentList
+  currentList: state.itemsReducer.currentList,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -89,6 +109,7 @@ const mapDispatchToProps = dispatch => ({
   handleItemToggle: (listId, id, data) => {
     dispatch(apiCall(`/lists/${listId}/items/${id}`, toggleItem, PUT, data));
   },
+  handleSetSearchFieldValue: value => dispatch(setSearchFieldValue(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemsContainer);

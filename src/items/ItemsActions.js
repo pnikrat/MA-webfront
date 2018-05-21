@@ -1,5 +1,6 @@
 import { SET_CURRENT_LIST, SET_ITEMS,
-  ADD_ITEM, REMOVE_ITEM, TOGGLE_ITEM, GET } from '../state/constants';
+  ADD_ITEM, REMOVE_ITEM, TOGGLE_ITEM, GET
+} from '../state/constants';
 import { apiCall } from '../services/apiActions';
 
 
