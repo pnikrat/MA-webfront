@@ -9,7 +9,7 @@ import { GET, POST, DELETE } from '../state/constants';
 import { setLists, addList, removeList } from './ListsActions';
 import Lists from './Lists';
 import ListsForm from './ListsForm';
-import { closeListsModal, openListsModal } from '../state/ModalsState';
+import { closeModal, openListsModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
 import '../styles/lists.css';
 
@@ -64,10 +64,11 @@ class ListsContainer extends Component<Props> {
           objectId={confirmationModalListId}
           onConfirm={this.onListDelete}
           header="Delete shopping list"
-          content="Deleting the list will delete all shopping items inside. Do you want to continue?"
           negativeButtonText="No"
           positiveButtonText="Yes"
-        />
+        >
+          <p>Deleting the list will delete all shopping items inside. Do you want to continue?</p>
+        </ConfirmationModal>
       </Container>
     );
   }
@@ -85,7 +86,7 @@ const mapDispatchToProps = dispatch => ({
   clearForm: () => dispatch(reset('lists')),
   handleListDelete: id => dispatch(apiCall(`/lists/${String(id)}`, () => removeList(id), DELETE)),
   openList: id => dispatch(push(`/list/${id}/items`)),
-  closeConfirmationModal: () => dispatch(closeListsModal()),
+  closeConfirmationModal: () => dispatch(closeModal()),
   openConfirmationModal: (e, id) => dispatch(openListsModal(e, id)),
 });
 

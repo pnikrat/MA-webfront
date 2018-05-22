@@ -10,6 +10,10 @@ type Props = {
   onSubmit: (data: Object) => void,
   onResultSelect: (data: Object) => void,
   onItemDelete: (id: number) => void,
+  name?: string,
+  quantity?: number,
+  unit?: string,
+  price?: number,
 } & FormProps
 
 class ItemsForm extends Component<Props> {
@@ -17,9 +21,9 @@ class ItemsForm extends Component<Props> {
 
   render() {
     const {
-      error, submitting, handleSubmit, onResultSelect, onItemDelete
+      error, submitting, handleSubmit, onResultSelect, onItemDelete,
+      name, quantity, unit, price,
     } = this.props;
-
     return (
       <Form onSubmit={handleSubmit}>
         { error && <Message negative>{error}</Message> }
@@ -27,6 +31,7 @@ class ItemsForm extends Component<Props> {
           name="name"
           type="text"
           label="Item name"
+          value={name}
           required
           component={SearchInput}
           placeholder="Type to search previous or add new..."
@@ -39,6 +44,7 @@ class ItemsForm extends Component<Props> {
             type="number"
             label="Quantity"
             component={Input}
+            value={quantity}
           />
           <Field
             name="unit"
@@ -46,6 +52,7 @@ class ItemsForm extends Component<Props> {
             label="Unit"
             component={Input}
             placeholder="Pieces, bottles, etc..."
+            value={unit}
           />
           <Field
             name="price"
@@ -55,6 +62,7 @@ class ItemsForm extends Component<Props> {
             min="0.00"
             step="0.01"
             component={Input}
+            value={price}
           />
         </div>
         <Form.Button

@@ -10,17 +10,23 @@ import { setSearchFieldValue } from '../search/SearchActions';
 import Items from './Items';
 import ItemsForm from './ItemsForm';
 import '../styles/items.css';
+import { openEditItemModal, closeModal } from '../state/ModalsState';
+import ConfirmationModal from '../common/ConfirmationModal';
 
 type Props = {
   match: Object,
   currentList: Object,
   items: Object,
+  isEditItemModalOpen: boolean,
+  editItem: Object,
   handleSetCurrentList: (Number) => void,
   clearForm: () => void,
   handleItemAdd: (Number, Object) => void,
   handleItemDelete: (Number, Number) => void,
   handleItemToggle: (Number, Number, Object) => void,
   handleSetSearchFieldValue: (string) => void,
+  openEditModal: (Object) => void,
+  closeEditItemModal: () => void,
 }
 
 class ItemsContainer extends Component<Props> {
@@ -52,6 +58,10 @@ class ItemsContainer extends Component<Props> {
     this.props.handleItemToggle(listId, id, stateParams);
   }
 
+  onItemEdit = (data) => {
+    return data;
+  }
+
   handleItemAdd = (data) => {
     this.props.handleSetSearchFieldValue('');
     this.props.clearForm();
@@ -63,7 +73,7 @@ class ItemsContainer extends Component<Props> {
 
   render() {
     const {
-      currentList, items,
+      currentList, items, openEditModal, closeEditItemModal, isEditItemModalOpen, editItem,
     } = this.props;
     return (
       <Container>
@@ -87,9 +97,20 @@ class ItemsContainer extends Component<Props> {
           <Items
             items={items}
             onItemStateChange={this.onItemStateChange}
-            // openEditModal={openEditModal}
+            openEditModal={openEditModal}
           />
         }
+        <ConfirmationModal
+          isOpen={isEditItemModalOpen}
+          onClose={closeEditItemModal}
+          objectId={editItem}
+          onConfirm={this.onItemEdit}
+          header="Edit item"
+          negativeButtonText="Discard changes"
+          positiveButtonText="Accept changes"
+        >
+          <ItemsForm {...editItem} />
+        </ConfirmationModal>
       </Container>
     );
   }
@@ -98,6 +119,8 @@ class ItemsContainer extends Component<Props> {
 const mapStateToProps = state => ({
   items: state.itemsReducer.items,
   currentList: state.itemsReducer.currentList,
+  isEditItemModalOpen: state.modalsReducer.editItems.isOpen,
+  editItem: state.modalsReducer.editItems.item,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -111,6 +134,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(apiCall(`/lists/${listId}/items/${id}`, toggleItem, PUT, data));
   },
   handleSetSearchFieldValue: value => dispatch(setSearchFieldValue(value)),
+  openEditModal: item => dispatch(openEditItemModal(item)),
+  closeEditItemModal: () => dispatch(closeModal()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemsContainer);

@@ -1,20 +1,20 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Button, Modal } from 'semantic-ui-react';
 
 type Props = {
   isOpen: boolean,
-  objectId: Number,
+  objectId: any,
   header: string,
-  content: string,
+  children?: React.Node,
   negativeButtonText: string,
   positiveButtonText: string,
   onClose: () => void,
-  onConfirm: (Number) => void,
+  onConfirm: (any) => void,
 }
 
 function ConfirmationModal({
-  isOpen, header, content, negativeButtonText, positiveButtonText,
+  isOpen, header, children, negativeButtonText, positiveButtonText,
   onClose, objectId, onConfirm
 }: Props) {
   const modalConfirmed = (id) => {
@@ -28,7 +28,7 @@ function ConfirmationModal({
         {header}
       </Modal.Header>
       <Modal.Content>
-        <p>{content}</p>
+        {children}
       </Modal.Content>
       <Modal.Actions>
         <Button
