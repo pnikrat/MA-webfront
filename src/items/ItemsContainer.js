@@ -8,7 +8,8 @@ import { GET, POST, PUT, DELETE } from '../state/constants';
 import { addItem, removeItem, toggleItem, setCurrentListAndFetchItems } from './ItemsActions';
 import { setSearchFieldValue } from '../search/SearchActions';
 import Items from './Items';
-import ItemsForm from './ItemsForm';
+import { DecoratedNewItemForm as NewItemForm } from './NewItemForm';
+import EditItemForm from './EditItemForm';
 import '../styles/items.css';
 import { openEditItemModal, closeModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
@@ -86,7 +87,7 @@ class ItemsContainer extends Component<Props> {
         <Container className="form-container">
           <Segment>
             <Header as="h3" className="with-divider">Add shopping items</Header>
-            <ItemsForm
+            <NewItemForm
               onSubmit={this.handleItemAdd}
               onResultSelect={this.onResultSelect}
               onItemDelete={this.onItemDelete}
@@ -109,7 +110,7 @@ class ItemsContainer extends Component<Props> {
           negativeButtonText="Discard changes"
           positiveButtonText="Accept changes"
         >
-          <ItemsForm {...editItem} />
+          <EditItemForm />
         </ConfirmationModal>
       </Container>
     );

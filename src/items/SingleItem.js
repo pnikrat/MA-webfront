@@ -38,14 +38,14 @@ function SingleItem({ item, onItemStateChange, openEditModal }: Props) {
           <Dropdown text="">
             <Dropdown.Menu>
               <Dropdown.Item
-                icon="trash outline"
-                text="Delete"
-                onClick={() => onItemStateChange(item, 'deleted')}
-              />
-              <Dropdown.Item
                 icon="edit"
                 text="Edit item"
                 onClick={() => openEditModal(item)}
+              />
+              <Dropdown.Item
+                icon="trash outline"
+                text="Delete"
+                onClick={() => onItemStateChange(item, 'deleted')}
               />
             </Dropdown.Menu>
           </Dropdown>

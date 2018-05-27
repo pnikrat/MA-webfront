@@ -23,7 +23,7 @@ function ConfirmationModal({
   };
 
   return (
-    <Modal size="mini" open={isOpen} onClose={onClose}>
+    <Modal size="small" open={isOpen} onClose={onClose}>
       <Modal.Header>
         {header}
       </Modal.Header>
