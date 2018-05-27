@@ -11,6 +11,7 @@ import Lists from './Lists';
 import ListsForm from './ListsForm';
 import { closeModal, openListsModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
+import ModalAcceptButton from '../common/ModalAcceptButton';
 import '../styles/lists.css';
 
 type Props = {
@@ -26,12 +27,15 @@ type Props = {
   openConfirmationModal: (Object, Number) => void,
 }
 
+const RemoveListModal = ConfirmationModal(ModalAcceptButton);
+
 class ListsContainer extends Component<Props> {
   componentDidMount = () => {
     this.props.handleListsFetch();
   }
 
   onListDelete = (id: Number) => {
+    this.props.closeConfirmationModal();
     this.props.handleListDelete(id);
   }
 
@@ -58,7 +62,7 @@ class ListsContainer extends Component<Props> {
           onListClick={openList}
           openConfirmationModal={openConfirmationModal}
         />
-        <ConfirmationModal
+        <RemoveListModal
           isOpen={isConfirmationModalOpen}
           onClose={closeConfirmationModal}
           objectId={confirmationModalListId}
@@ -68,7 +72,7 @@ class ListsContainer extends Component<Props> {
           positiveButtonText="Yes"
         >
           <p>Deleting the list will delete all shopping items inside. Do you want to continue?</p>
-        </ConfirmationModal>
+        </RemoveListModal>
       </Container>
     );
   }

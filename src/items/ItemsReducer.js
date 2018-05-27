@@ -1,4 +1,4 @@
-import { SET_CURRENT_LIST, SET_ITEMS, ADD_ITEM,
+import { SET_CURRENT_LIST, SET_ITEMS, ADD_ITEM, EDIT_ITEM,
   REMOVE_ITEM, TOGGLE_ITEM } from '../state/constants';
 
 function itemsReducer(state = {}, action) {
@@ -19,6 +19,13 @@ function itemsReducer(state = {}, action) {
           ...state.items,
           action.item
         ]
+      });
+    case EDIT_ITEM:
+      return Object.assign({}, state, {
+        currentList: state.currentList,
+        items: state.items.map((i) => {
+          return (i.id === action.payload.id) ? { ...i, ...action.payload } : i;
+        })
       });
     case REMOVE_ITEM:
       return Object.assign({}, state, {

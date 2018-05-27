@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
-import { addItem, removeItem, toggleItem, setCurrentListAndFetchItems } from './ItemsActions';
+import { addItem, removeItem, editItem,
+  toggleItem, setCurrentListAndFetchItems } from './ItemsActions';
 import { setSearchFieldValue } from '../search/SearchActions';
 import Items from './Items';
 import { DecoratedNewItemForm as NewItemForm } from './NewItemForm';
@@ -13,22 +14,25 @@ import EditItemForm from './EditItemForm';
 import '../styles/items.css';
 import { openEditItemModal, closeModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
+import ModalSubmitButton from '../common/ModalSubmitButton';
 
 type Props = {
   match: Object,
   currentList: Object,
   items: Object,
   isEditItemModalOpen: boolean,
-  editItem: Object,
   handleSetCurrentList: (Number) => void,
   clearForm: () => void,
   handleItemAdd: (Number, Object) => void,
   handleItemDelete: (Number, Number) => void,
+  handleItemEdit: (Number, Number, Object) => void,
   handleItemToggle: (Number, Number, Object) => void,
   handleSetSearchFieldValue: (string) => void,
   openEditModal: (Object) => void,
   closeEditItemModal: () => void,
 }
+
+const EditItemModal = ConfirmationModal(ModalSubmitButton);
 
 class ItemsContainer extends Component<Props> {
   componentDidMount = () => {
@@ -60,7 +64,10 @@ class ItemsContainer extends Component<Props> {
   }
 
   onItemEdit = (data) => {
-    return data;
+    this.props.closeEditItemModal();
+    const listId = this.props.currentList.id;
+    const { id } = data;
+    this.props.handleItemEdit(listId, id, data);
   }
 
   handleItemAdd = (data) => {
@@ -74,7 +81,7 @@ class ItemsContainer extends Component<Props> {
 
   render() {
     const {
-      currentList, items, openEditModal, closeEditItemModal, isEditItemModalOpen, editItem,
+      currentList, items, openEditModal, closeEditItemModal, isEditItemModalOpen,
     } = this.props;
     return (
       <Container>
@@ -101,17 +108,14 @@ class ItemsContainer extends Component<Props> {
             openEditModal={openEditModal}
           />
         }
-        <ConfirmationModal
+        <EditItemModal
           isOpen={isEditItemModalOpen}
           onClose={closeEditItemModal}
-          objectId={editItem}
-          onConfirm={this.onItemEdit}
           header="Edit item"
           negativeButtonText="Discard changes"
-          positiveButtonText="Accept changes"
         >
-          <EditItemForm />
-        </ConfirmationModal>
+          <EditItemForm onSubmit={this.onItemEdit} />
+        </EditItemModal>
       </Container>
     );
   }
@@ -121,7 +125,6 @@ const mapStateToProps = state => ({
   items: state.itemsReducer.items,
   currentList: state.itemsReducer.currentList,
   isEditItemModalOpen: state.modalsReducer.editItems.isOpen,
-  editItem: state.modalsReducer.editItems.item,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -130,6 +133,9 @@ const mapDispatchToProps = dispatch => ({
   handleItemAdd: (listId, data) => dispatch(apiCall(`/lists/${listId}/items`, addItem, POST, data)),
   handleItemDelete: (listId, id) => {
     dispatch(apiCall(`/lists/${listId}/items/${String(id)}`, () => removeItem(id), DELETE));
+  },
+  handleItemEdit: (listId, id, data) => {
+    dispatch(apiCall(`/lists/${listId}/items/${id}`, editItem, PUT, data));
   },
   handleItemToggle: (listId, id, data) => {
     dispatch(apiCall(`/lists/${listId}/items/${id}`, toggleItem, PUT, data));
