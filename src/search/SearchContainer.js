@@ -78,6 +78,7 @@ class SearchContainer extends Component<Props> {
           value={searchFieldValue}
           placeholder={placeholder}
           onChange={this.onSearchChange}
+          data-cy="item-name"
           onBlur={e => this.handleInputFocusOut(e)}
           onKeyDown={e => this.checkKeyAndFireAction(e)}
         />
