@@ -74,7 +74,17 @@ class ItemsContainer extends Component<Props> {
     this.props.handleSetSearchFieldValue('');
     this.props.clearForm();
     const listId = this.props.currentList.id;
-    this.props.handleItemAdd(listId, data);
+    const existingItem = this.props.items.filter(
+      i => i.name.localeCompare(data.name, 'en', { sensitivity: 'base' }) === 0);
+    if (existingItem.length > 0) {
+      const item = existingItem[0];
+      if (item.aasm_state === 'deleted') {
+        data.state = 'to_buy';
+      }
+      this.props.handleItemEdit(listId, item.id, data);
+    } else {
+      this.props.handleItemAdd(listId, data);
+    }
   }
 
   props: Props
@@ -129,7 +139,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   handleSetCurrentList: id => dispatch(apiCall(`/lists/${id}`, setCurrentListAndFetchItems, GET)),
-  clearForm: () => dispatch(reset('items')),
+  clearForm: () => dispatch(reset('newItem')),
   handleItemAdd: (listId, data) => dispatch(apiCall(`/lists/${listId}/items`, addItem, POST, data)),
   handleItemDelete: (listId, id) => {
     dispatch(apiCall(`/lists/${listId}/items/${String(id)}`, () => removeItem(id), DELETE));
