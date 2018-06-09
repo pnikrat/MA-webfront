@@ -21,6 +21,10 @@ const initialState = {
       isOpen: false,
       id: null,
     },
+    editItems: {
+      isOpen: false,
+      item: null,
+    }
   },
   apiErrorReducer: {
     apiError: null,

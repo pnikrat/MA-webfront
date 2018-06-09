@@ -1,5 +1,5 @@
 import { SET_CURRENT_LIST, SET_ITEMS,
-  ADD_ITEM, REMOVE_ITEM, TOGGLE_ITEM, GET
+  ADD_ITEM, REMOVE_ITEM, TOGGLE_ITEM, GET, EDIT_ITEM
 } from '../state/constants';
 import { apiCall } from '../services/apiActions';
 
@@ -40,6 +40,13 @@ function removeItem(id) {
   };
 }
 
+function editItem(response) {
+  return {
+    type: EDIT_ITEM,
+    payload: response.data,
+  };
+}
+
 function toggleItem(response) {
   return {
     type: TOGGLE_ITEM,
@@ -53,5 +60,6 @@ export {
   setCurrentListAndFetchItems,
   addItem,
   removeItem,
+  editItem,
   toggleItem,
 };

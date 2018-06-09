@@ -47,6 +47,11 @@
   border-radius: 5px;
 }
 
+.ui.dropdown .menu {
+  right: 0;
+  left: auto;
+}
+
 .flexed .form-input {
   width: 100%;
   margin-right: 10px;

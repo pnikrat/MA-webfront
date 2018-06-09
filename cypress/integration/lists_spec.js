@@ -31,7 +31,7 @@ describe('Lists module', () => {
       cy.get('.list-segment').then(($el) => {
         const numberOfLists = $el.length;
         cy.get('.delete.link').first().click();
-        cy.get('.mini.modal').within(() => {
+        cy.get('.modal').within(() => {
           cy.contains('Delete shopping list');
           cy.contains('Yes').click();
         });
@@ -43,7 +43,7 @@ describe('Lists module', () => {
       cy.get('.list-segment').then(($el) => {
         const numberOfLists = $el.length;
         cy.get('.delete.link').first().click();
-        cy.get('.mini.modal').within(() => {
+        cy.get('.modal').within(() => {
           cy.contains('No').click();
         });
         cy.get('.list-segment').should('have.length', numberOfLists);

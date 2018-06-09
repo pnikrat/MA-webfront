@@ -25,15 +25,6 @@ class SearchMenu extends Component<Props> {
     return (
       <div className="search-absolute">
         { results && results.map(result => this.singleResult(result)) }
-        { results.length === 0 &&
-          <SearchResult
-            result={{ id: -1 }}
-            title="No previous items found."
-            description="A new item will be added"
-            onResultSelect={() => undefined}
-            onItemDelete={() => undefined}
-          />
-        }
       </div>
     );
   }

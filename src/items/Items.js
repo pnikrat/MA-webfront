@@ -6,6 +6,7 @@ import SingleItem from './SingleItem';
 type Props = {
   items: Object,
   onItemStateChange: (Object, string) => void,
+  openEditModal: (Object) => void,
 }
 
 class Items extends Component<Props> {
@@ -29,6 +30,7 @@ class Items extends Component<Props> {
       key={item.id}
       item={item}
       onItemStateChange={this.props.onItemStateChange}
+      openEditModal={this.props.openEditModal}
     />
   );
 

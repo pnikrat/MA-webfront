@@ -27,3 +27,39 @@ Cypress.Commands.add('login', () => {
     });
   });
 });
+Cypress.Commands.add('freshItems', () => {
+  // command used to delete all user lists and create one new to get a fresh items state
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:4000/auth/sign_in',
+    body: {
+      email: 'cypressmain@example.com',
+      password: 'qwer1234',
+    },
+  }).then((response) => {
+    const { headers } = response;
+    cy.request({
+      method: 'GET',
+      url: 'http://localhost:4000/lists/',
+      headers,
+    }).then((responseIndex) => {
+      if (responseIndex.body.length > 0) {
+        responseIndex.body.forEach((list) => {
+          cy.request({
+            method: 'DELETE',
+            url: `http://localhost:4000/lists/${list.id}`,
+            headers,
+          });
+        });
+      }
+    });
+    cy.request({
+      method: 'POST',
+      url: 'http://localhost:4000/lists/',
+      body: {
+        name: 'Lidl',
+      },
+      headers,
+    });
+  });
+});

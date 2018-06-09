@@ -1,4 +1,9 @@
 describe('Items module', () => {
+  before(() => {
+    cy.login();
+    cy.freshItems();
+  });
+
   beforeEach(() => {
     cy.login();
   });
@@ -27,7 +32,7 @@ describe('Items module', () => {
     });
 
     it('can add new item', () => {
-      cy.get('input[name=name]').type('Water');
+      cy.get('[data-cy=item-name]').children('input').type('Water').blur();
       cy.get('input[name=quantity]').type('6');
       cy.get('input[name=unit]').type('bottles');
       cy.get('input[name=price]').type('3.40');
@@ -37,10 +42,33 @@ describe('Items module', () => {
       cy.contains('3.4$');
     });
 
+    it('can edit newly added item', () => {
+      cy.get('div[role=listitem]').last().within(() => {
+        cy.get('.ui.dropdown').click();
+        cy.contains('Edit item').click();
+      });
+      cy.get('.modal').within(() => {
+        cy.contains('Edit item');
+        cy.get('input[name=name]').clear().type('Edited item');
+        cy.get('input[name=quantity]').clear().type('7');
+        cy.get('input[name=unit]').clear().type('units');
+        cy.get('input[name=price]').clear().type('10.15');
+        cy.get('button[type=submit]').click();
+      });
+      cy.get('div[role=listitem]').last().within(() => {
+        cy.get('.header').should('contain', 'Edited item');
+        cy.get('.header').should('not.contain', 'Water');
+        cy.get('.description').should('contain', 'Quantity: 7 units');
+        cy.get('.description').should('not.contain', '6 bottles');
+        cy.get('.description').should('contain', '10.15$');
+        cy.get('.description').should('not.contain', '3.4$');
+      });
+    });
+
     it('can add item by specifying just a name', () => {
       cy.get('div[role=listitem]').then(($el) => {
         const numberOfItems = $el.length;
-        cy.get('input[name=name]').type('Apple{enter}');
+        cy.get('[data-cy=item-name]').children('input').type('Apple{enter}');
         cy.get('div[role=listitem]').should('have.length', numberOfItems + 1);
       });
       cy.get('div[role=listitem]').last().within(() => {
@@ -51,7 +79,7 @@ describe('Items module', () => {
     });
 
     it('cannot add item without specifying at least a name', () => {
-      cy.get('input[name=name]').clear();
+      cy.get('[data-cy=item-name]').children('input').clear();
       cy.get('div[role=listitem]').then(($el) => {
         const numberOfItems = $el.length;
         cy.get('button[type=submit]').click();

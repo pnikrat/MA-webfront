@@ -1,51 +1,44 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Button, Modal } from 'semantic-ui-react';
 
-type Props = {
-  isOpen: boolean,
-  objectId: Number,
-  header: string,
-  content: string,
-  negativeButtonText: string,
-  positiveButtonText: string,
-  onClose: () => void,
-  onConfirm: (Number) => void,
-}
+function ConfirmationModal(ModalPositiveButton: React.Component) {
+  type Props = {
+    isOpen: boolean,
+    objectId?: Number,
+    header: string,
+    children?: React.Node,
+    negativeButtonText: string,
+    positiveButtonText?: string,
+    onClose: () => void,
+    onConfirm?: (Number) => void,
+  }
 
-function ConfirmationModal({
-  isOpen, header, content, negativeButtonText, positiveButtonText,
-  onClose, objectId, onConfirm
-}: Props) {
-  const modalConfirmed = (id) => {
-    onConfirm(id);
-    onClose();
+  return class extends React.Component<Props> {
+    render() {
+      const {
+        isOpen, header, children, negativeButtonText, onClose, ...passThroughProps
+      } = this.props;
+      return (
+        <Modal size="small" open={isOpen} onClose={onClose}>
+          <Modal.Header>
+            {header}
+          </Modal.Header>
+          <Modal.Content>
+            {children}
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              negative
+              content={negativeButtonText}
+              onClick={onClose}
+            />
+            <ModalPositiveButton {...passThroughProps} />
+          </Modal.Actions>
+        </Modal>
+      );
+    }
   };
-
-  return (
-    <Modal size="mini" open={isOpen} onClose={onClose}>
-      <Modal.Header>
-        {header}
-      </Modal.Header>
-      <Modal.Content>
-        <p>{content}</p>
-      </Modal.Content>
-      <Modal.Actions>
-        <Button
-          negative
-          content={negativeButtonText}
-          onClick={onClose}
-        />
-        <Button
-          positive
-          icon="checkmark"
-          labelPosition="right"
-          content={positiveButtonText}
-          onClick={() => modalConfirmed(objectId)}
-        />
-      </Modal.Actions>
-    </Modal>
-  );
 }
 
 export default ConfirmationModal;
