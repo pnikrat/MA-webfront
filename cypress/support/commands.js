@@ -47,7 +47,7 @@ Cypress.Commands.add('freshItems', () => {
         responseIndex.body.forEach((list) => {
           cy.request({
             method: 'DELETE',
-            url: `http://localhost:4000/list/${list.id}`,
+            url: `http://localhost:4000/lists/${list.id}`,
             headers,
           });
         });

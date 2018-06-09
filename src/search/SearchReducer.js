@@ -12,7 +12,7 @@ function searchReducer(state = {}, action) {
       });
     case SET_SEARCH_FIELD_VALUE:
       return Object.assign({}, state, {
-        open: state.results.length > 0,
+        open: action.value !== '' && state.results.length > 0,
         value: action.value,
       });
     case SET_SEARCH_MENU_VISIBILITY:
