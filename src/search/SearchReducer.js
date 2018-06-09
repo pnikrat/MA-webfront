@@ -6,13 +6,13 @@ function searchReducer(state = {}, action) {
   switch (action.type) {
     case SET_SEARCH_RESULTS:
       return Object.assign({}, state, {
-        open: true,
+        open: action.payload.length > 0,
         results: action.payload === null ? [] : action.payload,
         cursor: 0,
       });
     case SET_SEARCH_FIELD_VALUE:
       return Object.assign({}, state, {
-        open: action.value !== '',
+        open: state.results.length > 0,
         value: action.value,
       });
     case SET_SEARCH_MENU_VISIBILITY:
