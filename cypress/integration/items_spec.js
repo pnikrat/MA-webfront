@@ -29,6 +29,10 @@ describe('Items module', () => {
   context('Basic interactions', () => {
     beforeEach(() => {
       cy.contains('Lidl').click();
+      cy.get('.ui.header').within(() => {
+        cy.contains('Lidl');
+        cy.contains('Add shopping items');
+      });
     });
 
     it('can add new item', () => {
@@ -127,6 +131,47 @@ describe('Items module', () => {
         cy.contains('Delete').click();
         cy.get('div[role=listitem]').should('have.length', numberOfItems - 1);
       });
+    });
+  });
+
+  context('Mass actions interactions', () => {
+    beforeEach(() => {
+      cy.contains('Lidl').click();
+      cy.get('.ui.header').within(() => {
+        cy.contains('Lidl');
+        cy.contains('Add shopping items');
+      });
+    });
+
+    it('cannot use remove bought items button when there are no bought items', () => {
+      cy.get('div[role=listitem].bought').should('have.length', 0);
+      cy.get('[data-cy=remove-bought-items]').should('have.class', 'disabled');
+    });
+
+    it('can move items with state bought to state delete', () => {
+      cy.get('[data-cy=item-name]').children('input').type('Tomato{enter}');
+      cy.get('[data-cy=item-name]').children('input').type('Potato{enter}');
+      cy.contains('Tomato');
+      cy.contains('Potato');
+      cy.get('div[role=listitem].to_buy').then(($item) => {
+        const numberOfItems = $item.length;
+        cy.get('[data-cy=mark-bought]').each(($el, i) => {
+          if (i !== 0) {
+            cy.wrap($el).click();
+            cy.get('div[role=listitem].to_buy').should('have.length', numberOfItems - i);
+          }
+        });
+      });
+      cy.get('div[role=listitem].to_buy').should('have.length', 1);
+      cy.get('div[role=listitem].bought').should('have.length', 2);
+      cy.get('[data-cy=remove-bought-items]').click();
+      cy.get('.first-sublist').should('not.contain', 'Tomato');
+      cy.get('.first-sublist').should('not.contain', 'Potato');
+      cy.get('[data-cy=item-name]').children('input').type('tom');
+      cy.get('.search-absolute').contains('Tomato');
+      cy.get('[data-cy=item-name]').children('input').clear().type('pot');
+      cy.get('.search-absolute').contains('Potato');
+      cy.get('[data-cy=remove-bought-items]').should('have.class', 'disabled');
     });
   });
 });

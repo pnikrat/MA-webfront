@@ -51,6 +51,7 @@ class Items extends Component<Props> {
             <Button
               size="tiny"
               disabled={isRemoveBoughtDisabled}
+              data-cy="remove-bought-items"
               onClick={() => removeBoughtItems()}
             >
               Remove bought items

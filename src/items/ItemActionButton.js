@@ -6,9 +6,10 @@ type Props = {
   color?: string,
   iconName: string,
   onClick: (void) => void,
+  dataCy: string,
 }
 
-function ItemActionButton({ color, iconName, onClick }: Props) {
+function ItemActionButton({ color, iconName, onClick, dataCy }: Props) {
   return (
     <List.Icon verticalAlign="middle">
       <Button
@@ -16,6 +17,7 @@ function ItemActionButton({ color, iconName, onClick }: Props) {
         icon
         circular
         onClick={onClick}
+        data-cy={dataCy}
       >
         <Icon name={iconName} />
       </Button>
