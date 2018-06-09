@@ -1,12 +1,14 @@
 // @flow
 import React, { Component } from 'react';
-import { Container, Header, List, Segment } from 'semantic-ui-react';
+import { Button, Container, Header, List, Segment } from 'semantic-ui-react';
 import SingleItem from './SingleItem';
 
 type Props = {
   items: Object,
   onItemStateChange: (Object, string) => void,
   openEditModal: (Object) => void,
+  isRemoveBoughtDisabled: boolean,
+  removeBoughtItems: () => void,
 }
 
 class Items extends Component<Props> {
@@ -35,7 +37,7 @@ class Items extends Component<Props> {
   );
 
   render() {
-    const { items } = this.props;
+    const { items, removeBoughtItems, isRemoveBoughtDisabled } = this.props;
     const activeComponents = items.filter(this.toBuy).sort(this.compare)
       .map(item => this.singleItem(item));
     const unavailableComponents = items.filter(this.unavailable)
@@ -44,7 +46,16 @@ class Items extends Component<Props> {
     return (
       <Container className="all-items-container">
         <Segment className="first-sublist sublist">
-          <Header as="h3" className="with-divider">To buy / Bought</Header>
+          <div className="flexed with-divider">
+            <Header as="h3">To buy / Bought</Header>
+            <Button
+              size="tiny"
+              disabled={isRemoveBoughtDisabled}
+              onClick={() => removeBoughtItems()}
+            >
+              Remove bought items
+            </Button>
+          </div>
           <List divided relaxed>
             {activeComponents}
           </List>

@@ -6,7 +6,7 @@ import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
 import { addItem, removeItem, editItem,
-  toggleItem, setCurrentListAndFetchItems } from './ItemsActions';
+  toggleItem, setCurrentListAndFetchItems, massToggleItems } from './ItemsActions';
 import { setSearchFieldValue } from '../search/SearchActions';
 import Items from './Items';
 import { DecoratedNewItemForm as NewItemForm } from './NewItemForm';
@@ -21,6 +21,7 @@ type Props = {
   currentList: Object,
   items: Object,
   isEditItemModalOpen: boolean,
+  isRemoveBoughtDisabled: boolean,
   handleSetCurrentList: (Number) => void,
   clearForm: () => void,
   handleItemAdd: (Number, Object) => void,
@@ -30,6 +31,7 @@ type Props = {
   handleSetSearchFieldValue: (string) => void,
   openEditModal: (Object) => void,
   closeEditItemModal: () => void,
+  handleRemoveBoughtItems: (Number, Object) => void,
 }
 
 const EditItemModal = ConfirmationModal(ModalSubmitButton);
@@ -70,6 +72,13 @@ class ItemsContainer extends Component<Props> {
     this.props.handleItemEdit(listId, id, data);
   }
 
+  removeBoughtItems = () => {
+    const boughtItemsIds = this.props.items.filter(i => i.aasm_state === 'bought').map(i => i.id);
+    const params = { ids: boughtItemsIds, state: 'deleted' };
+    const listId = this.props.currentList.id;
+    this.props.handleRemoveBoughtItems(listId, params);
+  }
+
   handleItemAdd = (data) => {
     this.props.handleSetSearchFieldValue('');
     this.props.clearForm();
@@ -92,6 +101,7 @@ class ItemsContainer extends Component<Props> {
   render() {
     const {
       currentList, items, openEditModal, closeEditItemModal, isEditItemModalOpen,
+      isRemoveBoughtDisabled,
     } = this.props;
     return (
       <Container>
@@ -116,6 +126,8 @@ class ItemsContainer extends Component<Props> {
             items={items}
             onItemStateChange={this.onItemStateChange}
             openEditModal={openEditModal}
+            isRemoveBoughtDisabled={isRemoveBoughtDisabled}
+            removeBoughtItems={this.removeBoughtItems}
           />
         }
         <EditItemModal
@@ -135,6 +147,8 @@ const mapStateToProps = state => ({
   items: state.itemsReducer.items,
   currentList: state.itemsReducer.currentList,
   isEditItemModalOpen: state.modalsReducer.editItems.isOpen,
+  isRemoveBoughtDisabled: state.itemsReducer.items
+    .filter(i => i.aasm_state === 'bought').length === 0,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -153,6 +167,9 @@ const mapDispatchToProps = dispatch => ({
   handleSetSearchFieldValue: value => dispatch(setSearchFieldValue(value)),
   openEditModal: item => dispatch(openEditItemModal(item)),
   closeEditItemModal: () => dispatch(closeModal()),
+  handleRemoveBoughtItems: (listId, data) => {
+    dispatch(apiCall(`/lists/${listId}/items`, massToggleItems, PUT, data));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemsContainer);
