@@ -6,7 +6,7 @@ import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
 import { addItem, removeItem, editItem,
-  toggleItem, setCurrentListAndFetchItems, massToggleItems } from './ItemsActions';
+  toggleItem, setCurrentListAndFetchItems, massToggleItems, massMoveItems } from './ItemsActions';
 import { setSearchFieldValue } from '../search/SearchActions';
 import Items from './Items';
 import { DecoratedNewItemForm as NewItemForm } from './NewItemForm';
@@ -20,8 +20,10 @@ type Props = {
   match: Object,
   currentList: Object,
   items: Object,
+  lists: Object,
   isEditItemModalOpen: boolean,
   isRemoveBoughtDisabled: boolean,
+  isMoveUnavailableDisabled: boolean,
   handleSetCurrentList: (Number) => void,
   clearForm: () => void,
   handleItemAdd: (Number, Object) => void,
@@ -32,9 +34,12 @@ type Props = {
   openEditModal: (Object) => void,
   closeEditItemModal: () => void,
   handleRemoveBoughtItems: (Number, Object) => void,
+  handleMoveUnavailableItems: (Number, Object) => void,
 }
 
 const EditItemModal = ConfirmationModal(ModalSubmitButton);
+const byState = (x: Object, state: string) => x.filter(i => i.aasm_state === state);
+
 
 class ItemsContainer extends Component<Props> {
   componentDidMount = () => {
@@ -73,10 +78,17 @@ class ItemsContainer extends Component<Props> {
   }
 
   removeBoughtItems = () => {
-    const boughtItemsIds = this.props.items.filter(i => i.aasm_state === 'bought').map(i => i.id);
+    const boughtItemsIds = byState(this.props.items, 'bought').map(i => i.id);
     const params = { ids: boughtItemsIds, state: 'deleted' };
     const listId = this.props.currentList.id;
     this.props.handleRemoveBoughtItems(listId, params);
+  }
+
+  moveUnavailableItems = (targetListId) => {
+    const unavailableItemsIds = byState(this.props.items, 'missing').map(i => i.id);
+    const params = { ids: unavailableItemsIds, target_list: targetListId, state: 'to_buy' };
+    const listId = this.props.currentList.id;
+    this.props.handleMoveUnavailableItems(listId, params);
   }
 
   handleItemAdd = (data) => {
@@ -101,7 +113,7 @@ class ItemsContainer extends Component<Props> {
   render() {
     const {
       currentList, items, openEditModal, closeEditItemModal, isEditItemModalOpen,
-      isRemoveBoughtDisabled,
+      isRemoveBoughtDisabled, lists, isMoveUnavailableDisabled,
     } = this.props;
     return (
       <Container>
@@ -124,10 +136,14 @@ class ItemsContainer extends Component<Props> {
         {items.length > 0 &&
           <Items
             items={items}
+            lists={lists}
             onItemStateChange={this.onItemStateChange}
             openEditModal={openEditModal}
             isRemoveBoughtDisabled={isRemoveBoughtDisabled}
             removeBoughtItems={this.removeBoughtItems}
+            isMoveUnavailableDisabled={isMoveUnavailableDisabled}
+            moveUnavailableItems={this.moveUnavailableItems}
+            currentList={currentList}
           />
         }
         <EditItemModal
@@ -145,10 +161,11 @@ class ItemsContainer extends Component<Props> {
 
 const mapStateToProps = state => ({
   items: state.itemsReducer.items,
+  lists: state.listsReducer.lists,
   currentList: state.itemsReducer.currentList,
   isEditItemModalOpen: state.modalsReducer.editItems.isOpen,
-  isRemoveBoughtDisabled: state.itemsReducer.items
-    .filter(i => i.aasm_state === 'bought').length === 0,
+  isRemoveBoughtDisabled: byState(state.itemsReducer.items, 'bought').length === 0,
+  isMoveUnavailableDisabled: byState(state.itemsReducer.items, 'missing').length === 0,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -169,6 +186,9 @@ const mapDispatchToProps = dispatch => ({
   closeEditItemModal: () => dispatch(closeModal()),
   handleRemoveBoughtItems: (listId, data) => {
     dispatch(apiCall(`/lists/${listId}/items`, massToggleItems, PUT, data));
+  },
+  handleMoveUnavailableItems: (listId, data) => {
+    dispatch(apiCall(`/lists/${listId}/items`, massMoveItems, PUT, data));
   },
 });
 

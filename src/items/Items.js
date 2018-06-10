@@ -1,14 +1,18 @@
 // @flow
 import React, { Component } from 'react';
-import { Button, Container, Header, List, Segment } from 'semantic-ui-react';
+import { Button, Container, Header, List, Segment, Dropdown } from 'semantic-ui-react';
 import SingleItem from './SingleItem';
 
 type Props = {
   items: Object,
+  lists: Object,
+  currentList: Object,
   onItemStateChange: (Object, string) => void,
   openEditModal: (Object) => void,
   isRemoveBoughtDisabled: boolean,
+  isMoveUnavailableDisabled: boolean,
   removeBoughtItems: () => void,
+  moveUnavailableItems: (Number) => void,
 }
 
 class Items extends Component<Props> {
@@ -26,6 +30,7 @@ class Items extends Component<Props> {
 
   toBuy = (x: Object) => x.aasm_state === 'to_buy' || x.aasm_state === 'bought'
   unavailable = (x: Object) => x.aasm_state === 'missing'
+  otherLists = (x: Object) => x.id !== this.props.currentList.id
 
   singleItem = (item: Object) => (
     <SingleItem
@@ -36,12 +41,24 @@ class Items extends Component<Props> {
     />
   );
 
+  listOption = (list: Object) => (
+    <Dropdown.Item
+      key={list.id}
+      onClick={() => this.props.moveUnavailableItems(list.id)}
+    >
+      {list.name}
+    </Dropdown.Item>
+  )
+
   render() {
-    const { items, removeBoughtItems, isRemoveBoughtDisabled } = this.props;
+    const {
+      items, removeBoughtItems, isRemoveBoughtDisabled, lists, isMoveUnavailableDisabled
+    } = this.props;
     const activeComponents = items.filter(this.toBuy).sort(this.compare)
       .map(item => this.singleItem(item));
     const unavailableComponents = items.filter(this.unavailable)
       .map(item => this.singleItem(item));
+    const availableLists = lists.filter(this.otherLists).map(list => this.listOption(list));
 
     return (
       <Container className="all-items-container">
@@ -54,7 +71,7 @@ class Items extends Component<Props> {
               data-cy="remove-bought-items"
               onClick={() => removeBoughtItems()}
             >
-              Remove bought items
+              Remove bought
             </Button>
           </div>
           <List divided relaxed>
@@ -63,7 +80,19 @@ class Items extends Component<Props> {
         </Segment>
         { unavailableComponents.length > 0 &&
           <Segment className="second-sublist sublist">
-            <Header as="h3" className="with-divider">Unavailable in shop</Header>
+            <div className="flexed with-divider">
+              <Header as="h3">Unavailable in shop</Header>
+              <Dropdown
+                text="Move unavailable to:"
+                button
+                className="tiny"
+                disabled={isMoveUnavailableDisabled}
+              >
+                <Dropdown.Menu>
+                  {availableLists}
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
             <List divided relaxed>
               { unavailableComponents }
             </List>

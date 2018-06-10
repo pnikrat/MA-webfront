@@ -62,6 +62,14 @@ function massToggleItems(response) {
   };
 }
 
+function massMoveItems(response) {
+  return (dispatch) => {
+    response.data.forEach((entity) => {
+      dispatch(removeItem(entity.id));
+    });
+  };
+}
+
 export {
   setCurrentList,
   setItems,
@@ -71,4 +79,5 @@ export {
   editItem,
   toggleItem,
   massToggleItems,
+  massMoveItems,
 };
