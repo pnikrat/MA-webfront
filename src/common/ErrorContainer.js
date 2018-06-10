@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Container, Message } from 'semantic-ui-react';
 
 type Props = {
-  apiError: string,
+  apiError: Array<string>,
 }
 
 function ErrorContainer({ apiError }: Props) {
@@ -14,7 +14,10 @@ function ErrorContainer({ apiError }: Props) {
       <Container>
         <Message negative>
           <Message.Header>Something went wrong</Message.Header>
-          <p>Service is currently unavailable...</p>
+          { apiError.map((error, i) => (
+            // rule disabled - this is just breaking array of strings into chunks
+            <p key={i}>{error}</p> // eslint-disable-line react/no-array-index-key
+          ))}
         </Message>
       </Container>
       }
