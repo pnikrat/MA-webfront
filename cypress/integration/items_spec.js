@@ -173,5 +173,43 @@ describe('Items module', () => {
       cy.get('.search-absolute').contains('Potato');
       cy.get('[data-cy=remove-bought-items]').should('have.class', 'disabled');
     });
+
+    it('cannot use move missing items button when there are no missing items', () => {
+      cy.get('div[role=listitem].missing').should('have.length', 0);
+      cy.get('[data-cy=move-missing-items').should('not.exist');
+    });
+
+    it('cannot use move missing items button when there are no other lists', () => {
+      cy.get('div[role=listitem].to_buy').first().within(() => {
+        cy.get('[data-cy=mark-missing]').click();
+      });
+      cy.get('div[role=listitem].to_buy').should('have.length', 0);
+      cy.get('div[role=listitem].missing').should('have.length', 1);
+      cy.contains('Home').click();
+      cy.get('.list-segment').should('have.length', 1);
+      cy.contains('Lidl').click();
+      cy.get('[data-cy=move-missing-items]').should('have.class', 'disabled');
+    });
+
+    it('can move items with state missing to another list. Items change state to to_buy', () => {
+      cy.contains('Home').click();
+      cy.contains('Add shopping list');
+      cy.get('input[name=name]').type('Biedronka{enter}');
+      cy.get('.list-segment').should('have.length', 2);
+      cy.contains('Lidl').click();
+      cy.contains('Add shopping items');
+      cy.get('[data-cy=item-name]').children('input').type('potato{enter}');
+      cy.get('div[role=listitem].to_buy').first().within(() => {
+        cy.get('[data-cy=mark-missing]').click();
+      });
+      cy.get('div[role=listitem].missing').should('have.length', 2);
+      cy.get('[data-cy=move-missing-items]').click();
+      cy.contains('Biedronka').click();
+      cy.get('div[role=listitem].missing').should('have.length', 0);
+      cy.contains('Home').click();
+      cy.contains('Biedronka').click();
+      cy.get('div[role=listitem].to_buy').should('have.length', 2);
+      cy.get('div[role=listitem].missing').should('have.length', 0);
+    });
   });
 });
