@@ -113,7 +113,7 @@ describe('Items module', () => {
       });
       cy.get('.second-sublist').should('exist');
       cy.get('div[role=listitem].missing').should('have.length', 1);
-      cy.contains('Unavailable in shop');
+      cy.contains('Missing in shop');
     });
 
     it('can change item state from missing to to_buy', () => {

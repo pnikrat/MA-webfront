@@ -23,7 +23,7 @@ type Props = {
   lists: Object,
   isEditItemModalOpen: boolean,
   isRemoveBoughtDisabled: boolean,
-  isMoveUnavailableDisabled: boolean,
+  isMoveMissingDisabled: boolean,
   handleSetCurrentList: (Number) => void,
   clearForm: () => void,
   handleItemAdd: (Number, Object) => void,
@@ -34,7 +34,7 @@ type Props = {
   openEditModal: (Object) => void,
   closeEditItemModal: () => void,
   handleRemoveBoughtItems: (Number, Object) => void,
-  handleMoveUnavailableItems: (Number, Object) => void,
+  handleMoveMissingItems: (Number, Object) => void,
 }
 
 const EditItemModal = ConfirmationModal(ModalSubmitButton);
@@ -84,11 +84,11 @@ class ItemsContainer extends Component<Props> {
     this.props.handleRemoveBoughtItems(listId, params);
   }
 
-  moveUnavailableItems = (targetListId) => {
-    const unavailableItemsIds = byState(this.props.items, 'missing').map(i => i.id);
-    const params = { ids: unavailableItemsIds, target_list: targetListId, state: 'to_buy' };
+  moveMissingItems = (targetListId) => {
+    const missingItemsIds = byState(this.props.items, 'missing').map(i => i.id);
+    const params = { ids: missingItemsIds, target_list: targetListId, state: 'to_buy' };
     const listId = this.props.currentList.id;
-    this.props.handleMoveUnavailableItems(listId, params);
+    this.props.handleMoveMissingItems(listId, params);
   }
 
   handleItemAdd = (data) => {
@@ -113,7 +113,7 @@ class ItemsContainer extends Component<Props> {
   render() {
     const {
       currentList, items, openEditModal, closeEditItemModal, isEditItemModalOpen,
-      isRemoveBoughtDisabled, lists, isMoveUnavailableDisabled,
+      isRemoveBoughtDisabled, lists, isMoveMissingDisabled,
     } = this.props;
     return (
       <Container>
@@ -141,8 +141,8 @@ class ItemsContainer extends Component<Props> {
             openEditModal={openEditModal}
             isRemoveBoughtDisabled={isRemoveBoughtDisabled}
             removeBoughtItems={this.removeBoughtItems}
-            isMoveUnavailableDisabled={isMoveUnavailableDisabled}
-            moveUnavailableItems={this.moveUnavailableItems}
+            isMoveMissingDisabled={isMoveMissingDisabled}
+            moveMissingItems={this.moveMissingItems}
             currentList={currentList}
           />
         }
@@ -165,7 +165,7 @@ const mapStateToProps = state => ({
   currentList: state.itemsReducer.currentList,
   isEditItemModalOpen: state.modalsReducer.editItems.isOpen,
   isRemoveBoughtDisabled: byState(state.itemsReducer.items, 'bought').length === 0,
-  isMoveUnavailableDisabled: byState(state.itemsReducer.items, 'missing').length === 0,
+  isMoveMissingDisabled: byState(state.itemsReducer.items, 'missing').length === 0,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -187,7 +187,7 @@ const mapDispatchToProps = dispatch => ({
   handleRemoveBoughtItems: (listId, data) => {
     dispatch(apiCall(`/lists/${listId}/items`, massToggleItems, PUT, data));
   },
-  handleMoveUnavailableItems: (listId, data) => {
+  handleMoveMissingItems: (listId, data) => {
     dispatch(apiCall(`/lists/${listId}/items`, massMoveItems, PUT, data));
   },
 });

@@ -10,9 +10,9 @@ type Props = {
   onItemStateChange: (Object, string) => void,
   openEditModal: (Object) => void,
   isRemoveBoughtDisabled: boolean,
-  isMoveUnavailableDisabled: boolean,
+  isMoveMissingDisabled: boolean,
   removeBoughtItems: () => void,
-  moveUnavailableItems: (Number) => void,
+  moveMissingItems: (Number) => void,
 }
 
 class Items extends Component<Props> {
@@ -29,7 +29,7 @@ class Items extends Component<Props> {
   }
 
   toBuy = (x: Object) => x.aasm_state === 'to_buy' || x.aasm_state === 'bought'
-  unavailable = (x: Object) => x.aasm_state === 'missing'
+  missing = (x: Object) => x.aasm_state === 'missing'
   otherLists = (x: Object) => x.id !== this.props.currentList.id
 
   singleItem = (item: Object) => (
@@ -44,7 +44,7 @@ class Items extends Component<Props> {
   listOption = (list: Object) => (
     <Dropdown.Item
       key={list.id}
-      onClick={() => this.props.moveUnavailableItems(list.id)}
+      onClick={() => this.props.moveMissingItems(list.id)}
     >
       {list.name}
     </Dropdown.Item>
@@ -52,11 +52,11 @@ class Items extends Component<Props> {
 
   render() {
     const {
-      items, removeBoughtItems, isRemoveBoughtDisabled, lists, isMoveUnavailableDisabled
+      items, removeBoughtItems, isRemoveBoughtDisabled, lists, isMoveMissingDisabled
     } = this.props;
     const activeComponents = items.filter(this.toBuy).sort(this.compare)
       .map(item => this.singleItem(item));
-    const unavailableComponents = items.filter(this.unavailable)
+    const missingComponents = items.filter(this.missing)
       .map(item => this.singleItem(item));
     const availableLists = lists.filter(this.otherLists).map(list => this.listOption(list));
 
@@ -78,15 +78,16 @@ class Items extends Component<Props> {
             {activeComponents}
           </List>
         </Segment>
-        { unavailableComponents.length > 0 &&
+        { missingComponents.length > 0 &&
           <Segment className="second-sublist sublist">
             <div className="flexed with-divider">
-              <Header as="h3">Unavailable in shop</Header>
+              <Header as="h3">Missing in shop</Header>
               <Dropdown
-                text="Move unavailable to:"
+                text="Move missing to:"
                 button
+                data-cy="move-missing-items"
                 className="tiny"
-                disabled={isMoveUnavailableDisabled}
+                disabled={isMoveMissingDisabled || availableLists.length === 0}
               >
                 <Dropdown.Menu>
                   {availableLists}
@@ -94,7 +95,7 @@ class Items extends Component<Props> {
               </Dropdown>
             </div>
             <List divided relaxed>
-              { unavailableComponents }
+              { missingComponents }
             </List>
           </Segment>
         }
