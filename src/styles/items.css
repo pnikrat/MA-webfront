@@ -57,6 +57,10 @@
   margin-right: 10px;
 }
 
+.flexed .form-input:last-child {
+  margin-right: 0px;
+}
+
 .vertically-spaced {
   display: flex;
   flex-direction: column;

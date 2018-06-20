@@ -17,12 +17,14 @@ function SingleItem({ item, onItemStateChange, openEditModal }: Props) {
           color="olive"
           iconName="checkmark"
           onClick={() => onItemStateChange(item, 'bought')}
+          dataCy="mark-bought"
         />
       }
       { item.aasm_state === 'to_buy' &&
         <ItemActionButton
           iconName="minus"
           onClick={() => onItemStateChange(item, 'missing')}
+          dataCy="mark-missing"
         />
       }
       { (item.aasm_state === 'bought' || item.aasm_state === 'missing') &&
@@ -30,6 +32,7 @@ function SingleItem({ item, onItemStateChange, openEditModal }: Props) {
           color="grey"
           iconName="undo"
           onClick={() => onItemStateChange(item, 'to_buy')}
+          dataCy="mark-undo"
         />
       }
       <List.Content className="full-width">

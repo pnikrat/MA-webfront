@@ -18,7 +18,8 @@ const apiMiddleware = ({ dispatch }) => next => (action) => {
     dispatch(success(response));
   }).catch((error) => {
     dispatch(apiStop());
-    dispatch(apiThrowError(error.message));
+    const { errors } = error.response.data;
+    dispatch(apiThrowError(errors));
   });
 };
 

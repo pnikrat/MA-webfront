@@ -26,7 +26,16 @@ body .ui {
   box-shadow: 0 3px 4px 0 hsla(0, 0%, 0%, 0.2);
 }
 
-h3, .ui.header.with-divider {
+h3, .ui.header {
+  margin-bottom: 0;
+}
+
+.with-divider .ui.button {
+  padding: 5px;
+}
+
+.with-divider,
+.ui.header.with-divider {
   margin-bottom: 10px;
   padding-bottom: 10px;
   border-bottom: 2px solid #2185d0;

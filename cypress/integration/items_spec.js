@@ -29,6 +29,10 @@ describe('Items module', () => {
   context('Basic interactions', () => {
     beforeEach(() => {
       cy.contains('Lidl').click();
+      cy.get('.ui.header').within(() => {
+        cy.contains('Lidl');
+        cy.contains('Add shopping items');
+      });
     });
 
     it('can add new item', () => {
@@ -109,7 +113,7 @@ describe('Items module', () => {
       });
       cy.get('.second-sublist').should('exist');
       cy.get('div[role=listitem].missing').should('have.length', 1);
-      cy.contains('Unavailable in shop');
+      cy.contains('Missing in shop');
     });
 
     it('can change item state from missing to to_buy', () => {
@@ -127,6 +131,85 @@ describe('Items module', () => {
         cy.contains('Delete').click();
         cy.get('div[role=listitem]').should('have.length', numberOfItems - 1);
       });
+    });
+  });
+
+  context('Mass actions interactions', () => {
+    beforeEach(() => {
+      cy.contains('Lidl').click();
+      cy.get('.ui.header').within(() => {
+        cy.contains('Lidl');
+        cy.contains('Add shopping items');
+      });
+    });
+
+    it('cannot use remove bought items button when there are no bought items', () => {
+      cy.get('div[role=listitem].bought').should('have.length', 0);
+      cy.get('[data-cy=remove-bought-items]').should('have.class', 'disabled');
+    });
+
+    it('can move items with state bought to state delete', () => {
+      cy.get('[data-cy=item-name]').children('input').type('Tomato{enter}');
+      cy.get('[data-cy=item-name]').children('input').type('Potato{enter}');
+      cy.contains('Tomato');
+      cy.contains('Potato');
+      cy.get('div[role=listitem].to_buy').then(($item) => {
+        const numberOfItems = $item.length;
+        cy.get('[data-cy=mark-bought]').each(($el, i) => {
+          if (i !== 0) {
+            cy.wrap($el).click();
+            cy.get('div[role=listitem].to_buy').should('have.length', numberOfItems - i);
+          }
+        });
+      });
+      cy.get('div[role=listitem].to_buy').should('have.length', 1);
+      cy.get('div[role=listitem].bought').should('have.length', 2);
+      cy.get('[data-cy=remove-bought-items]').click();
+      cy.get('.first-sublist').should('not.contain', 'Tomato');
+      cy.get('.first-sublist').should('not.contain', 'Potato');
+      cy.get('[data-cy=item-name]').children('input').type('tom');
+      cy.get('.search-absolute').contains('Tomato');
+      cy.get('[data-cy=item-name]').children('input').clear().type('pot');
+      cy.get('.search-absolute').contains('Potato');
+      cy.get('[data-cy=remove-bought-items]').should('have.class', 'disabled');
+    });
+
+    it('cannot use move missing items button when there are no missing items', () => {
+      cy.get('div[role=listitem].missing').should('have.length', 0);
+      cy.get('[data-cy=move-missing-items').should('not.exist');
+    });
+
+    it('cannot use move missing items button when there are no other lists', () => {
+      cy.get('div[role=listitem].to_buy').first().within(() => {
+        cy.get('[data-cy=mark-missing]').click();
+      });
+      cy.get('div[role=listitem].to_buy').should('have.length', 0);
+      cy.get('div[role=listitem].missing').should('have.length', 1);
+      cy.contains('Home').click();
+      cy.get('.list-segment').should('have.length', 1);
+      cy.contains('Lidl').click();
+      cy.get('[data-cy=move-missing-items]').should('have.class', 'disabled');
+    });
+
+    it('can move items with state missing to another list. Items change state to to_buy', () => {
+      cy.contains('Home').click();
+      cy.contains('Add shopping list');
+      cy.get('input[name=name]').type('Biedronka{enter}');
+      cy.get('.list-segment').should('have.length', 2);
+      cy.contains('Lidl').click();
+      cy.contains('Add shopping items');
+      cy.get('[data-cy=item-name]').children('input').type('potato{enter}');
+      cy.get('div[role=listitem].to_buy').first().within(() => {
+        cy.get('[data-cy=mark-missing]').click();
+      });
+      cy.get('div[role=listitem].missing').should('have.length', 2);
+      cy.get('[data-cy=move-missing-items]').click();
+      cy.contains('Biedronka').click();
+      cy.get('div[role=listitem].missing').should('have.length', 0);
+      cy.contains('Home').click();
+      cy.contains('Biedronka').click();
+      cy.get('div[role=listitem].to_buy').should('have.length', 2);
+      cy.get('div[role=listitem].missing').should('have.length', 0);
     });
   });
 });

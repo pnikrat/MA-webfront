@@ -6,7 +6,7 @@ import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
 import { addItem, removeItem, editItem,
-  toggleItem, setCurrentListAndFetchItems } from './ItemsActions';
+  toggleItem, setCurrentListAndFetchItems, massToggleItems, massMoveItems } from './ItemsActions';
 import { setSearchFieldValue } from '../search/SearchActions';
 import Items from './Items';
 import { DecoratedNewItemForm as NewItemForm } from './NewItemForm';
@@ -20,7 +20,10 @@ type Props = {
   match: Object,
   currentList: Object,
   items: Object,
+  lists: Object,
   isEditItemModalOpen: boolean,
+  isRemoveBoughtDisabled: boolean,
+  isMoveMissingDisabled: boolean,
   handleSetCurrentList: (Number) => void,
   clearForm: () => void,
   handleItemAdd: (Number, Object) => void,
@@ -30,9 +33,13 @@ type Props = {
   handleSetSearchFieldValue: (string) => void,
   openEditModal: (Object) => void,
   closeEditItemModal: () => void,
+  handleRemoveBoughtItems: (Number, Object) => void,
+  handleMoveMissingItems: (Number, Object) => void,
 }
 
 const EditItemModal = ConfirmationModal(ModalSubmitButton);
+const byState = (x: Object, state: string) => x.filter(i => i.aasm_state === state);
+
 
 class ItemsContainer extends Component<Props> {
   componentDidMount = () => {
@@ -70,6 +77,20 @@ class ItemsContainer extends Component<Props> {
     this.props.handleItemEdit(listId, id, data);
   }
 
+  removeBoughtItems = () => {
+    const boughtItemsIds = byState(this.props.items, 'bought').map(i => i.id);
+    const params = { ids: boughtItemsIds, state: 'deleted' };
+    const listId = this.props.currentList.id;
+    this.props.handleRemoveBoughtItems(listId, params);
+  }
+
+  moveMissingItems = (targetListId) => {
+    const missingItemsIds = byState(this.props.items, 'missing').map(i => i.id);
+    const params = { ids: missingItemsIds, target_list: targetListId, state: 'to_buy' };
+    const listId = this.props.currentList.id;
+    this.props.handleMoveMissingItems(listId, params);
+  }
+
   handleItemAdd = (data) => {
     this.props.handleSetSearchFieldValue('');
     this.props.clearForm();
@@ -92,6 +113,7 @@ class ItemsContainer extends Component<Props> {
   render() {
     const {
       currentList, items, openEditModal, closeEditItemModal, isEditItemModalOpen,
+      isRemoveBoughtDisabled, lists, isMoveMissingDisabled,
     } = this.props;
     return (
       <Container>
@@ -114,8 +136,14 @@ class ItemsContainer extends Component<Props> {
         {items.length > 0 &&
           <Items
             items={items}
+            lists={lists}
             onItemStateChange={this.onItemStateChange}
             openEditModal={openEditModal}
+            isRemoveBoughtDisabled={isRemoveBoughtDisabled}
+            removeBoughtItems={this.removeBoughtItems}
+            isMoveMissingDisabled={isMoveMissingDisabled}
+            moveMissingItems={this.moveMissingItems}
+            currentList={currentList}
           />
         }
         <EditItemModal
@@ -133,8 +161,11 @@ class ItemsContainer extends Component<Props> {
 
 const mapStateToProps = state => ({
   items: state.itemsReducer.items,
+  lists: state.listsReducer.lists,
   currentList: state.itemsReducer.currentList,
   isEditItemModalOpen: state.modalsReducer.editItems.isOpen,
+  isRemoveBoughtDisabled: byState(state.itemsReducer.items, 'bought').length === 0,
+  isMoveMissingDisabled: byState(state.itemsReducer.items, 'missing').length === 0,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -153,6 +184,12 @@ const mapDispatchToProps = dispatch => ({
   handleSetSearchFieldValue: value => dispatch(setSearchFieldValue(value)),
   openEditModal: item => dispatch(openEditItemModal(item)),
   closeEditItemModal: () => dispatch(closeModal()),
+  handleRemoveBoughtItems: (listId, data) => {
+    dispatch(apiCall(`/lists/${listId}/items`, massToggleItems, PUT, data));
+  },
+  handleMoveMissingItems: (listId, data) => {
+    dispatch(apiCall(`/lists/${listId}/items`, massMoveItems, PUT, data));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemsContainer);
