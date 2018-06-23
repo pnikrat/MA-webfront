@@ -6,8 +6,9 @@ import reducers from './Reducers';
 import initialState from './InitialState';
 import history from '../router/History';
 import apiMiddleware from '../services/apiMiddleware';
+import locationChangeMiddleware from '../router/locationChangeMiddleware';
 
-const middleWare = [thunk, apiMiddleware, routerMiddleware(history)];
+const middleWare = [thunk, apiMiddleware, locationChangeMiddleware, routerMiddleware(history)];
 const store = createStore(
   reducers, initialState, composeWithDevTools(applyMiddleware(...middleWare))
 );

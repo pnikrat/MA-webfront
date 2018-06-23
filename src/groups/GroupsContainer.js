@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Button, Container, Header, Segment } from 'semantic-ui-react';
 import { Route, Link, Switch } from 'react-router-dom';
 import { apiCall } from '../services/apiActions';
-import { GET } from '../state/constants';
-import { setGroups } from './GroupsActions';
+import { GET, POST } from '../state/constants';
+import { setGroups, addGroupAndRedirectBack } from './GroupsActions';
 import ModuleTitle from '../common/ModuleTitle';
 import Groups from './Groups';
 import NewGroupForm from './NewGroupForm';
@@ -13,6 +13,7 @@ import NewGroupForm from './NewGroupForm';
 type Props = {
   groups: Array<Object>,
   handleGroupsFetch: () => void,
+  handleGroupAdd: (Object) => void,
 }
 
 
@@ -21,8 +22,8 @@ class GroupsContainer extends Component<Props> {
     this.props.handleGroupsFetch();
   }
 
-  handleGroupAdd= () => {
-    // didnt do nuthin
+  handleGroupAdd = (data: Object) => {
+    this.props.handleGroupAdd(data);
   }
 
   render() {
@@ -73,6 +74,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   handleGroupsFetch: () => dispatch(apiCall('/groups', setGroups, GET)),
+  handleGroupAdd: group => dispatch(apiCall('/groups', addGroupAndRedirectBack, POST, group)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupsContainer);
