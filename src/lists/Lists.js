@@ -14,7 +14,6 @@ class Lists extends Component<Props> {
     const listsItems = lists.map(list =>
       (
         <Segment
-          color="blue"
           key={list.id}
           className="list-segment"
           onClick={() => onListClick(list.id)}
