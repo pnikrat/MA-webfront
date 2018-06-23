@@ -38,6 +38,9 @@ const initialState = {
     results: [],
     value: '',
     cursor: 0,
+  },
+  groupsReducer: {
+    groups: [],
   }
 };
 

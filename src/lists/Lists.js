@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Container, Icon, Segment } from 'semantic-ui-react';
 
 type Props = {
-  lists: Object,
+  lists: Array<Object>,
   onListClick: (Number) => void,
   openConfirmationModal: (Object, Number) => void,
 }
