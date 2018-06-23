@@ -5,10 +5,11 @@ import { Button, Container, Header, Segment } from 'semantic-ui-react';
 import { Route, Link, Switch } from 'react-router-dom';
 import { apiCall } from '../services/apiActions';
 import { GET, POST } from '../state/constants';
-import { setGroups, addGroupAndRedirectBack, showGroup } from './GroupsActions';
+import { setGroups, addGroupAndRedirectBack, showGroup, editGroup } from './GroupsActions';
 import ModuleTitle from '../common/ModuleTitle';
 import Groups from './Groups';
-import NewGroupForm from './NewGroupForm';
+import { DecoratedNewGroupForm as NewGroupForm } from './NewGroupForm';
+import EditGroupForm from './EditGroupForm';
 import GroupDetails from './GroupDetails';
 
 type Props = {
@@ -16,9 +17,8 @@ type Props = {
   currentGroup: Object,
   handleGroupsFetch: () => void,
   handleGroupAdd: (Object) => void,
-  handleGroupShow: (number) => void,
+  handleGroupShow: (number, Function) => void,
 }
-
 
 class GroupsContainer extends Component<Props> {
   componentDidMount = () => {
@@ -29,9 +29,22 @@ class GroupsContainer extends Component<Props> {
     this.props.handleGroupAdd(data);
   }
 
+  handleGroupUpdate = (data: Object) => {
+    //didnt do nuthin
+  }
+
+  handleGroupShow = (id: number) => {
+    this.props.handleGroupShow(id, showGroup);
+  }
+
+  handleGroupEditRedirect = (e: Object, id: number) => {
+    e.stopPropagation();
+    this.props.handleGroupShow(id, editGroup);
+  }
+
   render() {
     const {
-      groups, handleGroupShow, currentGroup
+      groups, currentGroup
     } = this.props;
     return (
       <Container>
@@ -58,6 +71,15 @@ class GroupsContainer extends Component<Props> {
             )}
           />
           <Route
+            path="/groups/:id/edit"
+            render={() => (
+              <Segment>
+                <Header as="h3" className="with-divider">{`Edit ${currentGroup.name}`}</Header>
+                <EditGroupForm onSubmit={this.handleGroupUpdate} />
+              </Segment>
+            )}
+          />
+          <Route
             path="/groups/:id"
             render={() => (
               <GroupDetails
@@ -70,7 +92,8 @@ class GroupsContainer extends Component<Props> {
             render={() => (
               <Groups
                 groups={groups}
-                onGroupClick={handleGroupShow}
+                onGroupClick={this.handleGroupShow}
+                onEditClick={this.handleGroupEditRedirect}
               />
             )}
           />
@@ -88,7 +111,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   handleGroupsFetch: () => dispatch(apiCall('/groups', setGroups, GET)),
   handleGroupAdd: group => dispatch(apiCall('/groups', addGroupAndRedirectBack, POST, group)),
-  handleGroupShow: id => dispatch(apiCall(`/groups/${id}`, showGroup, GET)),
+  handleGroupShow: (id, callback) => dispatch(apiCall(`/groups/${id}`, callback, GET)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupsContainer);

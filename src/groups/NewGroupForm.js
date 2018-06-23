@@ -1,9 +1,8 @@
 // @flow
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import type { FormProps } from 'redux-form';
-import { Form, Message } from 'semantic-ui-react';
-import Input from '../common/Input';
+import GroupsFormCore from './GroupsFormCore';
 
 type Props = {
   onSubmit: (data: Object) => void,
@@ -13,31 +12,17 @@ class NewGroupForm extends Component<Props> {
   props: Props
 
   render() {
-    const { error, submitting, handleSubmit } = this.props;
     return (
-      <Form onSubmit={handleSubmit}>
-        { error && <Message negative>{error}</Message> }
-        <Field
-          name="name"
-          type="text"
-          label="Group name"
-          required
-          component={Input}
-          placeholder="Enter the name of your new group"
-        />
-        <Form.Button
-          type="submit"
-          disabled={submitting}
-          color="blue"
-        >
-          {submitting ? 'Submitting...' : 'Create'}
-        </Form.Button>
-      </Form>
+      <GroupsFormCore
+        placeholder="Enter the name of your new group"
+        submitText="Create"
+        {...this.props}
+      />
     );
   }
 }
 
-const validate = (values) => {
+const validateGroupForm = (values: Object) => {
   const errors = {};
   if (!values.name) {
     errors.name = 'Required';
@@ -45,4 +30,7 @@ const validate = (values) => {
   return errors;
 };
 
-export default reduxForm({ form: 'newGroup', validate })(NewGroupForm);
+const DecoratedNewGroupForm = reduxForm({ form: 'newGroup', validateGroupForm })(NewGroupForm);
+export {
+  DecoratedNewGroupForm, validateGroupForm
+};

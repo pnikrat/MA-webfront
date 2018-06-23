@@ -1,12 +1,11 @@
 // @flow
 import React, { Component } from 'react';
 import { Button, Container, Segment } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-
 
 type Props = {
   groups: Array<Object>,
   onGroupClick: (number) => void,
+  onEditClick: (Object, number) => void,
 }
 
 class Groups extends Component<Props> {
@@ -20,8 +19,16 @@ class Groups extends Component<Props> {
         <p>{group.name}</p>
       </div>
       <div className="flexed">
-        <Button basic color="blue" as={Link} to={`/groups/${group.id}/edit`}>Edit</Button>
-        <Button color="red">Delete</Button>
+        <Button
+          compact
+          basic
+          color="blue"
+          onMouseDown={e => e.stopPropagation()}
+          onClick={e => this.props.onEditClick(e, group.id)}
+        >
+          Edit
+        </Button>
+        <Button compact color="red">Delete</Button>
       </div>
     </Segment>
   );

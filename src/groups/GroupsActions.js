@@ -15,6 +15,13 @@ function addGroup(response) {
   };
 }
 
+function addGroupAndRedirectBack(response) {
+  return (dispatch) => {
+    dispatch(addGroup(response));
+    dispatch(push('/groups'));
+  };
+}
+
 function setCurrentGroup(response) {
   return {
     type: SET_CURRENT_GROUP,
@@ -30,13 +37,14 @@ function showGroup(response) {
   };
 }
 
-function addGroupAndRedirectBack(response) {
+function editGroup(response) {
   return (dispatch) => {
-    dispatch(addGroup(response));
-    dispatch(push('/groups'));
+    const { id } = response.data;
+    dispatch(setCurrentGroup(response));
+    dispatch(push(`/groups/${id}/edit`));
   };
 }
 
 export {
-  setGroups, addGroupAndRedirectBack, showGroup,
+  setGroups, addGroupAndRedirectBack, showGroup, editGroup,
 };
