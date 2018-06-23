@@ -4,8 +4,8 @@ import { Button } from 'semantic-ui-react';
 
 type Props = {
   positiveButtonText: string,
-  objectId: Number,
-  onConfirm: (Number) => void,
+  objectId: number,
+  onConfirm: (number) => void,
 }
 
 function ModalAcceptButton({

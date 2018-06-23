@@ -5,7 +5,7 @@ import { Container, Icon, Segment } from 'semantic-ui-react';
 type Props = {
   lists: Array<Object>,
   onListClick: (Number) => void,
-  openConfirmationModal: (Object, Number) => void,
+  openConfirmationModal: (Object, number) => void,
 }
 
 class Lists extends Component<Props> {
