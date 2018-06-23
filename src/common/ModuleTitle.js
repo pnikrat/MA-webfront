@@ -4,13 +4,14 @@ import { Header, Icon } from 'semantic-ui-react';
 
 type Props = {
   iconName: string,
+  className?: string,
   children: React.Node,
 }
 
 const ModuleTitle = ({
-  iconName, children
+  iconName, className, children
 }: Props) => (
-  <div className="medium-bottom-margin">
+  <div className={className}>
     <Header as="h2">
       <Icon name={iconName} />
       <Header.Content>

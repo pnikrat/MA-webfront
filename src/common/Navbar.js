@@ -22,7 +22,7 @@ class Navbar extends Component<Props> {
           <MenuItem
             path="/groups"
             iconName="group"
-            text="My groups"
+            text="Groups"
           />
         }
         { currentUser.isSignedIn &&

@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Container, Header, Icon, Segment } from 'semantic-ui-react';
+import { Container, Header, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
@@ -118,7 +118,7 @@ class ItemsContainer extends Component<Props> {
     } = this.props;
     return (
       <Container>
-        <ModuleTitle iconName="shopping cart">
+        <ModuleTitle iconName="shopping cart" className="medium-bottom-margin">
           {currentList && currentList.name}
         </ModuleTitle>
         <Container className="form-container">
