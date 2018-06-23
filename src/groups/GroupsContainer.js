@@ -1,12 +1,14 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container } from 'semantic-ui-react';
+import { Button, Container, Header, Segment } from 'semantic-ui-react';
+import { Route, Link, Switch } from 'react-router-dom';
 import { apiCall } from '../services/apiActions';
 import { GET } from '../state/constants';
 import { setGroups } from './GroupsActions';
 import ModuleTitle from '../common/ModuleTitle';
 import Groups from './Groups';
+import NewGroupForm from './NewGroupForm';
 
 type Props = {
   groups: Array<Object>,
@@ -19,18 +21,47 @@ class GroupsContainer extends Component<Props> {
     this.props.handleGroupsFetch();
   }
 
+  handleGroupAdd= () => {
+    // didnt do nuthin
+  }
+
   render() {
     const {
       groups
     } = this.props;
     return (
       <Container>
-        <ModuleTitle iconName="group">
-          My groups
-        </ModuleTitle>
-        <Groups
-          groups={groups}
-        />
+        <div className="flexed medium-bottom-margin">
+          <ModuleTitle iconName="group">
+            Groups
+          </ModuleTitle>
+          <Route
+            path="/groups"
+            exact
+            render={() => (
+              <Button primary as={Link} to="/groups/new">Create new group</Button>
+            )}
+          />
+        </div>
+        <Switch>
+          <Route
+            path="/groups/new"
+            render={() => (
+              <Segment>
+                <Header as="h3" className="with-divider">Create new group</Header>
+                <NewGroupForm onSubmit={this.handleGroupAdd} />
+              </Segment>
+            )}
+          />
+          <Route
+            path="/groups"
+            render={() => (
+              <Groups
+                groups={groups}
+              />
+            )}
+          />
+        </Switch>
       </Container>
     );
   }
