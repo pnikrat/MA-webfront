@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Button, Container, Header, Segment } from 'semantic-ui-react';
 import { Route, Link, Switch } from 'react-router-dom';
 import { apiCall } from '../services/apiActions';
-import { GET, POST } from '../state/constants';
-import { setGroups, addGroupAndRedirectBack, showGroup, editGroup } from './GroupsActions';
+import { GET, POST, PUT } from '../state/constants';
+import { setGroups, addGroupAndRedirectBack, showGroup, editGroup, updateGroupAndRedirectBack } from './GroupsActions';
 import ModuleTitle from '../common/ModuleTitle';
 import Groups from './Groups';
 import { DecoratedNewGroupForm as NewGroupForm } from './NewGroupForm';
@@ -18,6 +18,7 @@ type Props = {
   handleGroupsFetch: () => void,
   handleGroupAdd: (Object) => void,
   handleGroupShow: (number, Function) => void,
+  handleGroupUpdate: (number, Object) => void,
 }
 
 class GroupsContainer extends Component<Props> {
@@ -30,7 +31,8 @@ class GroupsContainer extends Component<Props> {
   }
 
   handleGroupUpdate = (data: Object) => {
-    //didnt do nuthin
+    const { id } = data;
+    this.props.handleGroupUpdate(id, data);
   }
 
   handleGroupShow = (id: number) => {
@@ -112,6 +114,9 @@ const mapDispatchToProps = dispatch => ({
   handleGroupsFetch: () => dispatch(apiCall('/groups', setGroups, GET)),
   handleGroupAdd: group => dispatch(apiCall('/groups', addGroupAndRedirectBack, POST, group)),
   handleGroupShow: (id, callback) => dispatch(apiCall(`/groups/${id}`, callback, GET)),
+  handleGroupUpdate: (id, data) => {
+    dispatch(apiCall(`/groups/${id}`, updateGroupAndRedirectBack, PUT, data));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupsContainer);

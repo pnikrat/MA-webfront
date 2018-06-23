@@ -1,4 +1,4 @@
-import { SET_GROUPS, ADD_GROUP, SET_CURRENT_GROUP } from '../state/constants';
+import { SET_GROUPS, ADD_GROUP, SET_CURRENT_GROUP, UPDATE_GROUP } from '../state/constants';
 
 function groupsReducer(state = {}, action) {
   switch (action.type) {
@@ -11,6 +11,13 @@ function groupsReducer(state = {}, action) {
       return Object.assign({}, state, {
         currentGroup: state.currentGroup,
         groups: [...state.groups, action.group]
+      });
+    case UPDATE_GROUP:
+      return Object.assign({}, state, {
+        currentGroup: state.currentGroup,
+        groups: state.groups.map((g) => {
+          return (g.id === action.payload.id) ? { ...g, ...action.payload } : g;
+        })
       });
     case SET_CURRENT_GROUP:
       return Object.assign({}, state, {
