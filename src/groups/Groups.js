@@ -6,6 +6,7 @@ type Props = {
   groups: Array<Object>,
   onGroupClick: (number) => void,
   onEditClick: (Object, number) => void,
+  openConfirmationModal: (Object, number) => void,
 }
 
 class Groups extends Component<Props> {
@@ -28,7 +29,14 @@ class Groups extends Component<Props> {
         >
           Edit
         </Button>
-        <Button compact color="red">Delete</Button>
+        <Button
+          compact
+          color="red"
+          onMouseDown={e => e.stopPropagation()}
+          onClick={e => this.props.openConfirmationModal(e, group.id)}
+        >
+          Delete
+        </Button>
       </div>
     </Segment>
   );

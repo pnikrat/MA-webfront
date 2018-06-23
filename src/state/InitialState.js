@@ -24,7 +24,11 @@ const initialState = {
     editItems: {
       isOpen: false,
       item: null,
-    }
+    },
+    groups: {
+      isOpen: false,
+      id: null,
+    },
   },
   apiErrorReducer: {
     apiError: null,

@@ -4,22 +4,33 @@ import { connect } from 'react-redux';
 import { Button, Container, Header, Segment } from 'semantic-ui-react';
 import { Route, Link, Switch } from 'react-router-dom';
 import { apiCall } from '../services/apiActions';
-import { GET, POST, PUT } from '../state/constants';
-import { setGroups, addGroupAndRedirectBack, showGroup, editGroup, updateGroupAndRedirectBack } from './GroupsActions';
+import { GET, POST, PUT, DELETE } from '../state/constants';
+import { setGroups, addGroupAndRedirectBack, showGroup,
+  editGroup, updateGroupAndRedirectBack, deleteGroup } from './GroupsActions';
 import ModuleTitle from '../common/ModuleTitle';
 import Groups from './Groups';
 import { DecoratedNewGroupForm as NewGroupForm } from './NewGroupForm';
 import EditGroupForm from './EditGroupForm';
 import GroupDetails from './GroupDetails';
+import { openDeleteGroupModal, closeModal } from '../state/ModalsState';
+import ConfirmationModal from '../common/ConfirmationModal';
+import ModalAcceptButton from '../common/ModalAcceptButton';
 
 type Props = {
   groups: Array<Object>,
   currentGroup: Object,
+  isConfirmationModalOpen: boolean,
+  confirmationModalGroupId: number,
   handleGroupsFetch: () => void,
   handleGroupAdd: (Object) => void,
   handleGroupShow: (number, Function) => void,
   handleGroupUpdate: (number, Object) => void,
+  openConfirmationModal: (Object, number) => void,
+  closeConfirmationModal: () => void,
+  handleGroupDelete: (number) => void,
 }
+
+const RemoveGroupModal = ConfirmationModal(ModalAcceptButton);
 
 class GroupsContainer extends Component<Props> {
   componentDidMount = () => {
@@ -44,9 +55,15 @@ class GroupsContainer extends Component<Props> {
     this.props.handleGroupShow(id, editGroup);
   }
 
+  handleGroupDelete = (id: number) => {
+    this.props.closeConfirmationModal();
+    this.props.handleGroupDelete(id);
+  }
+
   render() {
     const {
-      groups, currentGroup
+      groups, currentGroup, openConfirmationModal, isConfirmationModalOpen,
+      closeConfirmationModal, confirmationModalGroupId
     } = this.props;
     return (
       <Container>
@@ -96,10 +113,23 @@ class GroupsContainer extends Component<Props> {
                 groups={groups}
                 onGroupClick={this.handleGroupShow}
                 onEditClick={this.handleGroupEditRedirect}
+                openConfirmationModal={openConfirmationModal}
               />
             )}
           />
         </Switch>
+        <RemoveGroupModal
+          isOpen={isConfirmationModalOpen}
+          onClose={closeConfirmationModal}
+          objectId={confirmationModalGroupId}
+          onConfirm={this.handleGroupDelete}
+          header="Delete group"
+          negativeButtonText="No"
+          positiveButtonText="Yes"
+        >
+          <p>When you delete the group all users from the group will lose
+          access to each other's shopping lists. Are you sure you want to continue?</p>
+        </RemoveGroupModal>
       </Container>
     );
   }
@@ -108,6 +138,8 @@ class GroupsContainer extends Component<Props> {
 const mapStateToProps = state => ({
   groups: state.groupsReducer.groups,
   currentGroup: state.groupsReducer.currentGroup,
+  isConfirmationModalOpen: state.modalsReducer.groups.isOpen,
+  confirmationModalGroupId: state.modalsReducer.groups.id,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -117,6 +149,9 @@ const mapDispatchToProps = dispatch => ({
   handleGroupUpdate: (id, data) => {
     dispatch(apiCall(`/groups/${id}`, updateGroupAndRedirectBack, PUT, data));
   },
+  handleGroupDelete: id => dispatch(apiCall(`/groups/${id}`, () => deleteGroup(id), DELETE)),
+  openConfirmationModal: (e, id) => dispatch(openDeleteGroupModal(e, id)),
+  closeConfirmationModal: () => dispatch(closeModal()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupsContainer);
