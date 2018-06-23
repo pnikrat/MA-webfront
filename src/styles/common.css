@@ -12,6 +12,10 @@ body .ui {
   margin-bottom: 15px;
 }
 
+.medium-bottom-margin {
+  margin-bottom: 10px;
+}
+
 .not-found-container {
   margin: 2rem auto;
   text-align: center;
