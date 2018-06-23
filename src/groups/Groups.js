@@ -19,6 +19,10 @@ class Groups extends Component<Props> {
       <div>
         <p>{group.name}</p>
       </div>
+      <div className="flexed">
+        <Button basic color="blue" as={Link} to={`/groups/${group.id}/edit`}>Edit</Button>
+        <Button color="red">Delete</Button>
+      </div>
     </Segment>
   );
 
