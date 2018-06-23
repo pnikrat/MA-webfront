@@ -1,14 +1,21 @@
 // @flow
 import React, { Component } from 'react';
-import { Container, Segment } from 'semantic-ui-react';
+import { Button, Container, Segment } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+
 
 type Props = {
   groups: Array<Object>,
+  onGroupClick: (number) => void,
 }
 
 class Groups extends Component<Props> {
   singleGroup = (group: Object) => (
-    <Segment key={group.id} className="list-segment">
+    <Segment
+      key={group.id}
+      className="list-segment flexed"
+      onClick={() => this.props.onGroupClick(group.id)}
+    >
       <div>
         <p>{group.name}</p>
       </div>

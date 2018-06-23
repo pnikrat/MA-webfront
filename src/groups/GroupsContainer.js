@@ -5,15 +5,18 @@ import { Button, Container, Header, Segment } from 'semantic-ui-react';
 import { Route, Link, Switch } from 'react-router-dom';
 import { apiCall } from '../services/apiActions';
 import { GET, POST } from '../state/constants';
-import { setGroups, addGroupAndRedirectBack } from './GroupsActions';
+import { setGroups, addGroupAndRedirectBack, showGroup } from './GroupsActions';
 import ModuleTitle from '../common/ModuleTitle';
 import Groups from './Groups';
 import NewGroupForm from './NewGroupForm';
+import GroupDetails from './GroupDetails';
 
 type Props = {
   groups: Array<Object>,
+  currentGroup: Object,
   handleGroupsFetch: () => void,
   handleGroupAdd: (Object) => void,
+  handleGroupShow: (number) => void,
 }
 
 
@@ -28,7 +31,7 @@ class GroupsContainer extends Component<Props> {
 
   render() {
     const {
-      groups
+      groups, handleGroupShow, currentGroup
     } = this.props;
     return (
       <Container>
@@ -55,10 +58,19 @@ class GroupsContainer extends Component<Props> {
             )}
           />
           <Route
+            path="/groups/:id"
+            render={() => (
+              <GroupDetails
+                group={currentGroup}
+              />
+            )}
+          />
+          <Route
             path="/groups"
             render={() => (
               <Groups
                 groups={groups}
+                onGroupClick={handleGroupShow}
               />
             )}
           />
@@ -70,11 +82,13 @@ class GroupsContainer extends Component<Props> {
 
 const mapStateToProps = state => ({
   groups: state.groupsReducer.groups,
+  currentGroup: state.groupsReducer.currentGroup,
 });
 
 const mapDispatchToProps = dispatch => ({
   handleGroupsFetch: () => dispatch(apiCall('/groups', setGroups, GET)),
   handleGroupAdd: group => dispatch(apiCall('/groups', addGroupAndRedirectBack, POST, group)),
+  handleGroupShow: id => dispatch(apiCall(`/groups/${id}`, showGroup, GET)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupsContainer);

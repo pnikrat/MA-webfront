@@ -1,5 +1,5 @@
 import { push } from 'react-router-redux';
-import { SET_GROUPS, ADD_GROUP } from '../state/constants';
+import { SET_GROUPS, ADD_GROUP, SET_CURRENT_GROUP } from '../state/constants';
 
 function setGroups(response) {
   return {
@@ -15,6 +15,21 @@ function addGroup(response) {
   };
 }
 
+function setCurrentGroup(response) {
+  return {
+    type: SET_CURRENT_GROUP,
+    group: response.data,
+  };
+}
+
+function showGroup(response) {
+  return (dispatch) => {
+    const { id } = response.data;
+    dispatch(setCurrentGroup(response));
+    dispatch(push(`/groups/${id}`));
+  };
+}
+
 function addGroupAndRedirectBack(response) {
   return (dispatch) => {
     dispatch(addGroup(response));
@@ -23,5 +38,5 @@ function addGroupAndRedirectBack(response) {
 }
 
 export {
-  setGroups, addGroupAndRedirectBack
+  setGroups, addGroupAndRedirectBack, showGroup,
 };
