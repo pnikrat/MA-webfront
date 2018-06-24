@@ -19,6 +19,7 @@ import ModalAcceptButton from '../common/ModalAcceptButton';
 type Props = {
   groups: Array<Object>,
   currentGroup: Object,
+  currentUser: Object,
   isConfirmationModalOpen: boolean,
   confirmationModalGroupId: number,
   handleGroupsFetch: () => void,
@@ -62,7 +63,7 @@ class GroupsContainer extends Component<Props> {
 
   render() {
     const {
-      groups, currentGroup, openConfirmationModal, isConfirmationModalOpen,
+      groups, currentGroup, currentUser, openConfirmationModal, isConfirmationModalOpen,
       closeConfirmationModal, confirmationModalGroupId
     } = this.props;
     return (
@@ -114,6 +115,7 @@ class GroupsContainer extends Component<Props> {
                 onGroupClick={this.handleGroupShow}
                 onEditClick={this.handleGroupEditRedirect}
                 openConfirmationModal={openConfirmationModal}
+                currentUser={currentUser}
               />
             )}
           />
@@ -138,6 +140,7 @@ class GroupsContainer extends Component<Props> {
 const mapStateToProps = state => ({
   groups: state.groupsReducer.groups,
   currentGroup: state.groupsReducer.currentGroup,
+  currentUser: state.reduxTokenAuth.currentUser.attributes,
   isConfirmationModalOpen: state.modalsReducer.groups.isOpen,
   confirmationModalGroupId: state.modalsReducer.groups.id,
 });

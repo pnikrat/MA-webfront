@@ -7,10 +7,15 @@ type Props = {
 }
 
 class GroupDetails extends Component<Props> {
+  props: Props
+
+  compare = (x: Object) => {
+    return x.id === this.props.group.creator_id ? -1 : 1;
+  }
   singleMember = (member: Object) => (
     <List.Item key={member.id}>
       <div>
-        <p>{`${member.first_name} ${member.last_name}`}</p>
+        <p>{`${member.first_name} ${member.last_name || ''}`}</p>
       </div>
     </List.Item>
   );
@@ -18,7 +23,7 @@ class GroupDetails extends Component<Props> {
   render() {
     const { group } = this.props;
     const users = group.users ? group.users : [];
-    const members = users.map(user => this.singleMember(user));
+    const members = users.sort(this.compare).map(user => this.singleMember(user));
     return (
       <Segment>
         <Header as="h3" className="with-divider">{group.name}</Header>
