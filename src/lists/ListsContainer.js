@@ -5,8 +5,8 @@ import { Container, Header, Segment } from 'semantic-ui-react';
 import { reset } from 'redux-form';
 import { push } from 'react-router-redux';
 import { apiCall } from '../services/apiActions';
-import { GET, POST, DELETE } from '../state/constants';
-import { setLists, addList, removeList } from './ListsActions';
+import { GET, POST, PUT, DELETE } from '../state/constants';
+import { setLists, addList, editList, removeList } from './ListsActions';
 import Lists from './Lists';
 import { DecoratedNewListForm as NewListForm } from './NewListForm';
 import EditListForm from './EditListForm';
@@ -25,6 +25,7 @@ type Props = {
   handleListAdd: (Object) => void,
   clearForm: () => void,
   handleListDelete: (number) => void,
+  handleListEdit: (number, Object) => void,
   openList: (Number) => void,
   closeListModal: () => void,
   openDeleteModal: (Object, number) => void,
@@ -47,7 +48,7 @@ class ListsContainer extends Component<Props> {
   onListEdit = (data) => {
     this.props.closeListModal();
     const { id } = data;
-    // this.props.handleListEdit(id, data);
+    this.props.handleListEdit(id, data);
   }
 
   handleListAdd = (data: Object) => {
@@ -110,7 +111,8 @@ const mapDispatchToProps = dispatch => ({
   handleListsFetch: () => dispatch(apiCall('/lists', setLists, GET)),
   handleListAdd: list => dispatch(apiCall('/lists', addList, POST, list)),
   clearForm: () => dispatch(reset('newList')),
-  handleListDelete: id => dispatch(apiCall(`/lists/${String(id)}`, () => removeList(id), DELETE)),
+  handleListDelete: id => dispatch(apiCall(`/lists/${id}`, () => removeList(id), DELETE)),
+  handleListEdit: (id, data) => dispatch(apiCall(`/lists/${id}`, editList, PUT, data)),
   openList: id => dispatch(push(`/list/${id}/items`)),
   closeListModal: () => dispatch(closeModal()),
   openDeleteModal: (e, id) => dispatch(openDeleteListModal(e, id)),

@@ -1,4 +1,4 @@
-import { SET_LISTS, ADD_LIST, REMOVE_LIST } from '../state/constants';
+import { SET_LISTS, ADD_LIST, REMOVE_LIST, EDIT_LIST } from '../state/constants';
 
 function setLists(response) {
   return {
@@ -21,8 +21,16 @@ function removeList(id) {
   };
 }
 
+function editList(response) {
+  return {
+    type: EDIT_LIST,
+    payload: response.data,
+  };
+}
+
 export {
   setLists,
   addList,
+  editList,
   removeList,
 };
