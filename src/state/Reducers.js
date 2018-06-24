@@ -8,6 +8,7 @@ import { modalsReducer } from './ModalsState';
 import apiErrorReducer from '../services/apiErrorReducer';
 import apiLoadingReducer from '../services/apiLoadingReducer';
 import searchReducer from '../search/SearchReducer';
+import groupsReducer from '../groups/GroupsReducer';
 
 const appReducer = combineReducers({
   form,
@@ -19,6 +20,7 @@ const appReducer = combineReducers({
   apiErrorReducer,
   apiLoadingReducer,
   searchReducer,
+  groupsReducer,
 });
 
 export default appReducer;

@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { Container, Icon, Segment } from 'semantic-ui-react';
 
 type Props = {
-  lists: Object,
+  lists: Array<Object>,
   onListClick: (Number) => void,
-  openConfirmationModal: (Object, Number) => void,
+  openConfirmationModal: (Object, number) => void,
 }
 
 class Lists extends Component<Props> {
@@ -14,7 +14,6 @@ class Lists extends Component<Props> {
     const listsItems = lists.map(list =>
       (
         <Segment
-          color="blue"
           key={list.id}
           className="list-segment"
           onClick={() => onListClick(list.id)}

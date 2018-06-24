@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import Input from '../common/Input';
 
 const ItemsFormCore = () => (
-  <div className="flexed">
+  <div className="flexed no-flex-wrap">
     <Field
       name="quantity"
       type="number"

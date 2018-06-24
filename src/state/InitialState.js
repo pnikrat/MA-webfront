@@ -6,6 +6,7 @@ const initialState = {
       attributes: {
         firstName: null,
         lastName: null,
+        id: null,
       },
     },
   },
@@ -24,7 +25,11 @@ const initialState = {
     editItems: {
       isOpen: false,
       item: null,
-    }
+    },
+    groups: {
+      isOpen: false,
+      id: null,
+    },
   },
   apiErrorReducer: {
     apiError: null,
@@ -38,6 +43,10 @@ const initialState = {
     results: [],
     value: '',
     cursor: 0,
+  },
+  groupsReducer: {
+    groups: [],
+    currentGroup: null,
   }
 };
 

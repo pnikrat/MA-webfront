@@ -1,4 +1,4 @@
-import { OPEN_LISTS_MODAL, OPEN_EDIT_ITEM_MODAL, CLOSE_MODAL } from './constants';
+import { OPEN_LISTS_MODAL, OPEN_EDIT_ITEM_MODAL, CLOSE_MODAL, OPEN_DELETE_GROUP_MODAL } from './constants';
 
 const openListsModal = (e, id) => {
   e.stopPropagation(); // prevents overlapping onClick events
@@ -8,12 +8,22 @@ const closeModal = () => ({ type: CLOSE_MODAL });
 
 const openEditItemModal = item => ({ type: OPEN_EDIT_ITEM_MODAL, payload: item });
 
+const openDeleteGroupModal = (e, id) => {
+  e.stopPropagation();
+  return { type: OPEN_DELETE_GROUP_MODAL, payload: id };
+};
+
 function modalsReducer(state = {}, action) {
   switch (action.type) {
     case OPEN_LISTS_MODAL:
       return Object.assign({}, state, {
         ...state,
         lists: { isOpen: true, id: action.payload },
+      });
+    case OPEN_DELETE_GROUP_MODAL:
+      return Object.assign({}, state, {
+        ...state,
+        groups: { isOpen: true, id: action.payload },
       });
     case OPEN_EDIT_ITEM_MODAL:
       return Object.assign({}, state, {
@@ -24,6 +34,7 @@ function modalsReducer(state = {}, action) {
       return Object.assign({}, state, {
         lists: { isOpen: false, id: null },
         editItems: { isOpen: false, item: null },
+        groups: { isOpen: false, id: null },
       });
     default:
       return state;
@@ -34,5 +45,6 @@ export {
   openListsModal,
   closeModal,
   openEditItemModal,
+  openDeleteGroupModal,
   modalsReducer
 };

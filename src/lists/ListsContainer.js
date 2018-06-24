@@ -15,16 +15,16 @@ import ModalAcceptButton from '../common/ModalAcceptButton';
 import '../styles/lists.css';
 
 type Props = {
-  lists: Object,
+  lists: Array<Object>,
   isConfirmationModalOpen: boolean,
-  confirmationModalListId: Number,
+  confirmationModalListId: number,
   handleListsFetch: () => void,
   handleListAdd: (Object) => void,
   clearForm: () => void,
-  handleListDelete: (Number) => void,
+  handleListDelete: (number) => void,
   openList: (Number) => void,
   closeConfirmationModal: () => void,
-  openConfirmationModal: (Object, Number) => void,
+  openConfirmationModal: (Object, number) => void,
 }
 
 const RemoveListModal = ConfirmationModal(ModalAcceptButton);
@@ -34,7 +34,7 @@ class ListsContainer extends Component<Props> {
     this.props.handleListsFetch();
   }
 
-  onListDelete = (id: Number) => {
+  onListDelete = (id: number) => {
     this.props.closeConfirmationModal();
     this.props.handleListDelete(id);
   }

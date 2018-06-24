@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Container, Header, Icon, Segment } from 'semantic-ui-react';
+import { Container, Header, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
@@ -15,6 +15,7 @@ import '../styles/items.css';
 import { openEditItemModal, closeModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
 import ModalSubmitButton from '../common/ModalSubmitButton';
+import ModuleTitle from '../common/ModuleTitle';
 
 type Props = {
   match: Object,
@@ -117,12 +118,9 @@ class ItemsContainer extends Component<Props> {
     } = this.props;
     return (
       <Container>
-        <Header as="h2">
-          <Icon name="shopping cart" />
-          <Header.Content>
-            {currentList && currentList.name}
-          </Header.Content>
-        </Header>
+        <ModuleTitle iconName="shopping cart" className="medium-bottom-margin">
+          {currentList && currentList.name}
+        </ModuleTitle>
         <Container className="form-container">
           <Segment>
             <Header as="h3" className="with-divider">Add shopping items</Header>

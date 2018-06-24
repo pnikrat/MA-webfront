@@ -4,10 +4,10 @@ import { Icon, Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 type Props = {
-  position: string,
   path: string,
   iconName: string,
   text: string,
+  position?: string,
   clickCallback?: () => Object,
 }
 

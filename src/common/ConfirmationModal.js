@@ -5,13 +5,13 @@ import { Button, Modal } from 'semantic-ui-react';
 function ConfirmationModal(ModalPositiveButton: React.Component) {
   type Props = {
     isOpen: boolean,
-    objectId?: Number,
+    objectId?: number,
     header: string,
     children?: React.Node,
     negativeButtonText: string,
     positiveButtonText?: string,
     onClose: () => void,
-    onConfirm?: (Number) => void,
+    onConfirm?: (number) => void,
   }
 
   return class extends React.Component<Props> {

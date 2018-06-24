@@ -12,6 +12,10 @@ body .ui {
   margin-bottom: 15px;
 }
 
+.medium-bottom-margin {
+  margin-bottom: 10px;
+}
+
 .not-found-container {
   margin: 2rem auto;
   text-align: center;
@@ -43,4 +47,9 @@ h3, .ui.header {
 
 .larger-top-margin {
   margin-top: 10px;
+}
+
+.small-top-margin,
+.icon.small-top-margin {
+  margin-top: 3px;
 }
