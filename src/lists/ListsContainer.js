@@ -8,7 +8,8 @@ import { apiCall } from '../services/apiActions';
 import { GET, POST, DELETE } from '../state/constants';
 import { setLists, addList, removeList } from './ListsActions';
 import Lists from './Lists';
-import ListsForm from './ListsForm';
+import { DecoratedNewListForm as NewListForm } from './NewListForm';
+import EditListForm from './EditListForm';
 import { closeModal, openDeleteListModal, openEditListModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
 import ModalAcceptButton from '../common/ModalAcceptButton';
@@ -45,7 +46,7 @@ class ListsContainer extends Component<Props> {
 
   onListEdit = (data) => {
     this.props.closeListModal();
-    // const { id } = data;
+    const { id } = data;
     // this.props.handleListEdit(id, data);
   }
 
@@ -64,7 +65,7 @@ class ListsContainer extends Component<Props> {
         <Container className="form-container">
           <Segment>
             <Header as="h3" className="with-divider">Add shopping list</Header>
-            <ListsForm onSubmit={this.handleListAdd} />
+            <NewListForm onSubmit={this.handleListAdd} />
           </Segment>
         </Container>
         <Lists
@@ -91,8 +92,7 @@ class ListsContainer extends Component<Props> {
           header="Edit list"
           negativeButtonText="Discard changes"
         >
-          TEST TEXT
-          {/* <EditListForm onSubmit={this.onListEdit} /> */}
+          <EditListForm onSubmit={this.onListEdit} />
         </EditListModal>
       </Container>
     );
@@ -109,7 +109,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   handleListsFetch: () => dispatch(apiCall('/lists', setLists, GET)),
   handleListAdd: list => dispatch(apiCall('/lists', addList, POST, list)),
-  clearForm: () => dispatch(reset('lists')),
+  clearForm: () => dispatch(reset('newList')),
   handleListDelete: id => dispatch(apiCall(`/lists/${String(id)}`, () => removeList(id), DELETE)),
   openList: id => dispatch(push(`/list/${id}/items`)),
   closeListModal: () => dispatch(closeModal()),
