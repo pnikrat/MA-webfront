@@ -9,7 +9,7 @@ import { GET, POST, DELETE } from '../state/constants';
 import { setLists, addList, removeList } from './ListsActions';
 import Lists from './Lists';
 import ListsForm from './ListsForm';
-import { closeModal, openListsModal } from '../state/ModalsState';
+import { closeModal, openDeleteListModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
 import ModalAcceptButton from '../common/ModalAcceptButton';
 import '../styles/lists.css';
@@ -23,8 +23,8 @@ type Props = {
   clearForm: () => void,
   handleListDelete: (number) => void,
   openList: (Number) => void,
-  closeConfirmationModal: () => void,
-  openConfirmationModal: (Object, number) => void,
+  closeListModal: () => void,
+  openDeleteModal: (Object, number) => void,
 }
 
 const RemoveListModal = ConfirmationModal(ModalAcceptButton);
@@ -35,7 +35,7 @@ class ListsContainer extends Component<Props> {
   }
 
   onListDelete = (id: number) => {
-    this.props.closeConfirmationModal();
+    this.props.closeListModal();
     this.props.handleListDelete(id);
   }
 
@@ -46,8 +46,8 @@ class ListsContainer extends Component<Props> {
 
   render() {
     const {
-      isConfirmationModalOpen, lists, openList, openConfirmationModal,
-      closeConfirmationModal, confirmationModalListId
+      isConfirmationModalOpen, lists, openList, openDeleteModal,
+      closeListModal, confirmationModalListId
     } = this.props;
     return (
       <Container>
@@ -60,11 +60,11 @@ class ListsContainer extends Component<Props> {
         <Lists
           lists={lists}
           onListClick={openList}
-          openConfirmationModal={openConfirmationModal}
+          openConfirmationModal={openDeleteModal}
         />
         <RemoveListModal
           isOpen={isConfirmationModalOpen}
-          onClose={closeConfirmationModal}
+          onClose={closeListModal}
           objectId={confirmationModalListId}
           onConfirm={this.onListDelete}
           header="Delete shopping list"
@@ -80,8 +80,8 @@ class ListsContainer extends Component<Props> {
 
 const mapStateToProps = state => ({
   lists: state.listsReducer.lists,
-  isConfirmationModalOpen: state.modalsReducer.lists.isOpen,
-  confirmationModalListId: state.modalsReducer.lists.id,
+  isConfirmationModalOpen: state.modalsReducer.deleteList.isOpen,
+  confirmationModalListId: state.modalsReducer.deleteList.id,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -90,8 +90,8 @@ const mapDispatchToProps = dispatch => ({
   clearForm: () => dispatch(reset('lists')),
   handleListDelete: id => dispatch(apiCall(`/lists/${String(id)}`, () => removeList(id), DELETE)),
   openList: id => dispatch(push(`/list/${id}/items`)),
-  closeConfirmationModal: () => dispatch(closeModal()),
-  openConfirmationModal: (e, id) => dispatch(openListsModal(e, id)),
+  closeListModal: () => dispatch(closeModal()),
+  openDeleteModal: (e, id) => dispatch(openDeleteListModal(e, id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListsContainer);

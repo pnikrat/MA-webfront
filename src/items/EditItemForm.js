@@ -37,7 +37,7 @@ class EditItemForm extends Component<Props> {
 }
 
 const mapStateToProps = state => ({
-  initialValues: state.modalsReducer.editItems.item,
+  initialValues: state.modalsReducer.editItem.item,
 });
 
 const DecoratedEditItemForm = reduxForm({ form: 'editItem', validateItemForm })(EditItemForm);
