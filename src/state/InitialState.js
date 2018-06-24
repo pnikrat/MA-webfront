@@ -22,6 +22,10 @@ const initialState = {
       isOpen: false,
       id: null,
     },
+    editList: {
+      isOpen: false,
+      list: null,
+    },
     editItem: {
       isOpen: false,
       item: null,

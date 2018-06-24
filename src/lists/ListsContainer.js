@@ -9,15 +9,17 @@ import { GET, POST, DELETE } from '../state/constants';
 import { setLists, addList, removeList } from './ListsActions';
 import Lists from './Lists';
 import ListsForm from './ListsForm';
-import { closeModal, openDeleteListModal } from '../state/ModalsState';
+import { closeModal, openDeleteListModal, openEditListModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
 import ModalAcceptButton from '../common/ModalAcceptButton';
+import ModalSubmitButton from '../common/ModalSubmitButton';
 import '../styles/lists.css';
 
 type Props = {
   lists: Array<Object>,
-  isConfirmationModalOpen: boolean,
-  confirmationModalListId: number,
+  isDeleteListModalOpen: boolean,
+  deleteListModalListId: number,
+  isEditListModalOpen: boolean,
   handleListsFetch: () => void,
   handleListAdd: (Object) => void,
   clearForm: () => void,
@@ -25,9 +27,11 @@ type Props = {
   openList: (Number) => void,
   closeListModal: () => void,
   openDeleteModal: (Object, number) => void,
+  openEditModal: (Object, Object) => void,
 }
 
 const RemoveListModal = ConfirmationModal(ModalAcceptButton);
+const EditListModal = ConfirmationModal(ModalSubmitButton);
 
 class ListsContainer extends Component<Props> {
   componentDidMount = () => {
@@ -39,6 +43,12 @@ class ListsContainer extends Component<Props> {
     this.props.handleListDelete(id);
   }
 
+  onListEdit = (data) => {
+    this.props.closeListModal();
+    // const { id } = data;
+    // this.props.handleListEdit(id, data);
+  }
+
   handleListAdd = (data: Object) => {
     this.props.clearForm();
     this.props.handleListAdd(data);
@@ -46,8 +56,8 @@ class ListsContainer extends Component<Props> {
 
   render() {
     const {
-      isConfirmationModalOpen, lists, openList, openDeleteModal,
-      closeListModal, confirmationModalListId
+      isDeleteListModalOpen, lists, openList, openDeleteModal, openEditModal,
+      closeListModal, deleteListModalListId, isEditListModalOpen,
     } = this.props;
     return (
       <Container>
@@ -61,11 +71,12 @@ class ListsContainer extends Component<Props> {
           lists={lists}
           onListClick={openList}
           openConfirmationModal={openDeleteModal}
+          openEditListModal={openEditModal}
         />
         <RemoveListModal
-          isOpen={isConfirmationModalOpen}
+          isOpen={isDeleteListModalOpen}
           onClose={closeListModal}
-          objectId={confirmationModalListId}
+          objectId={deleteListModalListId}
           onConfirm={this.onListDelete}
           header="Delete shopping list"
           negativeButtonText="No"
@@ -73,6 +84,16 @@ class ListsContainer extends Component<Props> {
         >
           <p>Deleting the list will delete all shopping items inside. Do you want to continue?</p>
         </RemoveListModal>
+        <EditListModal
+          isOpen={isEditListModalOpen}
+          onClose={closeListModal}
+          formReduxName="editList"
+          header="Edit list"
+          negativeButtonText="Discard changes"
+        >
+          TEST TEXT
+          {/* <EditListForm onSubmit={this.onListEdit} /> */}
+        </EditListModal>
       </Container>
     );
   }
@@ -80,8 +101,9 @@ class ListsContainer extends Component<Props> {
 
 const mapStateToProps = state => ({
   lists: state.listsReducer.lists,
-  isConfirmationModalOpen: state.modalsReducer.deleteList.isOpen,
-  confirmationModalListId: state.modalsReducer.deleteList.id,
+  isDeleteListModalOpen: state.modalsReducer.deleteList.isOpen,
+  deleteListModalListId: state.modalsReducer.deleteList.id,
+  isEditListModalOpen: state.modalsReducer.editList.isOpen,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -92,6 +114,7 @@ const mapDispatchToProps = dispatch => ({
   openList: id => dispatch(push(`/list/${id}/items`)),
   closeListModal: () => dispatch(closeModal()),
   openDeleteModal: (e, id) => dispatch(openDeleteListModal(e, id)),
+  openEditModal: (e, list) => dispatch(openEditListModal(e, list)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListsContainer);

@@ -1,16 +1,19 @@
 // @flow
 import React, { Component } from 'react';
-import { Container, Icon, Segment } from 'semantic-ui-react';
+import { Button, Container, Segment } from 'semantic-ui-react';
 
 type Props = {
   lists: Array<Object>,
   onListClick: (Number) => void,
   openConfirmationModal: (Object, number) => void,
+  openEditListModal: (Object, Object) => void,
 }
 
 class Lists extends Component<Props> {
   render() {
-    const { lists, onListClick, openConfirmationModal } = this.props;
+    const {
+      lists, onListClick, openConfirmationModal, openEditListModal
+    } = this.props;
     const listsItems = lists.map(list =>
       (
         <Segment
@@ -21,12 +24,25 @@ class Lists extends Component<Props> {
           <div>
             <p>{list.name}</p>
           </div>
-          <Icon
-            link
-            name="delete"
-            onMouseDown={e => e.stopPropagation()}
-            onClick={e => openConfirmationModal(e, list.id)}
-          />
+          <div className="flexed">
+            <Button
+              compact
+              basic
+              color="blue"
+              onMouseDown={e => e.stopPropagation()}
+              onClick={e => openEditListModal(e, list)}
+            >
+              Edit
+            </Button>
+            <Button
+              compact
+              color="red"
+              onMouseDown={e => e.stopPropagation()}
+              onClick={e => openConfirmationModal(e, list.id)}
+            >
+              Delete
+            </Button>
+          </div>
         </Segment>
       )
     );
