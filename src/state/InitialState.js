@@ -6,6 +6,7 @@ const initialState = {
       attributes: {
         firstName: null,
         lastName: null,
+        id: null,
       },
     },
   },
