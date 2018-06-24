@@ -147,6 +147,7 @@ class ItemsContainer extends Component<Props> {
         <EditItemModal
           isOpen={isEditItemModalOpen}
           onClose={closeEditModal}
+          formReduxName="editItem"
           header="Edit item"
           negativeButtonText="Discard changes"
         >
