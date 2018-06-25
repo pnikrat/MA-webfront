@@ -193,7 +193,7 @@ describe('Items module', () => {
 
     it('can move items with state missing to another list. Items change state to to_buy', () => {
       cy.contains('Home').click();
-      cy.contains('Add shopping list');
+      cy.contains('Create shopping list');
       cy.get('input[name=name]').type('Biedronka{enter}');
       cy.get('.list-segment').should('have.length', 2);
       cy.contains('Lidl').click();

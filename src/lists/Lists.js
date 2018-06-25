@@ -37,6 +37,7 @@ class Lists extends Component<Props> {
             <Button
               compact
               color="red"
+              data-cy="delete-list-button"
               onMouseDown={e => e.stopPropagation()}
               onClick={e => openConfirmationModal(e, list.id)}
             >

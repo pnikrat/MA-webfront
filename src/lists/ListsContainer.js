@@ -65,7 +65,7 @@ class ListsContainer extends Component<Props> {
       <Container>
         <Container className="form-container">
           <Segment>
-            <Header as="h3" className="with-divider">Add shopping list</Header>
+            <Header as="h3" className="with-divider">Create shopping list</Header>
             <NewListForm onSubmit={this.handleListAdd} />
           </Segment>
         </Container>

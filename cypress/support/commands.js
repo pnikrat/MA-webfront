@@ -27,6 +27,7 @@ Cypress.Commands.add('login', () => {
     });
   });
 });
+
 Cypress.Commands.add('freshItems', () => {
   // command used to delete all user lists and create one new to get a fresh items state
   cy.request({
@@ -61,5 +62,43 @@ Cypress.Commands.add('freshItems', () => {
       },
       headers,
     });
+  });
+});
+
+Cypress.Commands.add('registerTestUser', () => {
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:4000/auth/sign_up',
+    body: {
+      email: 'cypress@example.com',
+      password: 'qwer1234',
+      passwordConfirmation: 'qwer1234',
+      firstName: 'Cypress',
+    },
+    failOnStatusCode: false,
+  });
+});
+
+Cypress.Commands.add('destroyTestUser', () => {
+  // get access token and client headers required for delete if test user exists
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:4000/auth/sign_in',
+    body: { email: 'cypress@example.com', password: 'qwer1234' },
+    failOnStatusCode: false,
+  }).then((response) => {
+    if (response.status === 200) {
+      const { headers } = response;
+      // remove test user to prevent unique email validation fail
+      cy.request({
+        method: 'DELETE',
+        url: 'http://localhost:4000/auth/',
+        body: { uid: 'cypress@example.com' },
+        headers: {
+          'access-token': headers['access-token'],
+          client: headers.client
+        }
+      });
+    }
   });
 });

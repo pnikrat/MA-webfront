@@ -1,18 +1,7 @@
 describe('Authentication module', () => {
   context('Login', () => {
-    beforeEach(() => {
-      // create test user for login purposes
-      cy.request({
-        method: 'POST',
-        url: 'http://localhost:4000/auth/sign_up',
-        body: {
-          email: 'cypress@example.com',
-          password: 'qwer1234',
-          passwordConfirmation: 'qwer1234',
-          firstName: 'Cypress',
-        },
-        failOnStatusCode: false,
-      });
+    before(() => {
+      cy.registerTestUser();
     });
 
     it('visits login form and signs in', () => {
@@ -49,7 +38,7 @@ describe('Authentication module', () => {
 
     it('redirects to login form on unauthorized access', () => {
       cy.clearLocalStorage();
-      cy.visit('/list/1/items');
+      cy.visit('/lists/1/items');
       cy.url().should('include', '/signin');
     });
 
@@ -62,27 +51,7 @@ describe('Authentication module', () => {
 
   context('Registration', () => {
     before(() => {
-      // get access token and client headers if test user exists
-      cy.request({
-        method: 'POST',
-        url: 'http://localhost:4000/auth/sign_in',
-        body: { email: 'cypress@example.com', password: 'qwer1234' },
-        failOnStatusCode: false,
-      }).then((response) => {
-        if (response.status === 200) {
-          const { headers } = response;
-          // remove test user to prevent unique email validation fail
-          cy.request({
-            method: 'DELETE',
-            url: 'http://localhost:4000/auth/',
-            body: { uid: 'cypress@example.com' },
-            headers: {
-              'access-token': headers['access-token'],
-              client: headers.client
-            }
-          });
-        }
-      });
+      cy.destroyTestUser();
     });
 
     it('visits register form and signs up', () => {
@@ -104,17 +73,7 @@ describe('Authentication module', () => {
     });
 
     it('renders proper error on trying to register on occupied email', () => {
-      cy.request({
-        method: 'POST',
-        url: 'http://localhost:4000/auth/sign_up',
-        body: {
-          email: 'cypress@example.com',
-          password: 'qwer1234',
-          passwordConfirmation: 'qwer1234',
-          firstName: 'Cypress',
-        },
-        failOnStatusCode: false,
-      });
+      cy.registerTestUser();
       cy.visit('/signup');
       cy.get('input[name=email]').type('cypress@example.com');
       cy.get('input[name=password').type('qwer1234');
