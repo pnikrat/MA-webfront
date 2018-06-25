@@ -20,14 +20,14 @@ type Props = {
   groups: Array<Object>,
   currentGroup: Object,
   currentUser: Object,
-  isConfirmationModalOpen: boolean,
-  confirmationModalGroupId: number,
+  isDeleteGroupModalOpen: boolean,
+  deleteGroupModalGroupId: number,
   handleGroupsFetch: () => void,
   handleGroupAdd: (Object) => void,
   handleGroupShow: (number, Function) => void,
   handleGroupUpdate: (number, Object) => void,
-  openConfirmationModal: (Object, number) => void,
-  closeConfirmationModal: () => void,
+  openDeleteModal: (Object, number) => void,
+  closeDeleteModal: () => void,
   handleGroupDelete: (number) => void,
 }
 
@@ -57,14 +57,14 @@ class GroupsContainer extends Component<Props> {
   }
 
   handleGroupDelete = (id: number) => {
-    this.props.closeConfirmationModal();
+    this.props.closeDeleteModal();
     this.props.handleGroupDelete(id);
   }
 
   render() {
     const {
-      groups, currentGroup, currentUser, openConfirmationModal, isConfirmationModalOpen,
-      closeConfirmationModal, confirmationModalGroupId
+      groups, currentGroup, currentUser, openDeleteModal, isDeleteGroupModalOpen,
+      closeDeleteModal, deleteGroupModalGroupId
     } = this.props;
     return (
       <Container>
@@ -114,23 +114,25 @@ class GroupsContainer extends Component<Props> {
                 groups={groups}
                 onGroupClick={this.handleGroupShow}
                 onEditClick={this.handleGroupEditRedirect}
-                openConfirmationModal={openConfirmationModal}
+                openConfirmationModal={openDeleteModal}
                 currentUser={currentUser}
               />
             )}
           />
         </Switch>
         <RemoveGroupModal
-          isOpen={isConfirmationModalOpen}
-          onClose={closeConfirmationModal}
-          objectId={confirmationModalGroupId}
+          isOpen={isDeleteGroupModalOpen}
+          onClose={closeDeleteModal}
+          objectId={deleteGroupModalGroupId}
           onConfirm={this.handleGroupDelete}
           header="Delete group"
           negativeButtonText="No"
           positiveButtonText="Yes"
         >
-          <p>When you delete the group all users from the group will lose
-          access to each other's shopping lists. Are you sure you want to continue?</p>
+          <p>
+            When you delete the group all users from the group will lose
+            access to each other's shopping lists. Are you sure you want to continue?
+          </p>
         </RemoveGroupModal>
       </Container>
     );
@@ -141,8 +143,8 @@ const mapStateToProps = state => ({
   groups: state.groupsReducer.groups,
   currentGroup: state.groupsReducer.currentGroup,
   currentUser: state.reduxTokenAuth.currentUser.attributes,
-  isConfirmationModalOpen: state.modalsReducer.groups.isOpen,
-  confirmationModalGroupId: state.modalsReducer.groups.id,
+  isDeleteGroupModalOpen: state.modalsReducer.deleteGroup.isOpen,
+  deleteGroupModalGroupId: state.modalsReducer.deleteGroup.id,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -153,8 +155,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(apiCall(`/groups/${id}`, updateGroupAndRedirectBack, PUT, data));
   },
   handleGroupDelete: id => dispatch(apiCall(`/groups/${id}`, () => deleteGroup(id), DELETE)),
-  openConfirmationModal: (e, id) => dispatch(openDeleteGroupModal(e, id)),
-  closeConfirmationModal: () => dispatch(closeModal()),
+  openDeleteModal: (e, id) => dispatch(openDeleteGroupModal(e, id)),
+  closeDeleteModal: () => dispatch(closeModal()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupsContainer);

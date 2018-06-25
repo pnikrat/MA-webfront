@@ -18,15 +18,19 @@ const initialState = {
     items: [],
   },
   modalsReducer: {
-    lists: {
+    deleteList: {
       isOpen: false,
       id: null,
     },
-    editItems: {
+    editList: {
+      isOpen: false,
+      list: null,
+    },
+    editItem: {
       isOpen: false,
       item: null,
     },
-    groups: {
+    deleteGroup: {
       isOpen: false,
       id: null,
     },

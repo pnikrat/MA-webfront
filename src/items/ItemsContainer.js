@@ -33,7 +33,7 @@ type Props = {
   handleItemToggle: (Number, Number, Object) => void,
   handleSetSearchFieldValue: (string) => void,
   openEditModal: (Object) => void,
-  closeEditItemModal: () => void,
+  closeEditModal: () => void,
   handleRemoveBoughtItems: (Number, Object) => void,
   handleMoveMissingItems: (Number, Object) => void,
 }
@@ -72,7 +72,7 @@ class ItemsContainer extends Component<Props> {
   }
 
   onItemEdit = (data) => {
-    this.props.closeEditItemModal();
+    this.props.closeEditModal();
     const listId = this.props.currentList.id;
     const { id } = data;
     this.props.handleItemEdit(listId, id, data);
@@ -113,7 +113,7 @@ class ItemsContainer extends Component<Props> {
 
   render() {
     const {
-      currentList, items, openEditModal, closeEditItemModal, isEditItemModalOpen,
+      currentList, items, openEditModal, closeEditModal, isEditItemModalOpen,
       isRemoveBoughtDisabled, lists, isMoveMissingDisabled,
     } = this.props;
     return (
@@ -146,7 +146,8 @@ class ItemsContainer extends Component<Props> {
         }
         <EditItemModal
           isOpen={isEditItemModalOpen}
-          onClose={closeEditItemModal}
+          onClose={closeEditModal}
+          formReduxName="editItem"
           header="Edit item"
           negativeButtonText="Discard changes"
         >
@@ -161,7 +162,7 @@ const mapStateToProps = state => ({
   items: state.itemsReducer.items,
   lists: state.listsReducer.lists,
   currentList: state.itemsReducer.currentList,
-  isEditItemModalOpen: state.modalsReducer.editItems.isOpen,
+  isEditItemModalOpen: state.modalsReducer.editItem.isOpen,
   isRemoveBoughtDisabled: byState(state.itemsReducer.items, 'bought').length === 0,
   isMoveMissingDisabled: byState(state.itemsReducer.items, 'missing').length === 0,
 });
@@ -181,7 +182,7 @@ const mapDispatchToProps = dispatch => ({
   },
   handleSetSearchFieldValue: value => dispatch(setSearchFieldValue(value)),
   openEditModal: item => dispatch(openEditItemModal(item)),
-  closeEditItemModal: () => dispatch(closeModal()),
+  closeEditModal: () => dispatch(closeModal()),
   handleRemoveBoughtItems: (listId, data) => {
     dispatch(apiCall(`/lists/${listId}/items`, massToggleItems, PUT, data));
   },

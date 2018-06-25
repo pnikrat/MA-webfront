@@ -1,9 +1,15 @@
-import { OPEN_LISTS_MODAL, OPEN_EDIT_ITEM_MODAL, CLOSE_MODAL, OPEN_DELETE_GROUP_MODAL } from './constants';
+import { OPEN_DELETE_LIST_MODAL, OPEN_EDIT_ITEM_MODAL, CLOSE_MODAL,
+  OPEN_DELETE_GROUP_MODAL, OPEN_EDIT_LIST_MODAL } from './constants';
 
-const openListsModal = (e, id) => {
+const openDeleteListModal = (e, id) => {
   e.stopPropagation(); // prevents overlapping onClick events
-  return { type: OPEN_LISTS_MODAL, payload: id };
+  return { type: OPEN_DELETE_LIST_MODAL, payload: id };
 };
+const openEditListModal = (e, list) => {
+  e.stopPropagation();
+  return { type: OPEN_EDIT_LIST_MODAL, payload: list };
+};
+
 const closeModal = () => ({ type: CLOSE_MODAL });
 
 const openEditItemModal = item => ({ type: OPEN_EDIT_ITEM_MODAL, payload: item });
@@ -15,26 +21,32 @@ const openDeleteGroupModal = (e, id) => {
 
 function modalsReducer(state = {}, action) {
   switch (action.type) {
-    case OPEN_LISTS_MODAL:
+    case OPEN_DELETE_LIST_MODAL:
       return Object.assign({}, state, {
         ...state,
-        lists: { isOpen: true, id: action.payload },
+        deleteList: { isOpen: true, id: action.payload },
+      });
+    case OPEN_EDIT_LIST_MODAL:
+      return Object.assign({}, state, {
+        ...state,
+        editList: { isOpen: true, list: action.payload },
       });
     case OPEN_DELETE_GROUP_MODAL:
       return Object.assign({}, state, {
         ...state,
-        groups: { isOpen: true, id: action.payload },
+        deleteGroup: { isOpen: true, id: action.payload },
       });
     case OPEN_EDIT_ITEM_MODAL:
       return Object.assign({}, state, {
         ...state,
-        editItems: { isOpen: true, item: action.payload },
+        editItem: { isOpen: true, item: action.payload },
       });
     case CLOSE_MODAL:
       return Object.assign({}, state, {
-        lists: { isOpen: false, id: null },
-        editItems: { isOpen: false, item: null },
-        groups: { isOpen: false, id: null },
+        deleteList: { isOpen: false, id: null },
+        editList: { isOpen: false, id: null },
+        editItem: { isOpen: false, item: null },
+        deleteGroup: { isOpen: false, id: null },
       });
     default:
       return state;
@@ -42,7 +54,8 @@ function modalsReducer(state = {}, action) {
 }
 
 export {
-  openListsModal,
+  openDeleteListModal,
+  openEditListModal,
   closeModal,
   openEditItemModal,
   openDeleteGroupModal,

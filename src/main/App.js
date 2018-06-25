@@ -31,7 +31,7 @@ function App() {
           <Route path="/signup" component={SignupContainer} />
           <Route path="/signin" component={SigninContainer} />
           <Route
-            path="/list/:id/items"
+            path="/lists/:id/items"
             component={requireSignIn(ItemsContainer)}
           />
           <Route

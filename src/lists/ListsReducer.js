@@ -1,4 +1,4 @@
-import { SET_LISTS, ADD_LIST, REMOVE_LIST } from '../state/constants';
+import { SET_LISTS, ADD_LIST, REMOVE_LIST, EDIT_LIST } from '../state/constants';
 
 function listsReducer(state = {}, action) {
   switch (action.type) {
@@ -9,6 +9,12 @@ function listsReducer(state = {}, action) {
     case ADD_LIST:
       return Object.assign({}, state, {
         lists: [...state.lists, action.list]
+      });
+    case EDIT_LIST:
+      return Object.assign({}, state, {
+        lists: state.lists.map((i) => {
+          return (i.id === action.payload.id) ? { ...i, ...action.payload } : i;
+        })
       });
     case REMOVE_LIST:
       return Object.assign({}, state, {
