@@ -113,7 +113,7 @@ const mapDispatchToProps = dispatch => ({
   clearForm: () => dispatch(reset('newList')),
   handleListDelete: id => dispatch(apiCall(`/lists/${id}`, () => removeList(id), DELETE)),
   handleListEdit: (id, data) => dispatch(apiCall(`/lists/${id}`, editList, PUT, data)),
-  openList: id => dispatch(push(`/list/${id}/items`)),
+  openList: id => dispatch(push(`/lists/${id}/items`)),
   closeListModal: () => dispatch(closeModal()),
   openDeleteModal: (e, id) => dispatch(openDeleteListModal(e, id)),
   openEditModal: (e, list) => dispatch(openEditListModal(e, list)),
