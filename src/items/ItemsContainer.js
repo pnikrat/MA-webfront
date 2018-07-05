@@ -16,6 +16,7 @@ import { openEditItemModal, closeModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
 import ModalSubmitButton from '../common/ModalSubmitButton';
 import ModuleTitle from '../common/ModuleTitle';
+import ListSubscription from '../websockets/ListSubscription';
 
 type Props = {
   match: Object,
@@ -46,6 +47,13 @@ class ItemsContainer extends Component<Props> {
   componentDidMount = () => {
     const listId = this.props.match.params.id;
     this.props.handleSetCurrentList(listId);
+
+    this.listChannel = new ListSubscription(listId);
+    this.listChannel.subscribe();
+  }
+
+  componentWillUnmount = () => {
+    this.listChannel.unsubscribe();
   }
 
   onItemDelete = (id) => {
@@ -110,6 +118,7 @@ class ItemsContainer extends Component<Props> {
   }
 
   props: Props
+  listChannel: ListSubscription
 
   render() {
     const {
