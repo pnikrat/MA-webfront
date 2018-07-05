@@ -26,6 +26,7 @@ type Props = {
   isEditItemModalOpen: boolean,
   isRemoveBoughtDisabled: boolean,
   isMoveMissingDisabled: boolean,
+  rawDispatch: (Object) => void,
   handleSetCurrentList: (Number) => void,
   clearForm: () => void,
   handleItemAdd: (Number, Object) => void,
@@ -48,7 +49,7 @@ class ItemsContainer extends Component<Props> {
     const listId = this.props.match.params.id;
     this.props.handleSetCurrentList(listId);
 
-    this.listChannel = new ListSubscription(listId);
+    this.listChannel = new ListSubscription(listId, this.props.rawDispatch);
     this.listChannel.subscribe();
   }
 
@@ -177,6 +178,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  rawDispatch: dispatch,
   handleSetCurrentList: id => dispatch(apiCall(`/lists/${id}`, setCurrentListAndFetchItems, GET)),
   clearForm: () => dispatch(reset('newItem')),
   handleItemAdd: (listId, data) => dispatch(apiCall(`/lists/${listId}/items`, addItem, POST, data)),

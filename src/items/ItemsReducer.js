@@ -15,10 +15,9 @@ function itemsReducer(state = {}, action) {
     case ADD_ITEM:
       return Object.assign({}, state, {
         currentList: state.currentList,
-        items: [
-          ...state.items,
-          action.item
-        ]
+        items: state.items.findIndex(i => i.id === action.item.id) === -1
+          ? [...state.items, action.item]
+          : state.items
       });
     case EDIT_ITEM:
       return Object.assign({}, state, {

@@ -6,13 +6,15 @@ import { addItem, removeItem, editItem, toggleItem } from '../items/ItemsActions
 class ListSubscription {
   listId: number;
   cable: Object;
+  dispatch: (Object) => void;
   channel: Object;
   connected: () => void;
   received: (string) => void;
 
-  constructor(listId: number) {
+  constructor(listId: number, dispatch: (Object) => void) {
     this.listId = listId;
     this.cable = createConsumer();
+    this.dispatch = dispatch;
   }
 
   subscribe = () => {
@@ -26,21 +28,18 @@ class ListSubscription {
 
   received = (data: string) => {
     const parsedData = JSON.parse(data);
+    const action = this.determineAction(parsedData);
+    if (action) {
+      this.dispatch(action);
+    }
+  }
+
+  determineAction = (parsedData: Object) => {
     switch (parsedData.event_type) {
-      case ADD_ITEM:
-        addItem(parsedData.data);
-        break;
-      case REMOVE_ITEM:
-        removeItem(parsedData.data);
-        break;
-      case EDIT_ITEM:
-        editItem(parsedData.data);
-        break;
-      case TOGGLE_ITEM:
-        toggleItem(parsedData.data);
-        break;
-      default:
-        break;
+      case ADD_ITEM: return addItem(parsedData);
+      case REMOVE_ITEM: return removeItem(parsedData.data);
+      case EDIT_ITEM: return editItem(parsedData);
+      default: return null;
     }
   }
 }
