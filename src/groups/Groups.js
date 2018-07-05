@@ -21,6 +21,7 @@ class Groups extends Component<Props> {
 
   singleGroup = (group: Object) => (
     <SingleGroup
+      key={group.id}
       group={group}
       isCreator={this.isCreator(group.creator_id)}
       {...this.props}
