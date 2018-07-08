@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
-import { addItem, removeItem, editItem,
-  toggleItem, setCurrentListAndFetchItems, massToggleItems, massMoveItems } from './ItemsActions';
+import { addItem, removeItem, editItem, setCurrentListAndFetchItems,
+  massUpdateItems, massMoveItems } from './ItemsActions';
 import { setSearchFieldValue } from '../search/SearchActions';
 import Items from './Items';
 import { DecoratedNewItemForm as NewItemForm } from './NewItemForm';
@@ -32,7 +32,6 @@ type Props = {
   handleItemAdd: (Number, Object) => void,
   handleItemDelete: (Number, Number) => void,
   handleItemEdit: (Number, Number, Object) => void,
-  handleItemToggle: (Number, Number, Object) => void,
   handleSetSearchFieldValue: (string) => void,
   openEditModal: (Object) => void,
   closeEditModal: () => void,
@@ -68,7 +67,7 @@ class ItemsContainer extends Component<Props> {
     const listId = this.props.currentList.id;
     const { id } = item;
     const data = { state: desiredState };
-    this.props.handleItemToggle(listId, id, data);
+    this.props.handleItemEdit(listId, id, data);
   }
 
   onResultSelect = (data) => {
@@ -77,7 +76,7 @@ class ItemsContainer extends Component<Props> {
     const listId = this.props.currentList.id;
     const { id } = data;
     const stateParams = { state: 'to_buy' };
-    this.props.handleItemToggle(listId, id, stateParams);
+    this.props.handleItemEdit(listId, id, stateParams);
   }
 
   onItemEdit = (data) => {
@@ -188,14 +187,11 @@ const mapDispatchToProps = dispatch => ({
   handleItemEdit: (listId, id, data) => {
     dispatch(apiCall(`/lists/${listId}/items/${id}`, editItem, PUT, data));
   },
-  handleItemToggle: (listId, id, data) => {
-    dispatch(apiCall(`/lists/${listId}/items/${id}`, toggleItem, PUT, data));
-  },
   handleSetSearchFieldValue: value => dispatch(setSearchFieldValue(value)),
   openEditModal: item => dispatch(openEditItemModal(item)),
   closeEditModal: () => dispatch(closeModal()),
   handleRemoveBoughtItems: (listId, data) => {
-    dispatch(apiCall(`/lists/${listId}/items`, massToggleItems, PUT, data));
+    dispatch(apiCall(`/lists/${listId}/items`, massUpdateItems, PUT, data));
   },
   handleMoveMissingItems: (listId, data) => {
     dispatch(apiCall(`/lists/${listId}/items`, massMoveItems, PUT, data));

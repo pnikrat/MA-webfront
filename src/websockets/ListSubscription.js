@@ -1,7 +1,7 @@
 // @flow
 import createConsumer from './websocket';
-import { ADD_ITEM, REMOVE_ITEM, EDIT_ITEM, TOGGLE_ITEM } from '../state/constants';
-import { addItem, removeItem, editItem, toggleItem } from '../items/ItemsActions';
+import { ADD_ITEM, REMOVE_ITEM, EDIT_ITEM } from '../state/constants';
+import { addItem, removeItem, editItem } from '../items/ItemsActions';
 
 class ListSubscription {
   listId: number;

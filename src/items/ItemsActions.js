@@ -1,5 +1,5 @@
 import { SET_CURRENT_LIST, SET_ITEMS,
-  ADD_ITEM, REMOVE_ITEM, TOGGLE_ITEM, GET, EDIT_ITEM
+  ADD_ITEM, REMOVE_ITEM, GET, EDIT_ITEM
 } from '../state/constants';
 import { apiCall } from '../services/apiActions';
 
@@ -47,17 +47,10 @@ function editItem(response) {
   };
 }
 
-function toggleItem(response) {
-  return {
-    type: TOGGLE_ITEM,
-    payload: response.data,
-  };
-}
-
-function massToggleItems(response) {
+function massUpdateItems(response) {
   return (dispatch) => {
     response.data.forEach((entity) => {
-      dispatch(toggleItem({ data: entity }));
+      dispatch(editItem({ data: entity }));
     });
   };
 }
@@ -77,7 +70,6 @@ export {
   addItem,
   removeItem,
   editItem,
-  toggleItem,
-  massToggleItems,
+  massUpdateItems,
   massMoveItems,
 };
