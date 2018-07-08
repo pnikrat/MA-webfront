@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
-import { addItem, removeItem, editItem,
-  toggleItem, setCurrentListAndFetchItems, massToggleItems, massMoveItems } from './ItemsActions';
+import { addItem, removeItem, editItem, setCurrentListAndFetchItems,
+  massUpdateItems, massMoveItems } from './ItemsActions';
 import { setSearchFieldValue } from '../search/SearchActions';
 import Items from './Items';
 import { DecoratedNewItemForm as NewItemForm } from './NewItemForm';
@@ -16,6 +16,7 @@ import { openEditItemModal, closeModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
 import ModalSubmitButton from '../common/ModalSubmitButton';
 import ModuleTitle from '../common/ModuleTitle';
+import ListSubscription from '../websockets/ListSubscription';
 
 type Props = {
   match: Object,
@@ -25,12 +26,12 @@ type Props = {
   isEditItemModalOpen: boolean,
   isRemoveBoughtDisabled: boolean,
   isMoveMissingDisabled: boolean,
+  rawDispatch: (Object) => void,
   handleSetCurrentList: (Number) => void,
   clearForm: () => void,
   handleItemAdd: (Number, Object) => void,
   handleItemDelete: (Number, Number) => void,
   handleItemEdit: (Number, Number, Object) => void,
-  handleItemToggle: (Number, Number, Object) => void,
   handleSetSearchFieldValue: (string) => void,
   openEditModal: (Object) => void,
   closeEditModal: () => void,
@@ -46,6 +47,13 @@ class ItemsContainer extends Component<Props> {
   componentDidMount = () => {
     const listId = this.props.match.params.id;
     this.props.handleSetCurrentList(listId);
+
+    this.listChannel = new ListSubscription(listId, this.props.rawDispatch);
+    this.listChannel.subscribe();
+  }
+
+  componentWillUnmount = () => {
+    this.listChannel.unsubscribe();
   }
 
   onItemDelete = (id) => {
@@ -59,7 +67,7 @@ class ItemsContainer extends Component<Props> {
     const listId = this.props.currentList.id;
     const { id } = item;
     const data = { state: desiredState };
-    this.props.handleItemToggle(listId, id, data);
+    this.props.handleItemEdit(listId, id, data);
   }
 
   onResultSelect = (data) => {
@@ -68,7 +76,7 @@ class ItemsContainer extends Component<Props> {
     const listId = this.props.currentList.id;
     const { id } = data;
     const stateParams = { state: 'to_buy' };
-    this.props.handleItemToggle(listId, id, stateParams);
+    this.props.handleItemEdit(listId, id, stateParams);
   }
 
   onItemEdit = (data) => {
@@ -110,6 +118,7 @@ class ItemsContainer extends Component<Props> {
   }
 
   props: Props
+  listChannel: ListSubscription
 
   render() {
     const {
@@ -168,6 +177,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  rawDispatch: dispatch,
   handleSetCurrentList: id => dispatch(apiCall(`/lists/${id}`, setCurrentListAndFetchItems, GET)),
   clearForm: () => dispatch(reset('newItem')),
   handleItemAdd: (listId, data) => dispatch(apiCall(`/lists/${listId}/items`, addItem, POST, data)),
@@ -177,14 +187,11 @@ const mapDispatchToProps = dispatch => ({
   handleItemEdit: (listId, id, data) => {
     dispatch(apiCall(`/lists/${listId}/items/${id}`, editItem, PUT, data));
   },
-  handleItemToggle: (listId, id, data) => {
-    dispatch(apiCall(`/lists/${listId}/items/${id}`, toggleItem, PUT, data));
-  },
   handleSetSearchFieldValue: value => dispatch(setSearchFieldValue(value)),
   openEditModal: item => dispatch(openEditItemModal(item)),
   closeEditModal: () => dispatch(closeModal()),
   handleRemoveBoughtItems: (listId, data) => {
-    dispatch(apiCall(`/lists/${listId}/items`, massToggleItems, PUT, data));
+    dispatch(apiCall(`/lists/${listId}/items`, massUpdateItems, PUT, data));
   },
   handleMoveMissingItems: (listId, data) => {
     dispatch(apiCall(`/lists/${listId}/items`, massMoveItems, PUT, data));

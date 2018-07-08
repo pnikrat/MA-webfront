@@ -14,7 +14,6 @@ const SingleGroup = ({
   group, isCreator, onGroupClick, onEditClick, openConfirmationModal
 }: Props) => (
   <Segment
-    key={group.id}
     className="list-segment flexed"
     onClick={() => onGroupClick(group.id)}
   >

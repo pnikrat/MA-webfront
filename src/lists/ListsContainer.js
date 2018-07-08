@@ -17,6 +17,7 @@ import ModalSubmitButton from '../common/ModalSubmitButton';
 import '../styles/lists.css';
 
 type Props = {
+  currentUser: Object,
   lists: Array<Object>,
   isDeleteListModalOpen: boolean,
   deleteListModalListId: number,
@@ -59,7 +60,7 @@ class ListsContainer extends Component<Props> {
   render() {
     const {
       isDeleteListModalOpen, lists, openList, openDeleteModal, openEditModal,
-      closeListModal, deleteListModalListId, isEditListModalOpen,
+      closeListModal, deleteListModalListId, isEditListModalOpen, currentUser,
     } = this.props;
     return (
       <Container>
@@ -71,6 +72,7 @@ class ListsContainer extends Component<Props> {
         </Container>
         <Lists
           lists={lists}
+          currentUser={currentUser}
           onListClick={openList}
           openConfirmationModal={openDeleteModal}
           openEditListModal={openEditModal}
@@ -101,6 +103,7 @@ class ListsContainer extends Component<Props> {
 }
 
 const mapStateToProps = state => ({
+  currentUser: state.reduxTokenAuth.currentUser.attributes,
   lists: state.listsReducer.lists,
   isDeleteListModalOpen: state.modalsReducer.deleteList.isOpen,
   deleteListModalListId: state.modalsReducer.deleteList.id,
