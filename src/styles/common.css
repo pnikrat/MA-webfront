@@ -45,6 +45,15 @@ h3, .ui.header {
   border-bottom: 2px solid #2185d0;
 }
 
+.with-divider .price-totals {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.with-divider .price-totals p {
+  margin: 0 5px 0 5px;
+}
+
 .larger-top-margin {
   margin-top: 10px;
 }
