@@ -22,7 +22,7 @@ describe('Search module', () => {
       cy.get('input[name=price]').type('4.45');
       cy.get('button[type=submit]').click();
       cy.get('.first-sublist').contains('Brand new item');
-      cy.get('.first-sublist').contains('10.0$');
+      cy.get('.first-sublist').contains('10.00$');
       cy.get('.first-sublist').contains('Bread');
       cy.get('.first-sublist').contains('4.45$');
     });

@@ -43,7 +43,7 @@ describe('Items module', () => {
       cy.get('button[type=submit]').click();
       cy.contains('Water');
       cy.contains('Quantity: 6 bottles');
-      cy.contains('3.4$');
+      cy.contains('3.40$');
     });
 
     it('can edit newly added item', () => {
@@ -65,7 +65,7 @@ describe('Items module', () => {
         cy.get('.description').should('contain', 'Quantity: 7 units');
         cy.get('.description').should('not.contain', '6 bottles');
         cy.get('.description').should('contain', '10.15$');
-        cy.get('.description').should('not.contain', '3.4$');
+        cy.get('.description').should('not.contain', '3.40$');
       });
     });
 
