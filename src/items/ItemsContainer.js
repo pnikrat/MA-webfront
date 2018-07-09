@@ -7,7 +7,7 @@ import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
 import { addItem, removeItem, editItem, setCurrentListAndFetchItems,
   massUpdateItems, massMoveItems } from './ItemsActions';
-import { setSearchFieldValue } from '../search/SearchActions';
+import { setSearchFieldValue, setSearchMenuVisibility } from '../search/SearchActions';
 import Items from './Items';
 import { DecoratedNewItemForm as NewItemForm } from './NewItemForm';
 import EditItemForm from './EditItemForm';
@@ -33,6 +33,7 @@ type Props = {
   handleItemDelete: (Number, Number) => void,
   handleItemEdit: (Number, Number, Object) => void,
   handleSetSearchFieldValue: (string) => void,
+  handleSetSearchMenuVisibility: (boolean) => void,
   openEditModal: (Object) => void,
   closeEditModal: () => void,
   handleRemoveBoughtItems: (Number, Object) => void,
@@ -57,8 +58,7 @@ class ItemsContainer extends Component<Props> {
   }
 
   onItemDelete = (id) => {
-    this.props.handleSetSearchFieldValue('');
-    this.props.clearForm();
+    this.resetSearch();
     const listId = this.props.currentList.id;
     this.props.handleItemDelete(listId, id);
   }
@@ -71,8 +71,7 @@ class ItemsContainer extends Component<Props> {
   }
 
   onResultSelect = (data) => {
-    this.props.handleSetSearchFieldValue('');
-    this.props.clearForm();
+    this.resetSearch();
     const listId = this.props.currentList.id;
     const { id } = data;
     const stateParams = { state: 'to_buy' };
@@ -84,6 +83,12 @@ class ItemsContainer extends Component<Props> {
     const listId = this.props.currentList.id;
     const { id } = data;
     this.props.handleItemEdit(listId, id, data);
+  }
+
+  resetSearch = () => {
+    this.props.handleSetSearchFieldValue('');
+    this.props.handleSetSearchMenuVisibility(false);
+    this.props.clearForm();
   }
 
   removeBoughtItems = () => {
@@ -101,8 +106,7 @@ class ItemsContainer extends Component<Props> {
   }
 
   handleItemAdd = (data) => {
-    this.props.handleSetSearchFieldValue('');
-    this.props.clearForm();
+    this.resetSearch();
     const listId = this.props.currentList.id;
     const existingItem = this.props.items.filter(
       i => i.name.localeCompare(data.name, 'en', { sensitivity: 'base' }) === 0);
@@ -188,6 +192,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(apiCall(`/lists/${listId}/items/${id}`, editItem, PUT, data));
   },
   handleSetSearchFieldValue: value => dispatch(setSearchFieldValue(value)),
+  handleSetSearchMenuVisibility: value => dispatch(setSearchMenuVisibility(value)),
   openEditModal: item => dispatch(openEditItemModal(item)),
   closeEditModal: () => dispatch(closeModal()),
   handleRemoveBoughtItems: (listId, data) => {

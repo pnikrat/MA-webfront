@@ -36,6 +36,7 @@ function SearchResult({
           <Button
             circular
             tabIndex="-1"
+            type="button"
             className="unblurrable"
             icon="delete"
             size="mini"
