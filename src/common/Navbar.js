@@ -26,13 +26,21 @@ class Navbar extends Component<Props> {
           />
         }
         { currentUser.isSignedIn &&
-          <MenuItem
-            position="right"
-            path="/"
-            iconName="sign out"
-            text="Sign out"
-            clickCallback={this.handleSignOut}
-          />
+          <Menu.Menu position="right">
+            <MenuItem
+              position="right"
+              path="/"
+              iconName="user"
+              text={`${currentUser.attributes.firstName} ${currentUser.attributes.lastName || ''}`}
+            />
+            <MenuItem
+              position="right"
+              path="/"
+              iconName="sign out"
+              text="Sign out"
+              clickCallback={this.handleSignOut}
+            />
+          </Menu.Menu>
         }
       </Menu>
     );
