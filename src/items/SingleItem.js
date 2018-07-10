@@ -22,7 +22,7 @@ function SingleItem({ item, onItemStateChange, openEditModal }: Props) {
       }
       { item.aasm_state === 'to_buy' &&
         <ItemActionButton
-          iconName="minus"
+          iconName="close"
           onClick={() => onItemStateChange(item, 'missing')}
           dataCy="mark-missing"
         />
