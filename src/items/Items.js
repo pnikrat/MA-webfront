@@ -28,7 +28,9 @@ class Items extends Component<Props> {
     return x.aasm_state === 'to_buy' ? -1 : 1;
   }
 
-  toBuy = (x: Object) => x.aasm_state === 'to_buy' || x.aasm_state === 'bought'
+  sumMoney = (prev: string, next: string) => Number(prev) + Number(next)
+  active = (x: Object) => x.aasm_state === 'to_buy' || x.aasm_state === 'bought'
+  bought = (x: Object) => x.aasm_state === 'bought'
   missing = (x: Object) => x.aasm_state === 'missing'
   otherLists = (x: Object) => x.id !== this.props.currentList.id
 
@@ -54,17 +56,24 @@ class Items extends Component<Props> {
     const {
       items, removeBoughtItems, isRemoveBoughtDisabled, lists, isMoveMissingDisabled
     } = this.props;
-    const activeComponents = items.filter(this.toBuy).sort(this.compare)
+    const activeComponents = items.filter(this.active).sort(this.compare)
       .map(item => this.singleItem(item));
     const missingComponents = items.filter(this.missing)
       .map(item => this.singleItem(item));
     const availableLists = lists.filter(this.otherLists).map(list => this.listOption(list));
+
+    const activeTotal = items.filter(this.active).map(i => i.price).reduce(this.sumMoney, 0.0);
+    const boughtTotal = items.filter(this.bought).map(i => i.price).reduce(this.sumMoney, 0.0);
 
     return (
       <Container className="all-items-container">
         <Segment className="first-sublist sublist">
           <div className="flexed with-divider">
             <Header as="h3">To buy / Bought</Header>
+            <div className="price-totals">
+              <p>{`List value: ${activeTotal.toFixed(2)}$`}</p>
+              <p>{`Cart value: ${boughtTotal.toFixed(2)}$`}</p>
+            </div>
             <Button
               size="tiny"
               disabled={isRemoveBoughtDisabled}

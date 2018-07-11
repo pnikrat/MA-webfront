@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 
 type Props = {
   result: Object,
@@ -36,16 +36,20 @@ function SearchResult({
           <Button
             circular
             tabIndex="-1"
+            type="button"
             className="unblurrable"
-            icon="delete"
-            size="mini"
+            icon
+            color="google plus"
+            size="tiny"
             onMouseDown={e => e.stopPropagation()}
             onKeyDown={e => e.stopPropagation()}
             onClick={(e) => {
               e.stopPropagation();
               onItemDelete(id);
             }}
-          />
+          >
+            <Icon name="trash" />
+          </Button>
         }
       </div>
     </div>

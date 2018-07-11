@@ -9,7 +9,9 @@ type Props = {
   dataCy: string,
 }
 
-function ItemActionButton({ color, iconName, onClick, dataCy }: Props) {
+function ItemActionButton({
+  color, iconName, onClick, dataCy
+}: Props) {
   return (
     <List.Icon verticalAlign="middle">
       <Button
