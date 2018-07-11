@@ -211,5 +211,44 @@ describe('Items module', () => {
       cy.get('div[role=listitem].to_buy').should('have.length', 2);
       cy.get('div[role=listitem].missing').should('have.length', 0);
     });
+
+    it('cannot move single item that is not missing to another list', () => {
+      cy.contains('Home').click();
+      cy.contains('Biedronka').click();
+      cy.get('div[role=listitem].to_buy').first().within(() => {
+        cy.get('.ui.dropdown').click();
+        cy.contains('Edit item').click();
+      });
+      cy.get('.modal').within(() => {
+        cy.contains('Edit item');
+        cy.get('.content').should('not.contain', 'Item list');
+        cy.get('select[name=list_id]').should('not.exist');
+      });
+    });
+
+    it('can move single item with state missing to another list', () => {
+      cy.contains('Home').click();
+      cy.contains('Biedronka').click();
+      cy.get('div[role=listitem].to_buy').first().within(() => {
+        cy.get('[data-cy=mark-missing]').click();
+      });
+      cy.get('div[role=listitem].missing').should('have.length', 1);
+      cy.get('div[role=listitem].missing').first().within(() => {
+        cy.get('.ui.dropdown').click();
+        cy.contains('Edit item').click();
+      });
+      cy.get('.modal').within(() => {
+        cy.contains('Edit item');
+        cy.get('.content').should('contain', 'Item list');
+        cy.get('input[name=name]').clear().type('my moved item');
+        cy.get('select[name=list_id]').select('Lidl');
+        cy.get('button[type=submit]').click();
+      });
+      cy.get('div[role=listitem].missing').should('have.length', 0);
+      cy.root().should('not.contain', 'my moved item');
+      cy.contains('Home').click();
+      cy.contains('Lidl').click();
+      cy.contains('my moved item');
+    });
   });
 });
