@@ -82,7 +82,11 @@ class ItemsContainer extends Component<Props> {
     this.props.closeEditModal();
     const listId = this.props.currentList.id;
     const { id } = data;
-    this.props.handleItemEdit(listId, id, data);
+    let modifiedData;
+    if (data.list_id !== listId) {
+      modifiedData = { ...data, target_list: data.list_id, state: 'to_buy' };
+    }
+    this.props.handleItemEdit(listId, id, modifiedData || data);
   }
 
   resetSearch = () => {
