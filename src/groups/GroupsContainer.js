@@ -11,6 +11,7 @@ import ModuleTitle from '../common/ModuleTitle';
 import Groups from './Groups';
 import { DecoratedNewGroupForm as NewGroupForm } from './NewGroupForm';
 import EditGroupForm from './EditGroupForm';
+import NewInviteForm from './NewInviteForm';
 import GroupDetails from './GroupDetails';
 import { openDeleteGroupModal, closeModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
@@ -61,6 +62,10 @@ class GroupsContainer extends Component<Props> {
     this.props.handleGroupDelete(id);
   }
 
+  handleInviteCreate = (id: number) => {
+    // stub
+  }
+
   render() {
     const {
       groups, currentGroup, currentUser, openDeleteModal, isDeleteGroupModalOpen,
@@ -79,6 +84,17 @@ class GroupsContainer extends Component<Props> {
               <Button primary as={Link} to="/groups/new">Create new group</Button>
             )}
           />
+          <Route
+            path="/groups/:id"
+            exact
+            render={({ match }) => (
+              currentUser.id === currentGroup.creator_id ? (
+                <Button primary as={Link} to={`/groups/${match.params.id}/invite`}>
+                  Invite new member
+                </Button>
+              ) : (null)
+            )}
+          />
         </div>
         <Switch>
           <Route
@@ -87,6 +103,21 @@ class GroupsContainer extends Component<Props> {
               <Segment>
                 <Header as="h3" className="with-divider">Create new group</Header>
                 <NewGroupForm onSubmit={this.handleGroupAdd} />
+              </Segment>
+            )}
+          />
+          <Route
+            path="/groups/:id/invite"
+            render={() => (
+              <Segment>
+                <Header as="h3" className="with-divider">
+                  {`Invite new user to ${currentGroup.name}`}
+                </Header>
+                <NewInviteForm
+                  onSubmit={this.handleInviteCreate}
+                  submitText="Invite"
+                  placeholder="Type email of user to be invited"
+                />
               </Segment>
             )}
           />
