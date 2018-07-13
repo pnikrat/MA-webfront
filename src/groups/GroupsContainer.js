@@ -92,7 +92,7 @@ class GroupsContainer extends Component<Props> {
             path="/groups/:id"
             exact
             render={({ match }) => (
-              currentUser.id === currentGroup.creator_id ? (
+              currentUser.id === currentGroup.creator_id && match.params.id ? (
                 <Button primary as={Link} to={`/groups/${match.params.id}/invite`}>
                   Invite new member
                 </Button>
