@@ -1,5 +1,6 @@
 import { API_CALL, API_START, API_STOP,
-  SET_API_ERROR, REMOVE_API_ERROR, API_LOADING } from '../state/constants';
+  SET_API_ERROR, REMOVE_API_ERROR, API_LOADING,
+  SET_API_SUCCESS, REMOVE_API_SUCCESS } from '../state/constants';
 
 function apiCall(url, success, method, data = {}) {
   return {
@@ -47,11 +48,32 @@ function apiRemoveError() {
   };
 }
 
+function apiSetSuccess(success) {
+  return {
+    type: SET_API_SUCCESS,
+    payload: success,
+  };
+}
+
+function apiRemoveSuccess() {
+  return {
+    type: REMOVE_API_SUCCESS,
+  };
+}
+
+function removeFlash() {
+  return (dispatch) => {
+    dispatch(apiRemoveError());
+    dispatch(apiRemoveSuccess());
+  };
+}
+
 export {
   apiCall,
   apiStart,
   apiStop,
   apiShowLoading,
   apiThrowError,
-  apiRemoveError,
+  apiSetSuccess,
+  removeFlash,
 };
