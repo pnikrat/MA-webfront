@@ -67,6 +67,14 @@ function editGroup(response) {
   };
 }
 
+function redirectBack(response) {
+  return (dispatch) => {
+    const id = response.data.invitable_id;
+    dispatch(push(`/groups/${id}`));
+  };
+}
+
 export {
-  setGroups, addGroupAndRedirectBack, showGroup, editGroup, updateGroupAndRedirectBack, deleteGroup
+  setGroups, addGroupAndRedirectBack, showGroup, editGroup,
+  updateGroupAndRedirectBack, deleteGroup, redirectBack,
 };

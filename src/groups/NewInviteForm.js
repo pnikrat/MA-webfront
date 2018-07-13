@@ -9,6 +9,7 @@ type Props = {
   onSubmit: (data: Object) => void,
   placeholder?: string,
   submitText: string,
+  initialValues: Object,
 } & FormProps
 
 const NewInviteForm = ({
@@ -42,4 +43,4 @@ const validate = (values: Object) => {
   return errors;
 };
 
-export default reduxForm({ form: 'new_invite', validate })(NewInviteForm);
+export default reduxForm({ form: 'newInvite', validate })(NewInviteForm);

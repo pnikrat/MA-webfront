@@ -3,10 +3,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Container, Header, Segment } from 'semantic-ui-react';
 import { Route, Link, Switch } from 'react-router-dom';
+import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
 import { setGroups, addGroupAndRedirectBack, showGroup,
-  editGroup, updateGroupAndRedirectBack, deleteGroup } from './GroupsActions';
+  editGroup, updateGroupAndRedirectBack, deleteGroup, redirectBack } from './GroupsActions';
 import ModuleTitle from '../common/ModuleTitle';
 import Groups from './Groups';
 import { DecoratedNewGroupForm as NewGroupForm } from './NewGroupForm';
@@ -23,6 +24,7 @@ type Props = {
   currentUser: Object,
   isDeleteGroupModalOpen: boolean,
   deleteGroupModalGroupId: number,
+  clearForm: () => void,
   handleGroupsFetch: () => void,
   handleGroupAdd: (Object) => void,
   handleGroupShow: (number, Function) => void,
@@ -30,6 +32,7 @@ type Props = {
   openDeleteModal: (Object, number) => void,
   closeDeleteModal: () => void,
   handleGroupDelete: (number) => void,
+  handleInviteCreate: (Object) => void,
 }
 
 const RemoveGroupModal = ConfirmationModal(ModalAcceptButton);
@@ -62,8 +65,9 @@ class GroupsContainer extends Component<Props> {
     this.props.handleGroupDelete(id);
   }
 
-  handleInviteCreate = (id: number) => {
-    // stub
+  handleInviteCreate = (data: Object) => {
+    this.props.clearForm();
+    this.props.handleInviteCreate(data);
   }
 
   render() {
@@ -115,6 +119,7 @@ class GroupsContainer extends Component<Props> {
                 </Header>
                 <NewInviteForm
                   onSubmit={this.handleInviteCreate}
+                  initialValues={{ invitable_id: currentGroup.id, invitable_type: 'Group' }}
                   submitText="Invite"
                   placeholder="Type email of user to be invited"
                 />
@@ -179,6 +184,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  clearForm: () => dispatch(reset('newInvite')),
   handleGroupsFetch: () => dispatch(apiCall('/groups', setGroups, GET)),
   handleGroupAdd: group => dispatch(apiCall('/groups', addGroupAndRedirectBack, POST, group)),
   handleGroupShow: (id, callback) => dispatch(apiCall(`/groups/${id}`, callback, GET)),
@@ -188,6 +194,7 @@ const mapDispatchToProps = dispatch => ({
   handleGroupDelete: id => dispatch(apiCall(`/groups/${id}`, () => deleteGroup(id), DELETE)),
   openDeleteModal: (e, id) => dispatch(openDeleteGroupModal(e, id)),
   closeDeleteModal: () => dispatch(closeModal()),
+  handleInviteCreate: data => dispatch(apiCall('/invites', redirectBack, POST, data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupsContainer);
