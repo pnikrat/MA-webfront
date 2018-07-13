@@ -10,7 +10,7 @@ import SigninContainer from '../authentication/SigninContainer';
 import history from '../router/History';
 import ItemsContainer from '../items/ItemsContainer';
 import Navbar from '../common/Navbar';
-import ErrorContainer from '../common/ErrorContainer';
+import FlashContainer from '../common/FlashContainer';
 import Loading from '../common/Loading';
 import GroupsContainer from '../groups/GroupsContainer';
 import '../styles/common.css';
@@ -24,7 +24,7 @@ function App() {
     <ConnectedRouter history={history}>
       <div>
         <Navbar />
-        <ErrorContainer />
+        <FlashContainer />
         <Loading />
         <Switch>
           <Route path="/" exact component={Home} />

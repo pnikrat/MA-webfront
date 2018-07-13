@@ -35,8 +35,9 @@ const initialState = {
       id: null,
     },
   },
-  apiErrorReducer: {
+  apiMessagesReducer: {
     apiError: null,
+    apiSuccess: null,
   },
   apiLoadingReducer: {
     loading: false,
