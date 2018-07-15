@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import { generateRequireSignInWrapper } from 'redux-token-auth';
 import Home from './Home';
 import NotFound from '../common/NotFound';

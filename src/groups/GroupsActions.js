@@ -1,4 +1,4 @@
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { SET_GROUPS, ADD_GROUP, SET_CURRENT_GROUP,
   UPDATE_GROUP, DELETE_GROUP, GET } from '../state/constants';
 import { apiSetSuccess, apiCall } from '../services/apiActions';

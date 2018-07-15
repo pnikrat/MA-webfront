@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Header, Segment } from 'semantic-ui-react';
 import { reset } from 'redux-form';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
 import { setLists, addList, editList, removeList } from './ListsActions';
