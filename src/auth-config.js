@@ -13,6 +13,9 @@ const config = {
     firstName: 'first_name',
     lastName: 'last_name',
     invite_token: 'invite_token',
+  },
+  storage: {
+    flushGetRequests: false,
   }
 };
 
