@@ -82,6 +82,11 @@ describe('Groups module', () => {
   });
 
   context('Invitations', () => {
+    beforeEach(() => {
+      cy.login();
+      cy.contains('Groups').click();
+    });
+
     it('can send an invite to non existing user for his own group. Sees appropriate flash', () => {
       cy.contains('Cypress edited group').click();
       cy.contains('Invite new member').click();
