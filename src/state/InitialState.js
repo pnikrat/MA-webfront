@@ -51,7 +51,7 @@ const initialState = {
   },
   groupsReducer: {
     groups: [],
-    currentGroup: null,
+    currentGroup: {},
   }
 };
 

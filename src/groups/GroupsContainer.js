@@ -1,14 +1,13 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Container, Header, Segment } from 'semantic-ui-react';
+import { Container, Header, Segment } from 'semantic-ui-react';
 import { Route, Link, Switch } from 'react-router-dom';
 import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
 import { setGroups, addGroupAndRedirectBack, showGroup,
   editGroup, updateGroupAndRedirectBack, deleteGroup, redirectBack } from './GroupsActions';
-import ModuleTitle from '../common/ModuleTitle';
 import Groups from './Groups';
 import { DecoratedNewGroupForm as NewGroupForm } from './NewGroupForm';
 import EditGroupForm from './EditGroupForm';
@@ -17,6 +16,7 @@ import GroupDetails from './GroupDetails';
 import { openDeleteGroupModal, closeModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
 import ModalAcceptButton from '../common/ModalAcceptButton';
+import GroupsTitleBar from './GroupsTitleBar';
 
 type Props = {
   groups: Array<Object>,
@@ -24,6 +24,7 @@ type Props = {
   currentUser: Object,
   isDeleteGroupModalOpen: boolean,
   deleteGroupModalGroupId: number,
+  match: Object,
   clearForm: () => void,
   handleGroupsFetch: () => void,
   handleGroupAdd: (Object) => void,
@@ -40,6 +41,9 @@ const RemoveGroupModal = ConfirmationModal(ModalAcceptButton);
 class GroupsContainer extends Component<Props> {
   componentDidMount = () => {
     this.props.handleGroupsFetch();
+    if (this.props.match.id) {
+      this.props.handleGroupShow(this.props.match.id, showGroup);
+    }
   }
 
   handleGroupAdd = (data: Object) => {
@@ -77,29 +81,7 @@ class GroupsContainer extends Component<Props> {
     } = this.props;
     return (
       <Container>
-        <div className="flexed medium-bottom-margin">
-          <ModuleTitle iconName="group">
-            Groups
-          </ModuleTitle>
-          <Route
-            path="/groups"
-            exact
-            render={() => (
-              <Button primary as={Link} to="/groups/new">Create new group</Button>
-            )}
-          />
-          <Route
-            path="/groups/:id"
-            exact
-            render={({ match }) => (
-              currentUser.id === currentGroup.creator_id && match.params.id ? (
-                <Button primary as={Link} to={`/groups/${match.params.id}/invite`}>
-                  Invite new member
-                </Button>
-              ) : (null)
-            )}
-          />
-        </div>
+        <GroupsTitleBar currentUser={currentUser} currentGroup={currentGroup} />
         <Switch>
           <Route
             path="/groups/new"
