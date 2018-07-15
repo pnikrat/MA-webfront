@@ -2,12 +2,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Header, Segment } from 'semantic-ui-react';
-import { Route, Switch } from 'react-router-dom';
 import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
 import { setGroups, addGroupAndRedirectBack, showGroup,
-  editGroup, updateGroupAndRedirectBack, deleteGroup, redirectBack } from './GroupsActions';
+  editGroup, updateGroupAndRedirectBack, deleteGroup,
+  redirectBack, setCurrentGroup } from './GroupsActions';
 import Groups from './Groups';
 import { DecoratedNewGroupForm as NewGroupForm } from './NewGroupForm';
 import EditGroupForm from './EditGroupForm';
@@ -41,8 +41,8 @@ const RemoveGroupModal = ConfirmationModal(ModalAcceptButton);
 class GroupsContainer extends Component<Props> {
   componentDidMount = () => {
     this.props.handleGroupsFetch();
-    if (this.props.match.id) {
-      this.props.handleGroupShow(this.props.match.id, showGroup);
+    if (this.props.match.params.routeGroupId) {
+      this.props.handleGroupShow(this.props.match.params.routeGroupId, setCurrentGroup);
     }
   }
 
@@ -77,67 +77,57 @@ class GroupsContainer extends Component<Props> {
   render() {
     const {
       groups, currentGroup, currentUser, openDeleteModal, isDeleteGroupModalOpen,
-      closeDeleteModal, deleteGroupModalGroupId
+      closeDeleteModal, deleteGroupModalGroupId, match,
     } = this.props;
+    const { baseAction, routeGroupId, detailAction } = match.params;
     return (
       <Container>
-        <GroupsTitleBar currentUser={currentUser} currentGroup={currentGroup} />
-        <Switch>
-          <Route
-            path="/groups/new"
-            render={() => (
-              <Segment>
-                <Header as="h3" className="with-divider">Create new group</Header>
-                <NewGroupForm onSubmit={this.handleGroupAdd} />
-              </Segment>
-            )}
+        <GroupsTitleBar
+          currentUser={currentUser}
+          currentGroup={currentGroup}
+          baseAction={baseAction}
+          routeGroupId={routeGroupId}
+          detailAction={detailAction}
+        />
+        { baseAction === '/new' &&
+          <Segment>
+            <Header as="h3" className="with-divider">Create new group</Header>
+            <NewGroupForm onSubmit={this.handleGroupAdd} />
+          </Segment>
+        }
+        { routeGroupId && detailAction === '/invite' &&
+          <Segment>
+            <Header as="h3" className="with-divider">
+              {`Invite new user to ${currentGroup.name}`}
+            </Header>
+            <NewInviteForm
+              onSubmit={this.handleInviteCreate}
+              initialValues={{ invitable_id: currentGroup.id, invitable_type: 'Group' }}
+              submitText="Invite"
+              placeholder="Type email of user to be invited"
+            />
+          </Segment>
+        }
+        { routeGroupId && detailAction === '/edit' &&
+          <Segment>
+            <Header as="h3" className="with-divider">{`Edit ${currentGroup.name}`}</Header>
+            <EditGroupForm onSubmit={this.handleGroupUpdate} />
+          </Segment>
+        }
+        { routeGroupId && !detailAction &&
+          <GroupDetails
+            group={currentGroup}
           />
-          <Route
-            path="/groups/:id/invite"
-            render={() => (
-              <Segment>
-                <Header as="h3" className="with-divider">
-                  {`Invite new user to ${currentGroup.name}`}
-                </Header>
-                <NewInviteForm
-                  onSubmit={this.handleInviteCreate}
-                  initialValues={{ invitable_id: currentGroup.id, invitable_type: 'Group' }}
-                  submitText="Invite"
-                  placeholder="Type email of user to be invited"
-                />
-              </Segment>
-            )}
+        }
+        { !routeGroupId && !baseAction && !detailAction &&
+          <Groups
+            groups={groups}
+            onGroupClick={this.handleGroupShow}
+            onEditClick={this.handleGroupEditRedirect}
+            openConfirmationModal={openDeleteModal}
+            currentUser={currentUser}
           />
-          <Route
-            path="/groups/:id/edit"
-            render={() => (
-              <Segment>
-                <Header as="h3" className="with-divider">{`Edit ${currentGroup.name}`}</Header>
-                <EditGroupForm onSubmit={this.handleGroupUpdate} />
-              </Segment>
-            )}
-          />
-          <Route
-            path="/groups/:id"
-            render={() => (
-              <GroupDetails
-                group={currentGroup}
-              />
-            )}
-          />
-          <Route
-            path="/groups"
-            render={() => (
-              <Groups
-                groups={groups}
-                onGroupClick={this.handleGroupShow}
-                onEditClick={this.handleGroupEditRedirect}
-                openConfirmationModal={openDeleteModal}
-                currentUser={currentUser}
-              />
-            )}
-          />
-        </Switch>
+        }
         <RemoveGroupModal
           isOpen={isDeleteGroupModalOpen}
           onClose={closeDeleteModal}

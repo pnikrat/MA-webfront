@@ -89,4 +89,5 @@ function redirectBack(response) {
 export {
   setGroups, addGroupAndRedirectBack, showGroup, editGroup,
   updateGroupAndRedirectBack, deleteGroup, redirectBack,
+  setCurrentGroup,
 };

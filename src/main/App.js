@@ -35,7 +35,7 @@ function App() {
             component={requireSignIn(ItemsContainer)}
           />
           <Route
-            path="/groups"
+            path="/groups:baseAction(/new|/)?:routeGroupId?:detailAction(/edit|/invite)?"
             component={requireSignIn(GroupsContainer)}
           />
           <Route component={NotFound} />
