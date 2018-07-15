@@ -20,13 +20,13 @@ const SingleGroup = ({
     <div className="flexed">
       { isCreator &&
         <Popup
-          trigger={<Icon name="star" className="small-top-margin" />}
+          trigger={<Icon name="star" data-cy="creator-icon" className="small-top-margin" />}
           content="You are group creator"
         />
       }
       { !isCreator &&
         <Popup
-          trigger={<Icon name="user" className="small-top-margin" />}
+          trigger={<Icon name="user" data-cy="member-icon" className="small-top-margin" />}
           content="You are group member"
         />
       }
@@ -38,6 +38,7 @@ const SingleGroup = ({
           compact
           basic
           color="blue"
+          data-cy="edit-group-button"
           onMouseDown={e => e.stopPropagation()}
           onClick={e => onEditClick(e, group.id)}
         >
@@ -46,6 +47,7 @@ const SingleGroup = ({
         <Button
           compact
           color="red"
+          data-cy="delete-group-button"
           onMouseDown={e => e.stopPropagation()}
           onClick={e => openConfirmationModal(e, group.id)}
         >

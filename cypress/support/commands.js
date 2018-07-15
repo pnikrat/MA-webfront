@@ -159,6 +159,7 @@ Cypress.Commands.add('registerTestUser', () => {
       password: 'qwer1234',
       passwordConfirmation: 'qwer1234',
       firstName: 'Cypress',
+      lastName: 'Secondary',
     },
     failOnStatusCode: false,
   });

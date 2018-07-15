@@ -32,7 +32,7 @@ class Groups extends Component<Props> {
     const { groups } = this.props;
     const groupItems = groups.sort(this.compare).map(group => this.singleGroup(group));
     return (
-      <Container>
+      <Container data-cy="groups-container">
         {groupItems}
       </Container>
     );

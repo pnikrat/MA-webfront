@@ -18,7 +18,10 @@ const apiMiddleware = ({ dispatch }) => next => (action) => {
     dispatch(success(response));
   }).catch((error) => {
     dispatch(apiStop());
-    const { errors } = error.response.data;
+    let { errors } = error.response.data;
+    if (!Array.isArray(errors)) {
+      errors = [errors];
+    }
     dispatch(apiThrowError(errors));
   });
 };

@@ -27,7 +27,7 @@ class GroupDetails extends Component<Props> {
     return (
       <Segment>
         <Header as="h3" className="with-divider">{group.name}</Header>
-        <List divided relaxed>
+        <List divided relaxed data-cy="members-list">
           {members}
         </List>
       </Segment>
