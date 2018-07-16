@@ -251,4 +251,65 @@ describe('Items module', () => {
       cy.contains('my moved item');
     });
   });
+
+  context('Price calculations', () => {
+    before(() => {
+      cy.freshItems();
+    });
+
+    beforeEach(() => {
+      cy.contains('Lidl').click();
+    });
+
+    it('calculates value of all products in list', () => {
+      cy.get('[data-cy=item-name]').children('input').type('Water').blur();
+      cy.get('input[name=quantity]').type('6');
+      cy.get('input[name=price]').type('3.40');
+      cy.get('button[type=submit]').click();
+      cy.contains('List value: 20.40$');
+      cy.get('[data-cy=item-name]').children('input').type('Chicken').blur();
+      cy.get('input[name=quantity]').type('0.45');
+      cy.get('input[name=price]').type('10.20');
+      cy.get('button[type=submit]').click();
+      cy.contains('List value: 24.99$');
+      cy.get('[data-cy=item-name]').children('input').type('NukaCola').blur();
+      cy.get('input[name=quantity]').type('0.20');
+      cy.get('input[name=price]').type('30');
+      cy.get('button[type=submit]').click();
+      cy.contains('List value: 30.99$');
+    });
+
+    it('items that have price without quantity are added to total multiplied by 1', () => {
+      cy.get('[data-cy=item-name]').children('input').type('Singular').blur();
+      cy.get('input[name=price]').type('5.01');
+      cy.get('button[type=submit]').click();
+      cy.contains('List value: 36.00$');
+    });
+
+    it('items that have quantity without price are not added to total', () => {
+      cy.get('[data-cy=item-name]').children('input').type('No price').blur();
+      cy.get('input[name=quantity]').type('12');
+      cy.get('button[type=submit]').click();
+      cy.get('.first-sublist').within(() => {
+        cy.contains('No price');
+      });
+      cy.contains('List value: 36.00$');
+    });
+
+    it('items that are ticked off add to cart value and leave list value unchanged', () => {
+      cy.contains('.item.to_buy', 'Water').within(() => {
+        cy.get('[data-cy=mark-bought]').click();
+      });
+      cy.contains('Cart value: 20.40$');
+      cy.contains('List value: 36.00$');
+    });
+
+    it('items that are moved from to buy to missing change list value', () => {
+      cy.contains('.item.to_buy', 'Chicken').within(() => {
+        cy.get('[data-cy=mark-missing]').click();
+      });
+      cy.contains('List value: 31.41$');
+      cy.contains('Cart value: 20.40$');
+    });
+  });
 });
