@@ -1,14 +1,16 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { Redirect } from 'react-router-dom';
+import queryString from 'query-string';
 import { registerUser } from '../auth-config';
 import SignupForm from './SignupForm';
 import withAuth from './WithAuth';
 
 type Props = {
   currentUser: Object,
+  location: Object,
   redirect: () => void,
   sendRegistrationRequest: (Object) => Promise<void>
 }
@@ -16,6 +18,12 @@ type Props = {
 const SignupFormWithAuth = withAuth(SignupForm);
 
 class SignupContainer extends Component<Props> {
+  parseToken = () => {
+    const { search } = this.props.location;
+    const params = queryString.parse(search);
+    return params.invite_token ? { invite_token: params.invite_token } : undefined;
+  }
+
   render() {
     const { currentUser, redirect, sendRegistrationRequest } = this.props;
     return (
@@ -27,6 +35,7 @@ class SignupContainer extends Component<Props> {
         errorCode={422}
         redirect={redirect}
         sendAuthRequest={sendRegistrationRequest}
+        tokenParam={this.parseToken()}
       />
     );
   }

@@ -1,20 +1,22 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Container, Header, Segment } from 'semantic-ui-react';
-import { Route, Link, Switch } from 'react-router-dom';
+import { Container, Header, Segment } from 'semantic-ui-react';
+import { reset } from 'redux-form';
 import { apiCall } from '../services/apiActions';
 import { GET, POST, PUT, DELETE } from '../state/constants';
 import { setGroups, addGroupAndRedirectBack, showGroup,
-  editGroup, updateGroupAndRedirectBack, deleteGroup } from './GroupsActions';
-import ModuleTitle from '../common/ModuleTitle';
+  editGroup, updateGroupAndRedirectBack, deleteGroup,
+  redirectBack, setCurrentGroup } from './GroupsActions';
 import Groups from './Groups';
 import { DecoratedNewGroupForm as NewGroupForm } from './NewGroupForm';
 import EditGroupForm from './EditGroupForm';
+import NewInviteForm from './NewInviteForm';
 import GroupDetails from './GroupDetails';
 import { openDeleteGroupModal, closeModal } from '../state/ModalsState';
 import ConfirmationModal from '../common/ConfirmationModal';
 import ModalAcceptButton from '../common/ModalAcceptButton';
+import GroupsTitleBar from './GroupsTitleBar';
 
 type Props = {
   groups: Array<Object>,
@@ -22,6 +24,8 @@ type Props = {
   currentUser: Object,
   isDeleteGroupModalOpen: boolean,
   deleteGroupModalGroupId: number,
+  match: Object,
+  clearForm: () => void,
   handleGroupsFetch: () => void,
   handleGroupAdd: (Object) => void,
   handleGroupShow: (number, Function) => void,
@@ -29,6 +33,7 @@ type Props = {
   openDeleteModal: (Object, number) => void,
   closeDeleteModal: () => void,
   handleGroupDelete: (number) => void,
+  handleInviteCreate: (Object) => void,
 }
 
 const RemoveGroupModal = ConfirmationModal(ModalAcceptButton);
@@ -36,6 +41,9 @@ const RemoveGroupModal = ConfirmationModal(ModalAcceptButton);
 class GroupsContainer extends Component<Props> {
   componentDidMount = () => {
     this.props.handleGroupsFetch();
+    if (this.props.match.params.routeGroupId) {
+      this.props.handleGroupShow(this.props.match.params.routeGroupId, setCurrentGroup);
+    }
   }
 
   handleGroupAdd = (data: Object) => {
@@ -61,65 +69,65 @@ class GroupsContainer extends Component<Props> {
     this.props.handleGroupDelete(id);
   }
 
+  handleInviteCreate = (data: Object) => {
+    this.props.clearForm();
+    this.props.handleInviteCreate(data);
+  }
+
   render() {
     const {
       groups, currentGroup, currentUser, openDeleteModal, isDeleteGroupModalOpen,
-      closeDeleteModal, deleteGroupModalGroupId
+      closeDeleteModal, deleteGroupModalGroupId, match,
     } = this.props;
+    const { baseAction, routeGroupId, detailAction } = match.params;
     return (
       <Container>
-        <div className="flexed medium-bottom-margin">
-          <ModuleTitle iconName="group">
-            Groups
-          </ModuleTitle>
-          <Route
-            path="/groups"
-            exact
-            render={() => (
-              <Button primary as={Link} to="/groups/new">Create new group</Button>
-            )}
+        <GroupsTitleBar
+          currentUser={currentUser}
+          currentGroup={currentGroup}
+          baseAction={baseAction}
+          routeGroupId={routeGroupId}
+          detailAction={detailAction}
+        />
+        { baseAction === '/new' &&
+          <Segment>
+            <Header as="h3" className="with-divider">Create new group</Header>
+            <NewGroupForm onSubmit={this.handleGroupAdd} />
+          </Segment>
+        }
+        { routeGroupId && detailAction === '/invite' &&
+          <Segment>
+            <Header as="h3" className="with-divider">
+              {`Invite new user to ${currentGroup.name}`}
+            </Header>
+            <NewInviteForm
+              onSubmit={this.handleInviteCreate}
+              initialValues={{ invitable_id: currentGroup.id, invitable_type: 'Group' }}
+              submitText="Invite"
+              placeholder="Type email of user to be invited"
+            />
+          </Segment>
+        }
+        { routeGroupId && detailAction === '/edit' &&
+          <Segment>
+            <Header as="h3" className="with-divider">{`Edit ${currentGroup.name}`}</Header>
+            <EditGroupForm onSubmit={this.handleGroupUpdate} />
+          </Segment>
+        }
+        { routeGroupId && !detailAction &&
+          <GroupDetails
+            group={currentGroup}
           />
-        </div>
-        <Switch>
-          <Route
-            path="/groups/new"
-            render={() => (
-              <Segment>
-                <Header as="h3" className="with-divider">Create new group</Header>
-                <NewGroupForm onSubmit={this.handleGroupAdd} />
-              </Segment>
-            )}
+        }
+        { !routeGroupId && !baseAction && !detailAction &&
+          <Groups
+            groups={groups}
+            onGroupClick={this.handleGroupShow}
+            onEditClick={this.handleGroupEditRedirect}
+            openConfirmationModal={openDeleteModal}
+            currentUser={currentUser}
           />
-          <Route
-            path="/groups/:id/edit"
-            render={() => (
-              <Segment>
-                <Header as="h3" className="with-divider">{`Edit ${currentGroup.name}`}</Header>
-                <EditGroupForm onSubmit={this.handleGroupUpdate} />
-              </Segment>
-            )}
-          />
-          <Route
-            path="/groups/:id"
-            render={() => (
-              <GroupDetails
-                group={currentGroup}
-              />
-            )}
-          />
-          <Route
-            path="/groups"
-            render={() => (
-              <Groups
-                groups={groups}
-                onGroupClick={this.handleGroupShow}
-                onEditClick={this.handleGroupEditRedirect}
-                openConfirmationModal={openDeleteModal}
-                currentUser={currentUser}
-              />
-            )}
-          />
-        </Switch>
+        }
         <RemoveGroupModal
           isOpen={isDeleteGroupModalOpen}
           onClose={closeDeleteModal}
@@ -148,6 +156,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  clearForm: () => dispatch(reset('newInvite')),
   handleGroupsFetch: () => dispatch(apiCall('/groups', setGroups, GET)),
   handleGroupAdd: group => dispatch(apiCall('/groups', addGroupAndRedirectBack, POST, group)),
   handleGroupShow: (id, callback) => dispatch(apiCall(`/groups/${id}`, callback, GET)),
@@ -157,6 +166,7 @@ const mapDispatchToProps = dispatch => ({
   handleGroupDelete: id => dispatch(apiCall(`/groups/${id}`, () => deleteGroup(id), DELETE)),
   openDeleteModal: (e, id) => dispatch(openDeleteGroupModal(e, id)),
   closeDeleteModal: () => dispatch(closeModal()),
+  handleInviteCreate: data => dispatch(apiCall('/invites', redirectBack, POST, data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupsContainer);

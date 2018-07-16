@@ -1,5 +1,5 @@
 import call from '../services/api';
-import { apiStart, apiStop, apiThrowError, apiRemoveError, apiShowLoading } from './apiActions';
+import { apiStart, apiStop, apiThrowError, apiShowLoading, removeFlash } from './apiActions';
 
 const apiMiddleware = ({ dispatch }) => next => (action) => {
   const { api } = action.meta || false;
@@ -14,11 +14,14 @@ const apiMiddleware = ({ dispatch }) => next => (action) => {
   const { success } = action.meta;
   return call(payload).then((response) => {
     dispatch(apiStop());
-    dispatch(apiRemoveError());
+    dispatch(removeFlash());
     dispatch(success(response));
   }).catch((error) => {
     dispatch(apiStop());
-    const { errors } = error.response.data;
+    let { errors } = error.response.data;
+    if (!Array.isArray(errors)) {
+      errors = [errors];
+    }
     dispatch(apiThrowError(errors));
   });
 };

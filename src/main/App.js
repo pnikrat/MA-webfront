@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import { generateRequireSignInWrapper } from 'redux-token-auth';
 import Home from './Home';
 import NotFound from '../common/NotFound';
@@ -10,7 +10,7 @@ import SigninContainer from '../authentication/SigninContainer';
 import history from '../router/History';
 import ItemsContainer from '../items/ItemsContainer';
 import Navbar from '../common/Navbar';
-import ErrorContainer from '../common/ErrorContainer';
+import FlashContainer from '../common/FlashContainer';
 import Loading from '../common/Loading';
 import GroupsContainer from '../groups/GroupsContainer';
 import '../styles/common.css';
@@ -24,7 +24,7 @@ function App() {
     <ConnectedRouter history={history}>
       <div>
         <Navbar />
-        <ErrorContainer />
+        <FlashContainer />
         <Loading />
         <Switch>
           <Route path="/" exact component={Home} />
@@ -35,7 +35,7 @@ function App() {
             component={requireSignIn(ItemsContainer)}
           />
           <Route
-            path="/groups"
+            path="/groups:baseAction(/new|/)?:routeGroupId?:detailAction(/edit|/invite)?"
             component={requireSignIn(GroupsContainer)}
           />
           <Route component={NotFound} />

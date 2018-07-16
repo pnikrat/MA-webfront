@@ -35,8 +35,9 @@ const initialState = {
       id: null,
     },
   },
-  apiErrorReducer: {
+  apiMessagesReducer: {
     apiError: null,
+    apiSuccess: null,
   },
   apiLoadingReducer: {
     loading: false,
@@ -50,7 +51,7 @@ const initialState = {
   },
   groupsReducer: {
     groups: [],
-    currentGroup: null,
+    currentGroup: {},
   }
 };
 

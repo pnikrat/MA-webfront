@@ -62,8 +62,8 @@ describe('Authentication module', () => {
       cy.get('input[name=email]').type('cypress@example.com');
       cy.get('input[name=password').type('qwer1234');
       cy.get('input[name=passwordConfirmation]').type('qwer1234');
-      cy.get('input[name=firstName]').type('First name');
-      cy.get('input[name=lastName]').type('Last name');
+      cy.get('input[name=firstName]').type('Cypress');
+      cy.get('input[name=lastName]').type('Secondary');
       cy.contains('Sign up').click().should(() => {
         expect(localStorage.getItem('uid')).to.eq('cypress@example.com');
         expect(localStorage.getItem('access-token')).not.to.eq(null);

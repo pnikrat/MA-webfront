@@ -12,6 +12,7 @@ function withAuth(WrappedForm: React.ComponentType<P>) {
     path: string,
     linkName: string,
     errorCode: number,
+    tokenParam?: Object,
     redirect: () => void,
     sendAuthRequest: (Object) => Promise<void>
   }
@@ -42,14 +43,16 @@ function withAuth(WrappedForm: React.ComponentType<P>) {
     }
 
     render() {
-      const { headerText, path, linkName } = this.props;
+      const {
+        headerText, path, linkName, tokenParam,
+      } = this.props;
       return (
         <Container>
           <Segment>
             <Header as="h3" className="with-divider">
               {headerText}
             </Header>
-            <WrappedForm onSubmit={this.handleAuth} />
+            <WrappedForm onSubmit={this.handleAuth} initialValues={tokenParam} />
             <div className="larger-top-margin">
               <Link to={path}>{linkName}</Link>
             </div>

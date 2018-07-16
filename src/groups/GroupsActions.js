@@ -1,6 +1,7 @@
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { SET_GROUPS, ADD_GROUP, SET_CURRENT_GROUP,
-  UPDATE_GROUP, DELETE_GROUP } from '../state/constants';
+  UPDATE_GROUP, DELETE_GROUP, GET } from '../state/constants';
+import { apiSetSuccess, apiCall } from '../services/apiActions';
 
 function setGroups(response) {
   return {
@@ -67,6 +68,26 @@ function editGroup(response) {
   };
 }
 
+function showGroupWithFlash(flash) {
+  return response =>
+    (dispatch) => {
+      const { id } = response.data;
+      dispatch(setCurrentGroup(response));
+      dispatch(push(`/groups/${id}`));
+      dispatch(apiSetSuccess([flash]));
+    };
+}
+
+function redirectBack(response) {
+  return (dispatch) => {
+    const { invitable_id: groupId, recipient_id: inviteeId } = response.data;
+    const successMessage = inviteeId ? 'User has been added to group' : 'Invitation successfully sent';
+    dispatch(apiCall(`/groups/${groupId}`, showGroupWithFlash(successMessage), GET));
+  };
+}
+
 export {
-  setGroups, addGroupAndRedirectBack, showGroup, editGroup, updateGroupAndRedirectBack, deleteGroup
+  setGroups, addGroupAndRedirectBack, showGroup, editGroup,
+  updateGroupAndRedirectBack, deleteGroup, redirectBack,
+  setCurrentGroup,
 };

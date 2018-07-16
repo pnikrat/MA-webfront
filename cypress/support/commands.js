@@ -1,22 +1,36 @@
-Cypress.Commands.add('login', () => {
+Cypress.Commands.add('login', (user = 'main') => {
   // command used to login via backend requests instead of UI
+  const bodyMain = {
+    email: 'cypressmain@example.com',
+    password: 'qwer1234',
+    password_confirmation: 'qwer1234',
+    first_name: 'CypressMain',
+  };
+  const bodySecondary = {
+    email: 'cypress@example.com',
+    password: 'qwer1234',
+    passwordConfirmation: 'qwer1234',
+    firstName: 'Cypress',
+    lastName: 'Secondary',
+  };
+  let body;
+  if (user !== 'secondary') {
+    body = bodyMain;
+  } else {
+    body = bodySecondary;
+  }
   cy.request({
     method: 'POST',
     url: 'http://localhost:4000/auth/',
-    body: {
-      email: 'cypressmain@example.com',
-      password: 'qwer1234',
-      password_confirmation: 'qwer1234',
-      first_name: 'CypressMain',
-    },
+    body,
     failOnStatusCode: false,
   }).then(() => {
     cy.request({
       method: 'POST',
       url: 'http://localhost:4000/auth/sign_in',
       body: {
-        email: 'cypressmain@example.com',
-        password: 'qwer1234',
+        email: body.email,
+        password: body.password,
       },
     }).then((response) => {
       const { headers } = response;
@@ -65,6 +79,91 @@ Cypress.Commands.add('freshItems', () => {
   });
 });
 
+Cypress.Commands.add('freshGroups', () => {
+  // command used to delete all user groups and create new ones for fresh state
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:4000/auth/sign_in',
+    body: {
+      email: 'cypressmain@example.com',
+      password: 'qwer1234',
+    },
+  }).then((response) => {
+    const { headers } = response;
+    cy.request({
+      method: 'GET',
+      url: 'http://localhost:4000/groups/',
+      headers,
+    }).then((responseIndex) => {
+      if (responseIndex.body.length > 0) {
+        responseIndex.body.forEach((group) => {
+          cy.request({
+            method: 'DELETE',
+            url: `http://localhost:4000/groups/${group.id}`,
+            headers,
+          });
+        });
+      }
+    });
+    cy.request({
+      method: 'POST',
+      url: 'http://localhost:4000/groups/',
+      body: {
+        name: 'Cypress main group',
+      },
+      headers,
+    });
+  });
+
+  cy.registerTestUser();
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:4000/auth/sign_in',
+    body: {
+      email: 'cypress@example.com',
+      password: 'qwer1234',
+    },
+  }).then((response) => {
+    const { headers } = response;
+    cy.request({
+      method: 'GET',
+      url: 'http://localhost:4000/groups/',
+      headers,
+    }).then((responseIndex) => {
+      if (responseIndex.body.length > 0) {
+        responseIndex.body.forEach((group) => {
+          cy.request({
+            method: 'DELETE',
+            url: `http://localhost:4000/groups/${group.id}`,
+            headers,
+          });
+        });
+      }
+    });
+    cy.request({
+      method: 'POST',
+      url: 'http://localhost:4000/groups/',
+      body: {
+        name: 'Cypress secondary group',
+      },
+      headers,
+    }).then((responseGroupCreation) => {
+      const { id: groupId } = responseGroupCreation.body;
+      headers.Accept = 'application/json';
+      cy.request({
+        method: 'POST',
+        url: 'http://localhost:4000/invites',
+        body: {
+          email: 'cypressmain@example.com',
+          invitable_id: groupId,
+          invitable_type: 'Group',
+        },
+        headers,
+      });
+    });
+  });
+});
+
 Cypress.Commands.add('registerTestUser', () => {
   cy.request({
     method: 'POST',
@@ -74,6 +173,7 @@ Cypress.Commands.add('registerTestUser', () => {
       password: 'qwer1234',
       passwordConfirmation: 'qwer1234',
       firstName: 'Cypress',
+      lastName: 'Secondary',
     },
     failOnStatusCode: false,
   });
@@ -89,6 +189,22 @@ Cypress.Commands.add('destroyTestUser', () => {
   }).then((response) => {
     if (response.status === 200) {
       const { headers } = response;
+      // remove test user groups to prevent foreign key violation
+      cy.request({
+        method: 'GET',
+        url: 'http://localhost:4000/groups/',
+        headers,
+      }).then((responseIndex) => {
+        if (responseIndex.body.length > 0) {
+          responseIndex.body.forEach((group) => {
+            cy.request({
+              method: 'DELETE',
+              url: `http://localhost:4000/groups/${group.id}`,
+              headers,
+            });
+          });
+        }
+      });
       // remove test user to prevent unique email validation fail
       cy.request({
         method: 'DELETE',
