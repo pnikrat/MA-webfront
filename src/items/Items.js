@@ -28,7 +28,9 @@ class Items extends Component<Props> {
     return x.aasm_state === 'to_buy' ? -1 : 1;
   }
 
-  sumMoney = (prev: string, next: string) => Number(prev) + Number(next)
+  mapAndReduce = (filterType: Function, items: Object) => items.filter(filterType)
+    .map(i => [i.price, i.quantity]).reduce(this.sumMoney, 0.0);
+  sumMoney = (prev: number, next: Array<any>) => prev + (Number(next[0]) * (next[1] || 1))
   active = (x: Object) => x.aasm_state === 'to_buy' || x.aasm_state === 'bought'
   bought = (x: Object) => x.aasm_state === 'bought'
   missing = (x: Object) => x.aasm_state === 'missing'
@@ -62,8 +64,8 @@ class Items extends Component<Props> {
       .map(item => this.singleItem(item));
     const availableLists = lists.filter(this.otherLists).map(list => this.listOption(list));
 
-    const activeTotal = items.filter(this.active).map(i => i.price).reduce(this.sumMoney, 0.0);
-    const boughtTotal = items.filter(this.bought).map(i => i.price).reduce(this.sumMoney, 0.0);
+    const activeTotal = this.mapAndReduce(this.active, items);
+    const boughtTotal = this.mapAndReduce(this.bought, items);
 
     return (
       <Container className="all-items-container">

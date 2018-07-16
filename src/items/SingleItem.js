@@ -54,7 +54,7 @@ function SingleItem({ item, onItemStateChange, openEditModal }: Props) {
           </Dropdown>
         </List.Header>
         <List.Description className="flexed">
-          <div>{item.quantity && `Quantity: ${item.quantity} ${item.unit || ''}`}</div>
+          <div>{item.quantity && `Quantity: ${parseFloat(Number(item.quantity).toFixed(2))} ${item.unit || ''}`}</div>
           <div>{item.price && `${Number(item.price).toFixed(2)}$`}</div>
         </List.Description>
       </List.Content>
