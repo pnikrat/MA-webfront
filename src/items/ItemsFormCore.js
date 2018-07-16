@@ -7,8 +7,11 @@ const ItemsFormCore = () => (
   <div className="flexed no-flex-wrap">
     <Field
       name="quantity"
+      parse={value => Number(value)}
       type="number"
       label="Quantity"
+      min="0.00"
+      step="0.01"
       component={Input}
     />
     <Field
