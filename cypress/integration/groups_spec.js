@@ -62,8 +62,8 @@ describe('Groups module', () => {
     });
 
     it('can edit own group', () => {
-      cy.contains('Cypress main group').click();
-      cy.get('[data-cy=members-list]').contains('CypressMain');
+      cy.contains('Cypress secondary group').click();
+      cy.get('[data-cy=members-list]').contains('Cypress Secondary');
       cy.get('.custom-menu.menu').within(() => {
         cy.contains('Groups').click();
       });
@@ -121,6 +121,84 @@ describe('Groups module', () => {
       cy.contains('User already in group');
       cy.get('input[name=email]').should('have.value', '');
       cy.url().should('match', /groups\/\d+\/invite/);
+    });
+  });
+
+  context('Interactions with lists of other group members', () => {
+    before(() => {
+      cy.freshItems();
+    });
+
+    beforeEach(() => {
+      cy.login('secondary');
+    });
+
+    it('can see lists of other group members', () => {
+      cy.contains('Create shopping list');
+      cy.get('input[name=name]').type('Secondary Alma');
+      cy.get('button[type=submit]').click();
+      cy.get('[data-cy=lists-container]').within(() => {
+        cy.contains('Lidl');
+        cy.contains('Secondary Alma');
+      });
+      cy.contains('Sign out').click();
+      cy.login();
+      cy.contains('Create shopping list');
+      cy.get('[data-cy=lists-container]').within(() => {
+        cy.contains('Lidl');
+        cy.contains('Secondary Alma');
+      });
+    });
+
+    it('can edit other group members list name', () => {
+      cy.contains('.list-segment', 'Lidl').within(() => {
+        cy.contains('Edit').click();
+      });
+      cy.get('.modal').within(() => {
+        cy.get('input[name=name]').clear().type('Primary Selgros');
+        cy.get('button[type=submit]').click();
+      });
+      cy.get('[data-cy=lists-container').within(() => {
+        cy.contains('Secondary Alma');
+        cy.contains('Primary Selgros');
+        cy.root().should('not.contain', 'Lidl');
+      });
+      cy.contains('Sign out').click();
+      cy.login();
+      cy.get('[data-cy=lists-container]').within(() => {
+        cy.contains('Primary Selgros');
+        cy.root().should('not.contain', 'Lidl');
+      });
+    });
+
+    it('cannot delete other group members list', () => {
+      cy.contains('.list-segment', 'Primary Selgros').within(() => {
+        cy.root().should('not.contain', 'Delete');
+      });
+      cy.contains('.list-segment', 'Secondary Alma').last().within(() => {
+        cy.contains('Delete').click();
+      });
+      cy.get('.modal').within(() => {
+        cy.contains('Yes').click();
+      });
+    });
+
+    it('can add and tick off items on other group member list', () => {
+      cy.contains('Primary Selgros').click();
+      cy.contains('Add shopping items');
+      cy.get('[data-cy=item-name]').children('input').type('Other user item{enter}');
+      cy.get('.first-sublist').within(() => {
+        cy.contains('.item.to_buy', 'Other user item').within(() => {
+          cy.get('[data-cy=mark-bought]').click();
+        });
+        cy.contains('.item.bought', 'Other user item');
+      });
+      cy.contains('Sign out').click();
+      cy.login();
+      cy.contains('Primary Selgros').click();
+      cy.get('.first-sublist').within(() => {
+        cy.contains('.item.bought', 'Other user item');
+      });
     });
   });
 });

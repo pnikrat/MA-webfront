@@ -63,7 +63,7 @@ class Lists extends Component<Props> {
       )
     );
     return (
-      <Container>
+      <Container data-cy="lists-container">
         {listsItems}
       </Container>
     );

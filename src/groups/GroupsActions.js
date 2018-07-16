@@ -33,15 +33,15 @@ function deleteGroup(id) {
 
 function addGroupAndRedirectBack(response) {
   return (dispatch) => {
-    dispatch(push('/groups'));
     dispatch(addGroup(response));
+    dispatch(push('/groups'));
   };
 }
 
 function updateGroupAndRedirectBack(response) {
   return (dispatch) => {
-    dispatch(push('/groups'));
     dispatch(updateGroup(response));
+    dispatch(push('/groups'));
   };
 }
 
@@ -63,8 +63,8 @@ function showGroup(response) {
 function editGroup(response) {
   return (dispatch) => {
     const { id } = response.data;
-    dispatch(push(`/groups/${id}/edit`));
     dispatch(setCurrentGroup(response));
+    dispatch(push(`/groups/${id}/edit`));
   };
 }
 
