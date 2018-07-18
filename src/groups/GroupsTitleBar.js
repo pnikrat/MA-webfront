@@ -17,14 +17,14 @@ const GroupsTitleBar = ({
 }: Props) => (
   <div className="flexed medium-bottom-margin">
     <ModuleTitle iconName="group">
-      Groups
+      Grupy
     </ModuleTitle>
     { !baseAction && !routeGroupId && !detailAction &&
-      <Button primary as={Link} to="/groups/new">Create new group</Button>
+      <Button primary as={Link} to="/groups/new">Stwórz nową grupę</Button>
     }
     { routeGroupId && !detailAction && currentUser.id === currentGroup.creator_id &&
       <Button primary as={Link} to={`/groups/${routeGroupId}/invite`}>
-        Invite new member
+        Zaproś do grupy
       </Button>
     }
   </div>

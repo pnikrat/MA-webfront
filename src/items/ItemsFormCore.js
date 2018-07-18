@@ -9,7 +9,7 @@ const ItemsFormCore = () => (
       name="quantity"
       parse={value => Number(value)}
       type="number"
-      label="Quantity"
+      label="Ilość"
       min="0.00"
       step="0.01"
       component={Input}
@@ -17,15 +17,15 @@ const ItemsFormCore = () => (
     <Field
       name="unit"
       type="text"
-      label="Unit"
+      label="Jednostka"
       component={Input}
-      placeholder="Pieces, bottles, etc..."
+      placeholder="Sztuki, butelki, kilogramy, itp..."
     />
     <Field
       name="price"
       parse={value => Number(value)}
       type="number"
-      label="Price"
+      label="Cena za jednostkę"
       min="0.00"
       step="0.01"
       component={Input}

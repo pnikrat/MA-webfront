@@ -10,7 +10,7 @@ type Props = {
 function Loading({ isLoading }: Props) {
   return (
     <Dimmer active={isLoading} page>
-      <Loader>Loading</Loader>
+      <Loader>Wczytywanie...</Loader>
     </Dimmer>
   );
 }

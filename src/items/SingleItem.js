@@ -42,20 +42,20 @@ function SingleItem({ item, onItemStateChange, openEditModal }: Props) {
             <Dropdown.Menu>
               <Dropdown.Item
                 icon="edit"
-                text="Edit item"
+                text="Edytuj"
                 onClick={() => openEditModal(item)}
               />
               <Dropdown.Item
                 icon="trash outline"
-                text="Delete"
+                text="Usuń"
                 onClick={() => onItemStateChange(item, 'deleted')}
               />
             </Dropdown.Menu>
           </Dropdown>
         </List.Header>
         <List.Description className="flexed">
-          <div>{item.quantity && `Quantity: ${parseFloat(Number(item.quantity).toFixed(2))} ${item.unit || ''}`}</div>
-          <div>{item.price && `${Number(item.price).toFixed(2)}$`}</div>
+          <div>{item.quantity && `Ilość: ${Number(item.quantity).toLocaleString('pl', { maximumFractionDigits: 2 })} ${item.unit || ''}`}</div>
+          <div>{item.price && `${Number(item.price).toLocaleString('pl', { style: 'currency', currency: 'PLN' })}`}</div>
         </List.Description>
       </List.Content>
     </List.Item>

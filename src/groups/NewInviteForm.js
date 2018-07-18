@@ -20,7 +20,7 @@ const NewInviteForm = ({
     <Field
       name="email"
       type="email"
-      label="User email"
+      label="Email zapraszanego"
       required
       component={Input}
       placeholder={placeholder}
@@ -30,7 +30,7 @@ const NewInviteForm = ({
       disabled={submitting}
       color="blue"
     >
-      {submitting ? 'Submitting...' : submitText}
+      {submitting ? 'Wysyłanie...' : submitText}
     </Form.Button>
   </Form>
 );
@@ -38,7 +38,7 @@ const NewInviteForm = ({
 const validate = (values: Object) => {
   const errors = {};
   if (!values.email) {
-    errors.email = 'Required';
+    errors.email = 'Pole wymagane';
   }
   return errors;
 };

@@ -71,10 +71,10 @@ class Items extends Component<Props> {
       <Container className="all-items-container">
         <Segment className="first-sublist sublist">
           <div className="flexed with-divider">
-            <Header as="h3">To buy / Bought</Header>
+            <Header as="h3">Do kupienia / Kupione</Header>
             <div className="price-totals">
-              <p>{`List value: ${activeTotal.toFixed(2)}$`}</p>
-              <p>{`Cart value: ${boughtTotal.toFixed(2)}$`}</p>
+              <p>{`Wartość listy: ${activeTotal.toLocaleString('pl', { style: 'currency', currency: 'PLN' })}`}</p>
+              <p>{`Wartość koszyka: ${boughtTotal.toLocaleString('pl', { style: 'currency', currency: 'PLN' })}`}</p>
             </div>
             <Button
               size="tiny"
@@ -82,7 +82,7 @@ class Items extends Component<Props> {
               data-cy="remove-bought-items"
               onClick={() => removeBoughtItems()}
             >
-              Remove bought
+              Usuń kupione
             </Button>
           </div>
           <List divided relaxed>
@@ -92,9 +92,9 @@ class Items extends Component<Props> {
         { missingComponents.length > 0 &&
           <Segment className="second-sublist sublist">
             <div className="flexed with-divider">
-              <Header as="h3">Missing in shop</Header>
+              <Header as="h3">Brak w sklepie</Header>
               <Dropdown
-                text="Move missing to:"
+                text="Przenieś brakujące do:"
                 button
                 data-cy="move-missing-items"
                 className="tiny"

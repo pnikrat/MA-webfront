@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 function LandingContainer() {
   return (
     <Container>
-      <Button primary as={Link} to="/signup">Sign up</Button>
-      <Button primary as={Link} to="/signin">Sign in</Button>
+      <Button primary as={Link} to="/signup">Rejestracja</Button>
+      <Button primary as={Link} to="/signin">Logowanie</Button>
     </Container>
   );
 }

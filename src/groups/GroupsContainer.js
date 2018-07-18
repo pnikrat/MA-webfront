@@ -91,26 +91,26 @@ class GroupsContainer extends Component<Props> {
         />
         { baseAction === '/new' &&
           <Segment>
-            <Header as="h3" className="with-divider">Create new group</Header>
+            <Header as="h3" className="with-divider">Stwórz nową grupę</Header>
             <NewGroupForm onSubmit={this.handleGroupAdd} />
           </Segment>
         }
         { routeGroupId && detailAction === '/invite' &&
           <Segment>
             <Header as="h3" className="with-divider">
-              {`Invite new user to ${currentGroup.name}`}
+              {`Zaproś nową osobę do: ${currentGroup.name}`}
             </Header>
             <NewInviteForm
               onSubmit={this.handleInviteCreate}
               initialValues={{ invitable_id: currentGroup.id, invitable_type: 'Group' }}
-              submitText="Invite"
-              placeholder="Type email of user to be invited"
+              submitText="Zaproś"
+              placeholder="Wpisz email zapraszanego użytkownika"
             />
           </Segment>
         }
         { routeGroupId && detailAction === '/edit' &&
           <Segment>
-            <Header as="h3" className="with-divider">{`Edit ${currentGroup.name}`}</Header>
+            <Header as="h3" className="with-divider">{`Edytuj ${currentGroup.name}`}</Header>
             <EditGroupForm onSubmit={this.handleGroupUpdate} />
           </Segment>
         }
@@ -133,13 +133,13 @@ class GroupsContainer extends Component<Props> {
           onClose={closeDeleteModal}
           objectId={deleteGroupModalGroupId}
           onConfirm={this.handleGroupDelete}
-          header="Delete group"
-          negativeButtonText="No"
-          positiveButtonText="Yes"
+          header="Usuń grupę"
+          negativeButtonText="Nie"
+          positiveButtonText="Tak"
         >
           <p>
-            When you delete the group all users from the group will lose
-            access to each other's shopping lists. Are you sure you want to continue?
+            Kiedy usuniesz grupę, wszyscy użytkownicy z tej grupy stracą dostęp do list
+            zakupów pozostałych członków tej grupy. Czy na pewno chcesz kontynuować?
           </p>
         </RemoveGroupModal>
       </Container>

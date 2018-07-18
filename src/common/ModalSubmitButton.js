@@ -14,7 +14,7 @@ const ModalSubmitButton = ({
     disabled={submitting}
     onClick={() => dispatch(submit(formReduxName))}
   >
-    { submitting ? 'Submitting...' : 'Edit' }
+    { submitting ? 'Wysyłanie...' : 'Edytuj' }
   </Button>
 );
 

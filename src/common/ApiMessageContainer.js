@@ -8,7 +8,7 @@ type Props = {
 }
 
 function ApiMessageContainer({ apiMessage, positive }: Props) {
-  const header = positive ? 'Success' : 'Something went wrong';
+  const header = positive ? 'Sukces' : 'Coś poszło nie tak';
   return (
     <div className="larger-bottom-margin">
       { apiMessage &&

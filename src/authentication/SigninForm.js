@@ -18,25 +18,25 @@ class SigninForm extends Component<Props> {
         <Field
           name="email"
           type="email"
-          label="Email address"
+          label="Adres email"
           required
           component={Input}
-          placeholder="your-mail@domain.com"
+          placeholder="mail@domain.com"
         />
         <Field
           name="password"
           type="password"
-          label="Password"
+          label="Hasło"
           required
           component={Input}
-          placeholder="Password"
+          placeholder="Hasło"
         />
         <Form.Button
           type="submit"
           disabled={submitting}
           color="blue"
         >
-          {submitting ? 'Submitting...' : 'Sign in'}
+          {submitting ? 'Wysyłanie...' : 'Zaloguj się'}
         </Form.Button>
       </Form>
     );
@@ -46,10 +46,10 @@ class SigninForm extends Component<Props> {
 const validate = (values) => {
   const errors = {};
   if (!values.email) {
-    errors.email = 'Required';
+    errors.email = 'Pole wymagane';
   }
   if (!values.password) {
-    errors.password = 'Required';
+    errors.password = 'Pole wymagane';
   }
   return errors;
 };

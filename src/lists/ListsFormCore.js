@@ -11,7 +11,7 @@ const ListsFormCore = ({ placeholder }: Props) => (
   <Field
     name="name"
     type="text"
-    label="Shopping list name"
+    label="Nazwa listy zakupów"
     required
     component={Input}
     placeholder={placeholder}

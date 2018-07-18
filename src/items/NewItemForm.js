@@ -30,10 +30,10 @@ class NewItemForm extends Component<Props> {
         <Field
           name="name"
           type="text"
-          label="Item name"
+          label="Nazwa"
           required
           component={SearchInput}
-          placeholder="Type to search previous or add new..."
+          placeholder="Zacznij wpisywać, aby przeszukać poprzednio dodane rzeczy lub dodać nowe..."
           onResultSelect={onResultSelect}
           onItemDelete={onItemDelete}
         />
@@ -43,7 +43,7 @@ class NewItemForm extends Component<Props> {
           disabled={submitting}
           color="blue"
         >
-          {submitting ? 'Submitting...' : 'Add'}
+          {submitting ? 'Wysyłanie...' : 'Dodaj'}
         </Form.Button>
       </Form>
     );
@@ -53,7 +53,7 @@ class NewItemForm extends Component<Props> {
 const validateItemForm = (values: Object) => {
   const errors = {};
   if (!values.name) {
-    errors.name = 'Required';
+    errors.name = 'Pole wymagane';
   }
   return errors;
 };

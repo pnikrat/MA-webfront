@@ -20,48 +20,48 @@ class SignupForm extends Component<Props> {
         <Field
           name="email"
           type="email"
-          label="Email address"
+          label="Adres email"
           required
           component={Input}
-          placeholder="your-mail@domain.com"
+          placeholder="mail@domain.com"
         />
         <Field
           name="password"
           type="password"
-          label="Password"
+          label="Hasło"
           required
           component={Input}
-          placeholder="Password"
+          placeholder="Hasło"
         />
         <Field
           name="passwordConfirmation"
           type="password"
-          label="Password confirmation"
+          label="Potwierdź hasło"
           required
           component={Input}
-          placeholder="Password confirmation"
+          placeholder="Potwierdź hasło"
         />
         <Field
           name="firstName"
           type="text"
-          label="First name"
+          label="Imię"
           required
           component={Input}
-          placeholder="First name"
+          placeholder="Imię"
         />
         <Field
           name="lastName"
           type="text"
-          label="Last name"
+          label="Nazwisko"
           component={Input}
-          placeholder="Last name"
+          placeholder="Nazwisko"
         />
         <Form.Button
           type="submit"
           disabled={submitting}
           color="blue"
         >
-          {submitting ? 'Submitting...' : 'Sign up'}
+          {submitting ? 'Wysyłanie...' : 'Zarejestruj się'}
         </Form.Button>
       </Form>
     );
@@ -71,18 +71,18 @@ class SignupForm extends Component<Props> {
 const validate = (values) => {
   const errors = {};
   if (!values.firstName) {
-    errors.firstName = 'Required';
+    errors.firstName = 'Pole wymagane';
   }
   if (!values.email) {
-    errors.email = 'Required';
+    errors.email = 'Pole wymagane';
   }
   if (values.password !== values.passwordConfirmation) {
-    errors.passwordConfirmation = 'Passwords do not match';
+    errors.passwordConfirmation = 'Hasła nie są takie same';
   }
   if (!values.password) {
-    errors.password = 'Required';
+    errors.password = 'Pole wymagane';
   } else if (values.password.length < 6) {
-    errors.password = 'Minimum of 6 characters';
+    errors.password = 'Co najmniej 6 znaków';
   }
   return errors;
 };

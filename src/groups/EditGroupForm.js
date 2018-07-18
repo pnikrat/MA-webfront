@@ -16,7 +16,7 @@ class EditGroupForm extends Component<Props> {
   render() {
     return (
       <GroupsFormCore
-        submitText="Edit"
+        submitText="Edytuj"
         {...this.props}
       />
     );
