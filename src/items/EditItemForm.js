@@ -33,16 +33,16 @@ class EditItemForm extends Component<Props> {
         <Field
           name="name"
           type="text"
-          label="Item name"
+          label="Nazwa"
           required
           component={Input}
-          placeholder="Item name..."
+          placeholder="Nazwa..."
         />
         <ItemsFormCore />
         { initialValues.aasm_state === 'missing' &&
           <Field
             name="list_id"
-            label="Item list"
+            label="Przynależna lista"
             control="select"
             component={Input}
           >

@@ -19,13 +19,13 @@ class NewListForm extends Component<Props> {
     return (
       <Form onSubmit={handleSubmit}>
         { error && <Message negative>{error}</Message> }
-        <ListsFormCore placeholder="My new shopping list" />
+        <ListsFormCore placeholder="Nazwa nowej listy zakupów" />
         <Form.Button
           type="submit"
           disabled={submitting}
           color="blue"
         >
-          {submitting ? 'Submitting...' : 'Create'}
+          {submitting ? 'Wysyłanie...' : 'Stwórz'}
         </Form.Button>
       </Form>
     );
@@ -35,7 +35,7 @@ class NewListForm extends Component<Props> {
 const validateListForm = (values: Object) => {
   const errors = {};
   if (!values.name) {
-    errors.name = 'Required';
+    errors.name = 'Pole wymagane';
   }
   return errors;
 };

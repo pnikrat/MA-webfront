@@ -19,7 +19,8 @@ const GroupsFormCore = ({
     <Field
       name="name"
       type="text"
-      label="Group name"
+      label="Nazwa grupy"
+      dataCy="group-name-input"
       required
       component={Input}
       placeholder={placeholder}
@@ -29,7 +30,7 @@ const GroupsFormCore = ({
       disabled={submitting}
       color="blue"
     >
-      {submitting ? 'Submitting...' : submitText}
+      {submitting ? 'Wysyłanie...' : submitText}
     </Form.Button>
   </Form>
 );

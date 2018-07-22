@@ -14,8 +14,8 @@ class NewGroupForm extends Component<Props> {
   render() {
     return (
       <GroupsFormCore
-        placeholder="Enter the name of your new group"
-        submitText="Create"
+        placeholder="Wprowadź nazwę swojej nowej grupy"
+        submitText="Stwórz"
         {...this.props}
       />
     );
@@ -25,7 +25,7 @@ class NewGroupForm extends Component<Props> {
 const validateGroupForm = (values: Object) => {
   const errors = {};
   if (!values.name) {
-    errors.name = 'Required';
+    errors.name = 'Pole wymagane';
   }
   return errors;
 };

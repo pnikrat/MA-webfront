@@ -29,9 +29,9 @@ class SignupContainer extends Component<Props> {
     return (
       currentUser.isSignedIn ? <Redirect to="/" /> :
       <SignupFormWithAuth
-        headerText="Create an account"
+        headerText="Stwórz konto"
         path="/signin"
-        linkName="Already have an account?"
+        linkName="Posiadasz już konto?"
         errorCode={422}
         redirect={redirect}
         sendAuthRequest={sendRegistrationRequest}

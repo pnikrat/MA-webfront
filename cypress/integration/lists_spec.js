@@ -10,7 +10,7 @@ describe('Lists module', () => {
     });
 
     it('shows shopping lists dashboard on home page with new list form', () => {
-      cy.contains('Create shopping list');
+      cy.get('[data-cy=new-list-form-header]');
       cy.url().should('equal', `${Cypress.env('baseUrl')}/`);
     });
 
@@ -25,10 +25,10 @@ describe('Lists module', () => {
 
     it('can edit newly added shopping list', () => {
       cy.get('.list-segment').last().within(() => {
-        cy.contains('Edit').click();
+        cy.get('[data-cy=list-edit-button]').click();
       });
       cy.get('.modal').within(() => {
-        cy.contains('Edit list');
+        cy.contains('[data-cy=modal-header]', 'Edytuj listę zakupów');
         cy.get('input[name=name]').should('have.value', 'Lidl');
         cy.get('input[name=name]').clear().type('Piotr i Pawel');
         cy.get('button[type=submit]').click();
@@ -52,8 +52,8 @@ describe('Lists module', () => {
         const numberOfLists = $el.length;
         cy.get('[data-cy=delete-list-button]').first().click();
         cy.get('.modal').within(() => {
-          cy.contains('Delete shopping list');
-          cy.contains('Yes').click();
+          cy.contains('[data-cy=modal-header]', 'Usuń listę zakupów');
+          cy.get('[data-cy=accept-modal]').click();
         });
         cy.get('.list-segment').should('have.length', numberOfLists - 1);
       });
@@ -64,7 +64,7 @@ describe('Lists module', () => {
         const numberOfLists = $el.length;
         cy.get('[data-cy=delete-list-button]').first().click();
         cy.get('.modal').within(() => {
-          cy.contains('No').click();
+          cy.get('[data-cy=dismiss-modal]').click();
         });
         cy.get('.list-segment').should('have.length', numberOfLists);
       });

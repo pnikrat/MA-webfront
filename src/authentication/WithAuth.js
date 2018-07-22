@@ -32,12 +32,12 @@ function withAuth(WrappedForm: React.ComponentType<P>) {
           throw new SubmissionError(errors);
         } else {
           throw new SubmissionError({
-            _error: 'Login failed!'
+            _error: 'Logowanie nieudane!'
           });
         }
       } else {
         throw new SubmissionError({
-          _error: 'Server error, please try again later.'
+          _error: 'Błąd serwera, proszę spróbować później.'
         });
       }
     }

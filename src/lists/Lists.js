@@ -42,10 +42,11 @@ class Lists extends Component<Props> {
               compact
               basic
               color="blue"
+              data-cy="list-edit-button"
               onMouseDown={e => e.stopPropagation()}
               onClick={e => openEditListModal(e, list)}
             >
-              Edit
+              Edytuj
             </Button>
             { this.isCreator(list.user_id) &&
               <Button
@@ -55,7 +56,7 @@ class Lists extends Component<Props> {
                 onMouseDown={e => e.stopPropagation()}
                 onClick={e => openConfirmationModal(e, list.id)}
               >
-                Delete
+                Usuń
               </Button>
             }
           </div>

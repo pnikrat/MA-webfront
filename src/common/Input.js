@@ -11,14 +11,16 @@ type Props = {
   required?: boolean,
   placeholder?: string,
   control?: string,
-  children?: React.Node
+  children?: React.Node,
+  dataCy?: string,
 } & FieldProps
 
 const Input = ({
-  input, label, type, placeholder, required, meta, min, step, control, children,
+  input, label, type, placeholder, required, meta, min, step, control, children, dataCy,
 }: Props) => (
   <div className="form-input">
     <Form.Field
+      data-cy={dataCy}
       {...input}
       control={control || 'input'}
       type={type}

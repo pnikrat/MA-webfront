@@ -81,7 +81,7 @@ function showGroupWithFlash(flash) {
 function redirectBack(response) {
   return (dispatch) => {
     const { invitable_id: groupId, recipient_id: inviteeId } = response.data;
-    const successMessage = inviteeId ? 'User has been added to group' : 'Invitation successfully sent';
+    const successMessage = inviteeId ? 'Użytkownik został dodany do grupy' : 'Wysłano zaproszenie na adres email użytkownika';
     dispatch(apiCall(`/groups/${groupId}`, showGroupWithFlash(successMessage), GET));
   };
 }

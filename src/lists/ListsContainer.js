@@ -66,7 +66,7 @@ class ListsContainer extends Component<Props> {
       <Container>
         <Container className="form-container">
           <Segment>
-            <Header as="h3" className="with-divider">Create shopping list</Header>
+            <Header as="h3" className="with-divider" data-cy="new-list-form-header">Stwórz listę zakupów</Header>
             <NewListForm onSubmit={this.handleListAdd} />
           </Segment>
         </Container>
@@ -82,18 +82,18 @@ class ListsContainer extends Component<Props> {
           onClose={closeListModal}
           objectId={deleteListModalListId}
           onConfirm={this.onListDelete}
-          header="Delete shopping list"
-          negativeButtonText="No"
-          positiveButtonText="Yes"
+          header="Usuń listę zakupów"
+          negativeButtonText="Nie"
+          positiveButtonText="Tak"
         >
-          <p>Deleting the list will delete all shopping items inside. Do you want to continue?</p>
+          <p>Usunięcie listy usunie również wszystkie znajdujące się na niej pozycje. Czy na pewno chcesz kontynuować?</p>
         </RemoveListModal>
         <EditListModal
           isOpen={isEditListModalOpen}
           onClose={closeListModal}
           formReduxName="editList"
-          header="Edit list"
-          negativeButtonText="Discard changes"
+          header="Edytuj listę zakupów"
+          negativeButtonText="Odrzuć zmiany"
         >
           <EditListForm onSubmit={this.onListEdit} />
         </EditListModal>

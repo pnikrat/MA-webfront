@@ -26,7 +26,7 @@ class GroupDetails extends Component<Props> {
     const members = users.sort(this.compare).map(user => this.singleMember(user));
     return (
       <Segment>
-        <Header as="h3" className="with-divider">{group.name}</Header>
+        <Header as="h3" className="with-divider">{`Członkowie ${group.name}`}</Header>
         <List divided relaxed data-cy="members-list">
           {members}
         </List>

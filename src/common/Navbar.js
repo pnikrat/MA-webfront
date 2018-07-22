@@ -17,12 +17,13 @@ class Navbar extends Component<Props> {
     const { currentUser } = this.props;
     return (
       <Menu stackable className="custom-menu">
-        <MenuItem path="/" iconName="home" text="Home" />
+        <MenuItem path="/" iconName="home" text="Strona główna" dataCy="lists-button" />
         { currentUser.isSignedIn &&
           <MenuItem
             path="/groups"
+            dataCy="groups-button"
             iconName="group"
-            text="Groups"
+            text="Grupy"
           />
         }
         { currentUser.isSignedIn &&
@@ -36,8 +37,9 @@ class Navbar extends Component<Props> {
             <MenuItem
               position="right"
               path="/"
+              dataCy="logout-button"
               iconName="sign out"
-              text="Sign out"
+              text="Wylogowanie"
               clickCallback={this.handleSignOut}
             />
           </Menu.Menu>

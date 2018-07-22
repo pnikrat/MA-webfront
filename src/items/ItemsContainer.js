@@ -140,7 +140,7 @@ class ItemsContainer extends Component<Props> {
         </ModuleTitle>
         <Container className="form-container">
           <Segment>
-            <Header as="h3" className="with-divider">Add shopping items</Header>
+            <Header as="h3" className="with-divider" data-cy="add-item-form-header">Dodaj rzeczy do kupienia</Header>
             <NewItemForm
               onSubmit={this.handleItemAdd}
               onResultSelect={this.onResultSelect}
@@ -165,8 +165,8 @@ class ItemsContainer extends Component<Props> {
           isOpen={isEditItemModalOpen}
           onClose={closeEditModal}
           formReduxName="editItem"
-          header="Edit item"
-          negativeButtonText="Discard changes"
+          header="Edytuj rzecz"
+          negativeButtonText="Odrzuć zmiany"
         >
           <EditItemForm onSubmit={this.onItemEdit} />
         </EditItemModal>

@@ -12,16 +12,14 @@ describe('Items module', () => {
     it('can access items view by clicking on shopping list', () => {
       cy.contains('Lidl').click();
       cy.url().should('contain', '/items');
-      cy.get('.ui.header').within(() => {
-        cy.contains('Lidl');
-        cy.contains('Add shopping items');
-      });
+      cy.get('[data-cy=add-item-form-header]');
+      cy.contains('Lidl');
     });
 
     it('can move back to lists overview by clicking Home button', () => {
       cy.contains('Lidl').click();
       cy.url().should('contain', '/items');
-      cy.contains('Home').click();
+      cy.get('[data-cy=lists-button]').click();
       cy.url().should('equal', `${Cypress.env('baseUrl')}/`);
     });
   });
@@ -29,10 +27,8 @@ describe('Items module', () => {
   context('Basic interactions', () => {
     beforeEach(() => {
       cy.contains('Lidl').click();
-      cy.get('.ui.header').within(() => {
-        cy.contains('Lidl');
-        cy.contains('Add shopping items');
-      });
+      cy.get('[data-cy=add-item-form-header]');
+      cy.contains('Lidl');
     });
 
     it('can add new item', () => {
@@ -42,17 +38,17 @@ describe('Items module', () => {
       cy.get('input[name=price]').type('3.40');
       cy.get('button[type=submit]').click();
       cy.contains('Water');
-      cy.contains('Quantity: 6 bottles');
-      cy.contains('3.40$');
+      cy.contains('Ilość: 6 bottles');
+      cy.contains(/3,40\szł/);
     });
 
     it('can edit newly added item', () => {
       cy.get('div[role=listitem]').last().within(() => {
         cy.get('.ui.dropdown').click();
-        cy.contains('Edit item').click();
+        cy.get('[data-cy=edit-item]').click();
       });
       cy.get('.modal').within(() => {
-        cy.contains('Edit item');
+        cy.get('[data-cy=modal-header]');
         cy.get('input[name=name]').clear().type('Edited item');
         cy.get('input[name=quantity]').clear().type('7');
         cy.get('input[name=unit]').clear().type('units');
@@ -62,10 +58,10 @@ describe('Items module', () => {
       cy.get('div[role=listitem]').last().within(() => {
         cy.get('.header').should('contain', 'Edited item');
         cy.get('.header').should('not.contain', 'Water');
-        cy.get('.description').should('contain', 'Quantity: 7 units');
+        cy.get('.description').should('contain', 'Ilość: 7 units');
         cy.get('.description').should('not.contain', '6 bottles');
-        cy.get('.description').should('contain', '10.15$');
-        cy.get('.description').should('not.contain', '3.40$');
+        cy.get('.description .price').contains(/10,15\szł/);
+        cy.get('.description .price').should('not.contain', /3,40\szł/);
       });
     });
 
@@ -77,8 +73,8 @@ describe('Items module', () => {
       });
       cy.get('div[role=listitem]').last().within(() => {
         cy.get('.header').should('contain', 'Apple');
-        cy.get('.description').should('not.contain', 'Quantity');
-        cy.get('.description').should('not.contain', '$');
+        cy.get('.description').should('not.contain', 'Ilość');
+        cy.get('.description .price').should('not.contain', 'zł');
       });
     });
 
@@ -113,7 +109,7 @@ describe('Items module', () => {
       });
       cy.get('.second-sublist').should('exist');
       cy.get('div[role=listitem].missing').should('have.length', 1);
-      cy.contains('Missing in shop');
+      cy.get('[data-cy=missing-items-sublist-header]');
     });
 
     it('can change item state from missing to to_buy', () => {
@@ -128,7 +124,7 @@ describe('Items module', () => {
       cy.get('div[role=listitem]').then(($el) => {
         const numberOfItems = $el.length;
         cy.get('.ui.dropdown').first().click();
-        cy.contains('Delete').click();
+        cy.get('[data-cy=delete-item]').first().click();
         cy.get('div[role=listitem]').should('have.length', numberOfItems - 1);
       });
     });
@@ -137,10 +133,8 @@ describe('Items module', () => {
   context('Mass actions interactions', () => {
     beforeEach(() => {
       cy.contains('Lidl').click();
-      cy.get('.ui.header').within(() => {
-        cy.contains('Lidl');
-        cy.contains('Add shopping items');
-      });
+      cy.get('[data-cy=add-item-form-header]');
+      cy.contains('Lidl');
     });
 
     it('cannot use remove bought items button when there are no bought items', () => {
@@ -185,19 +179,19 @@ describe('Items module', () => {
       });
       cy.get('div[role=listitem].to_buy').should('have.length', 0);
       cy.get('div[role=listitem].missing').should('have.length', 1);
-      cy.contains('Home').click();
+      cy.get('[data-cy=lists-button]').click();
       cy.get('.list-segment').should('have.length', 1);
       cy.contains('Lidl').click();
       cy.get('[data-cy=move-missing-items]').should('have.class', 'disabled');
     });
 
     it('can move items with state missing to another list. Items change state to to_buy', () => {
-      cy.contains('Home').click();
-      cy.contains('Create shopping list');
+      cy.get('[data-cy=lists-button]').click();
+      cy.get('[data-cy=new-list-form-header]');
       cy.get('input[name=name]').type('Biedronka{enter}');
       cy.get('.list-segment').should('have.length', 2);
       cy.contains('Lidl').click();
-      cy.contains('Add shopping items');
+      cy.get('[data-cy=add-item-form-header]');
       cy.get('[data-cy=item-name]').children('input').type('potato{enter}');
       cy.get('div[role=listitem].to_buy').first().within(() => {
         cy.get('[data-cy=mark-missing]').click();
@@ -206,28 +200,28 @@ describe('Items module', () => {
       cy.get('[data-cy=move-missing-items]').click();
       cy.contains('Biedronka').click();
       cy.get('div[role=listitem].missing').should('have.length', 0);
-      cy.contains('Home').click();
+      cy.get('[data-cy=lists-button]').click();
       cy.contains('Biedronka').click();
       cy.get('div[role=listitem].to_buy').should('have.length', 2);
       cy.get('div[role=listitem].missing').should('have.length', 0);
     });
 
     it('cannot move single item that is not missing to another list', () => {
-      cy.contains('Home').click();
+      cy.get('[data-cy=lists-button]').click();
       cy.contains('Biedronka').click();
       cy.get('div[role=listitem].to_buy').first().within(() => {
         cy.get('.ui.dropdown').click();
-        cy.contains('Edit item').click();
+        cy.get('[data-cy=edit-item]').click();
       });
       cy.get('.modal').within(() => {
-        cy.contains('Edit item');
-        cy.get('.content').should('not.contain', 'Item list');
+        cy.get('[data-cy=modal-header]');
+        cy.get('.content').should('not.contain', 'Przynależna lista');
         cy.get('select[name=list_id]').should('not.exist');
       });
     });
 
     it('can move single item with state missing to another list', () => {
-      cy.contains('Home').click();
+      cy.get('[data-cy=lists-button]').click();
       cy.contains('Biedronka').click();
       cy.get('div[role=listitem].to_buy').first().within(() => {
         cy.get('[data-cy=mark-missing]').click();
@@ -235,18 +229,18 @@ describe('Items module', () => {
       cy.get('div[role=listitem].missing').should('have.length', 1);
       cy.get('div[role=listitem].missing').first().within(() => {
         cy.get('.ui.dropdown').click();
-        cy.contains('Edit item').click();
+        cy.get('[data-cy=edit-item]').click();
       });
       cy.get('.modal').within(() => {
-        cy.contains('Edit item');
-        cy.get('.content').should('contain', 'Item list');
+        cy.get('[data-cy=modal-header]');
+        cy.get('.content').should('contain', 'Przynależna lista');
         cy.get('input[name=name]').clear().type('my moved item');
         cy.get('select[name=list_id]').select('Lidl');
         cy.get('button[type=submit]').click();
       });
       cy.get('div[role=listitem].missing').should('have.length', 0);
       cy.root().should('not.contain', 'my moved item');
-      cy.contains('Home').click();
+      cy.get('[data-cy=lists-button]').click();
       cy.contains('Lidl').click();
       cy.contains('my moved item');
     });
@@ -266,24 +260,24 @@ describe('Items module', () => {
       cy.get('input[name=quantity]').type('6');
       cy.get('input[name=price]').type('3.40');
       cy.get('button[type=submit]').click();
-      cy.contains('List value: 20.40$');
+      cy.contains(/Wartość\slisty:\s20,40\szł/);
       cy.get('[data-cy=item-name]').children('input').type('Chicken').blur();
       cy.get('input[name=quantity]').type('0.45');
       cy.get('input[name=price]').type('10.20');
       cy.get('button[type=submit]').click();
-      cy.contains('List value: 24.99$');
+      cy.contains(/Wartość\slisty:\s24,99\szł/);
       cy.get('[data-cy=item-name]').children('input').type('NukaCola').blur();
       cy.get('input[name=quantity]').type('0.20');
       cy.get('input[name=price]').type('30');
       cy.get('button[type=submit]').click();
-      cy.contains('List value: 30.99$');
+      cy.contains(/Wartość\slisty:\s30,99\szł/);
     });
 
     it('items that have price without quantity are added to total multiplied by 1', () => {
       cy.get('[data-cy=item-name]').children('input').type('Singular').blur();
       cy.get('input[name=price]').type('5.01');
       cy.get('button[type=submit]').click();
-      cy.contains('List value: 36.00$');
+      cy.contains(/Wartość\slisty:\s36,00\szł/);
     });
 
     it('items that have quantity without price are not added to total', () => {
@@ -293,23 +287,23 @@ describe('Items module', () => {
       cy.get('.first-sublist').within(() => {
         cy.contains('No price');
       });
-      cy.contains('List value: 36.00$');
+      cy.contains(/Wartość\slisty:\s36,00\szł/);
     });
 
     it('items that are ticked off add to cart value and leave list value unchanged', () => {
       cy.contains('.item.to_buy', 'Water').within(() => {
         cy.get('[data-cy=mark-bought]').click();
       });
-      cy.contains('Cart value: 20.40$');
-      cy.contains('List value: 36.00$');
+      cy.contains(/Wartość\skoszyka:\s20,40\szł/);
+      cy.contains(/Wartość\slisty:\s36,00\szł/);
     });
 
     it('items that are moved from to buy to missing change list value', () => {
       cy.contains('.item.to_buy', 'Chicken').within(() => {
         cy.get('[data-cy=mark-missing]').click();
       });
-      cy.contains('List value: 31.41$');
-      cy.contains('Cart value: 20.40$');
+      cy.contains(/Wartość\slisty:\s31,41\szł/);
+      cy.contains(/Wartość\skoszyka:\s20,40\szł/);
     });
   });
 });

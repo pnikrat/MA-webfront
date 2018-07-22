@@ -16,6 +16,7 @@ function ModalAcceptButton({
       positive
       icon="checkmark"
       labelPosition="right"
+      data-cy="accept-modal"
       content={positiveButtonText}
       onClick={() => onConfirm(objectId)}
     />

@@ -21,13 +21,13 @@ const SingleGroup = ({
       { isCreator &&
         <Popup
           trigger={<Icon name="star" data-cy="creator-icon" className="small-top-margin" />}
-          content="You are group creator"
+          content="Jesteś właścicielem grupy"
         />
       }
       { !isCreator &&
         <Popup
           trigger={<Icon name="user" data-cy="member-icon" className="small-top-margin" />}
-          content="You are group member"
+          content="Jesteś członkiem grupy"
         />
       }
       <p>{group.name}</p>
@@ -42,7 +42,7 @@ const SingleGroup = ({
           onMouseDown={e => e.stopPropagation()}
           onClick={e => onEditClick(e, group.id)}
         >
-          Edit
+          Edytuj
         </Button>
         <Button
           compact
@@ -51,7 +51,7 @@ const SingleGroup = ({
           onMouseDown={e => e.stopPropagation()}
           onClick={e => openConfirmationModal(e, group.id)}
         >
-          Delete
+          Usuń
         </Button>
       </div>
     }
