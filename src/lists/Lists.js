@@ -42,6 +42,7 @@ class Lists extends Component<Props> {
               compact
               basic
               color="blue"
+              data-cy="list-edit-button"
               onMouseDown={e => e.stopPropagation()}
               onClick={e => openEditListModal(e, list)}
             >

@@ -21,7 +21,7 @@ function ConfirmationModal(ModalPositiveButton: React.Component) {
       } = this.props;
       return (
         <Modal size="small" open={isOpen} onClose={onClose}>
-          <Modal.Header>
+          <Modal.Header data-cy="modal-header">
             {header}
           </Modal.Header>
           <Modal.Content>
@@ -30,6 +30,7 @@ function ConfirmationModal(ModalPositiveButton: React.Component) {
           <Modal.Actions>
             <Button
               negative
+              data-cy="dismiss-modal"
               content={negativeButtonText}
               onClick={onClose}
             />
