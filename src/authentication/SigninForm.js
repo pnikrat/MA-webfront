@@ -33,6 +33,7 @@ class SigninForm extends Component<Props> {
         />
         <Form.Button
           type="submit"
+          data-cy="login-button"
           disabled={submitting}
           color="blue"
         >

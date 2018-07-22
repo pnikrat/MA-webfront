@@ -59,6 +59,7 @@ class SignupForm extends Component<Props> {
         <Form.Button
           type="submit"
           disabled={submitting}
+          data-cy="register-button"
           color="blue"
         >
           {submitting ? 'Wysyłanie...' : 'Zarejestruj się'}

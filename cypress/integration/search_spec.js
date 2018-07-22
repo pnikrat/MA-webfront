@@ -9,7 +9,7 @@ describe('Search module', () => {
     cy.contains('Lidl').click();
     cy.get('.ui.header').within(() => {
       cy.contains('Lidl');
-      cy.contains('Add shopping items');
+      cy.contains('Dodaj rzeczy do kupienia');
     });
   });
 

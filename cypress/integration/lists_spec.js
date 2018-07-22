@@ -10,7 +10,7 @@ describe('Lists module', () => {
     });
 
     it('shows shopping lists dashboard on home page with new list form', () => {
-      cy.contains('Create shopping list');
+      cy.contains('Stwórz listę zakupów');
       cy.url().should('equal', `${Cypress.env('baseUrl')}/`);
     });
 

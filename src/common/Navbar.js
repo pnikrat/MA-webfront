@@ -36,6 +36,7 @@ class Navbar extends Component<Props> {
             <MenuItem
               position="right"
               path="/"
+              dataCy="logout-button"
               iconName="sign out"
               text="Wylogowanie"
               clickCallback={this.handleSignOut}

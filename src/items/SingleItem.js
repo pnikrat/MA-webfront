@@ -46,6 +46,7 @@ function SingleItem({ item, onItemStateChange, openEditModal }: Props) {
                 onClick={() => openEditModal(item)}
               />
               <Dropdown.Item
+                data-cy="delete-item"
                 icon="trash outline"
                 text="Usuń"
                 onClick={() => onItemStateChange(item, 'deleted')}

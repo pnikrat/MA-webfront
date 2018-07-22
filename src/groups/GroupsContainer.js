@@ -98,7 +98,7 @@ class GroupsContainer extends Component<Props> {
         { routeGroupId && detailAction === '/invite' &&
           <Segment>
             <Header as="h3" className="with-divider">
-              {`Zaproś nową osobę do: ${currentGroup.name}`}
+              {`Zaproś nową osobę do ${currentGroup.name}`}
             </Header>
             <NewInviteForm
               onSubmit={this.handleInviteCreate}
