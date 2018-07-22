@@ -20,9 +20,9 @@ describe('Search module', () => {
       cy.get('input[name=price]').type('4.45');
       cy.get('button[type=submit]').click();
       cy.get('.first-sublist').contains('Brand new item');
-      // cy.get('.first-sublist').contains('10,00 zł');
+      cy.get('.first-sublist').contains(/10,00\szł/);
       cy.get('.first-sublist').contains('Bread');
-      // cy.get('.first-sublist').contains('4,45 zł');
+      cy.get('.first-sublist').contains(/4,45\szł/);
     });
 
     it('can mark just added items as deleted', () => {
@@ -55,7 +55,7 @@ describe('Search module', () => {
       cy.get('.search-absolute').contains('Bread').click();
       cy.get('[data-cy=item-name]').children('input').should('be.empty');
       cy.get('.first-sublist').contains('Bread');
-      // cy.get('.first-sublist').contains('4,45 zł');
+      cy.get('.first-sublist').contains(/4,45\szł/);
       cy.get('[data-cy=item-name]').children('input').type('Brea');
       cy.get('.search-absolute').should('not.contain', 'Bread');
     });
@@ -70,7 +70,7 @@ describe('Search module', () => {
         cy.get('div[role=listitem]').should('have.length', numberOfItems); // edit instead of add
       });
       cy.get('.first-sublist').contains('bReAD');
-      // cy.get('.first-sublist').contains('3,45 zł');
+      cy.get('.first-sublist').contains(/3,45\szł/);
       cy.get('.first-sublist').contains('Ilość: 2');
     });
 
