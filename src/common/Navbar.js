@@ -17,7 +17,7 @@ class Navbar extends Component<Props> {
     const { currentUser } = this.props;
     return (
       <Menu stackable className="custom-menu">
-        <MenuItem path="/" iconName="home" text="Strona główna" />
+        <MenuItem path="/" iconName="home" text="Strona główna" dataCy="lists-button" />
         { currentUser.isSignedIn &&
           <MenuItem
             path="/groups"

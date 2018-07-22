@@ -41,6 +41,7 @@ function SingleItem({ item, onItemStateChange, openEditModal }: Props) {
           <Dropdown text="">
             <Dropdown.Menu>
               <Dropdown.Item
+                data-cy="edit-item"
                 icon="edit"
                 text="Edytuj"
                 onClick={() => openEditModal(item)}
@@ -56,7 +57,7 @@ function SingleItem({ item, onItemStateChange, openEditModal }: Props) {
         </List.Header>
         <List.Description className="flexed">
           <div>{item.quantity && `Ilość: ${Number(item.quantity).toLocaleString('pl', { maximumFractionDigits: 2 })} ${item.unit || ''}`}</div>
-          <div>{item.price && `${Number(item.price).toLocaleString('pl', { style: 'currency', currency: 'PLN' })}`}</div>
+          <div className="price">{item.price && `${Number(item.price).toLocaleString('pl', { style: 'currency', currency: 'PLN' })}`}</div>
         </List.Description>
       </List.Content>
     </List.Item>

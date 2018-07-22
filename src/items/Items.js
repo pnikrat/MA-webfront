@@ -92,7 +92,7 @@ class Items extends Component<Props> {
         { missingComponents.length > 0 &&
           <Segment className="second-sublist sublist">
             <div className="flexed with-divider">
-              <Header as="h3">Brak w sklepie</Header>
+              <Header as="h3" data-cy="missing-items-sublist-header">Brak w sklepie</Header>
               <Dropdown
                 text="Przenieś brakujące do:"
                 button
