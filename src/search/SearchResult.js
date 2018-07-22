@@ -27,8 +27,8 @@ function SearchResult({
       <div className="content">
         {name && <div className="title">{name}</div>}
         {title && <div className="title">{title}</div>}
-        {price && <div className="price">{price}$</div>}
-        {unit && <div className="description">{quantity} {unit}</div>}
+        {price && <div className="price">{`${Number(price).toLocaleString('pl', { style: 'currency', currency: 'PLN' })}`}</div>}
+        {quantity && <div className="description">{`Ilość: ${Number(quantity).toLocaleString('pl', { maximumFractionDigits: 2 })} ${unit || ''}`}</div>}
         {description && <div className="description">{description}</div>}
       </div>
       <div className="vertically-spaced">
