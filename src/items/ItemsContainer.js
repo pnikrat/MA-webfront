@@ -140,7 +140,7 @@ class ItemsContainer extends Component<Props> {
         </ModuleTitle>
         <Container className="form-container">
           <Segment>
-            <Header as="h3" className="with-divider">Dodaj rzeczy do kupienia</Header>
+            <Header as="h3" className="with-divider" data-cy="add-item-form-header">Dodaj rzeczy do kupienia</Header>
             <NewItemForm
               onSubmit={this.handleItemAdd}
               onResultSelect={this.onResultSelect}

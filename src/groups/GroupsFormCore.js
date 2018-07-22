@@ -20,6 +20,7 @@ const GroupsFormCore = ({
       name="name"
       type="text"
       label="Nazwa grupy"
+      dataCy="group-name-input"
       required
       component={Input}
       placeholder={placeholder}

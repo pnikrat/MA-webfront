@@ -97,7 +97,7 @@ class GroupsContainer extends Component<Props> {
         }
         { routeGroupId && detailAction === '/invite' &&
           <Segment>
-            <Header as="h3" className="with-divider">
+            <Header as="h3" className="with-divider" data-cy="invite-form-header">
               {`Zaproś nową osobę do ${currentGroup.name}`}
             </Header>
             <NewInviteForm
@@ -110,7 +110,7 @@ class GroupsContainer extends Component<Props> {
         }
         { routeGroupId && detailAction === '/edit' &&
           <Segment>
-            <Header as="h3" className="with-divider">{`Edytuj ${currentGroup.name}`}</Header>
+            <Header as="h3" className="with-divider" data-cy="edit-group-form-header">{`Edytuj ${currentGroup.name}`}</Header>
             <EditGroupForm onSubmit={this.handleGroupUpdate} />
           </Segment>
         }

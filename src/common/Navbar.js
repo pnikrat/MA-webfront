@@ -21,6 +21,7 @@ class Navbar extends Component<Props> {
         { currentUser.isSignedIn &&
           <MenuItem
             path="/groups"
+            dataCy="groups-button"
             iconName="group"
             text="Grupy"
           />
