@@ -69,7 +69,7 @@ class SearchContainer extends Component<Props> {
   render() {
     const {
       placeholder, onResultSelect, searchFieldValue,
-      onItemDelete, displayResults, searchResults,
+      onItemDelete, displayResults, searchResults, currentList,
     } = this.props;
     return (
       <div>
@@ -84,6 +84,7 @@ class SearchContainer extends Component<Props> {
         />
         { displayResults &&
           <SearchMenu
+            currentList={currentList}
             results={searchResults}
             onResultSelect={onResultSelect}
             onItemDelete={onItemDelete}

@@ -4,6 +4,7 @@ import { Button, Icon } from 'semantic-ui-react';
 
 type Props = {
   result: Object,
+  isFromCurrentList: boolean,
   onResultSelect: (data: Object) => void,
   onItemDelete: (id: number) => void,
   title?: string,
@@ -11,7 +12,7 @@ type Props = {
 }
 
 function SearchResult({
-  result, onResultSelect, onItemDelete, title, description
+  result, onResultSelect, onItemDelete, title, description, isFromCurrentList,
 }: Props) {
   const {
     id, name, price, unit, quantity
@@ -32,7 +33,7 @@ function SearchResult({
         {description && <div className="description">{description}</div>}
       </div>
       <div className="vertically-spaced">
-        { !title &&
+        { isFromCurrentList &&
           <Button
             circular
             tabIndex="-1"
