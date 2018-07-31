@@ -83,4 +83,55 @@ describe('Search module', () => {
       cy.get('.search-absolute').should('not.be.visible');
     });
   });
+
+  context('Searching through items from other lists', () => {
+    it('adds deleted item to other list. Searches in first one show item from other one', () => {
+      cy.get('[data-cy=lists-button]').click();
+      cy.get('[data-cy=new-list-form-header]');
+      cy.get('input[name=name]').type('Biedronka');
+      cy.get('button[type=submit]').click();
+      cy.contains('.list-segment', 'Biedronka').click();
+      cy.get('[data-cy=add-item-form-header]');
+      cy.get('[data-cy=item-name]').children('input').type('Brocolli');
+      cy.get('input[name=quantity]').type(5);
+      cy.get('input[name=unit]').type('flowers');
+      cy.get('button[type=submit]').click();
+      cy.contains('.item.to_buy', 'Brocolli').within(() => {
+        cy.get('.ui.dropdown').first().click();
+        cy.get('[data-cy=delete-item]').first().click();
+      });
+      cy.get('[data-cy=lists-button]').click();
+      cy.contains('Lidl').click();
+      cy.get('[data-cy=add-item-form-header]');
+      cy.contains('.item.to_buy', 'bReAD').within(() => {
+        cy.get('.ui.dropdown').first().click();
+        cy.get('[data-cy=delete-item]').first().click();
+      });
+      cy.get('.first-sublist').should('not.contain', 'bReAD');
+      cy.get('[data-cy=item-name]').children('input').type('Br');
+      cy.get('.search-absolute').contains('Brocolli');
+      cy.get('.search-absolute').contains('bReAD');
+      cy.get('.search-absolute').contains('Ilość: 2');
+      cy.get('.search-absolute').should('not.contain', 'flowers');
+    });
+
+    it('can click item from another list to add it to current one', () => {
+      cy.get('[data-cy=item-name]').children('input').type('Br');
+      cy.get('.search-absolute').contains('Brocolli').click();
+      cy.get('.first-sublist').contains('Brocolli');
+      cy.get('.first-sublist').should('not.contain', 'flowers');
+      cy.get('[data-cy=item-name]').children('input').type('Br');
+      // uncomment when search has its bug fixed
+      // cy.get('.search-absolute').should('not.contain', 'Brocolli');
+    });
+
+    it('added item is still present on another list', () => {
+      cy.get('[data-cy=lists-button]').click();
+      cy.contains('.list-segment', 'Biedronka').click();
+      cy.get('[data-cy=add-item-form-header]');
+      cy.get('[data-cy=item-name]').children('input').type('Br');
+      cy.get('.search-absolute').contains('Brocolli').click();
+      cy.get('.first-sublist').should('contain', 'flowers');
+    });
+  });
 });
