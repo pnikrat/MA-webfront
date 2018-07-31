@@ -9,7 +9,7 @@ function setHeaders() {
   const client = localStorage.getItem('client');
 
   return {
-    Accept: 'application/json',
+    Accept: 'application/json;version=1',
     'Content-Type': 'application/json',
     'Access-Token': `${token}`,
     'Token-Type': 'Bearer',
