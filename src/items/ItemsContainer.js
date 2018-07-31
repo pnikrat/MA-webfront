@@ -73,9 +73,14 @@ class ItemsContainer extends Component<Props> {
   onResultSelect = (data) => {
     this.resetSearch();
     const listId = this.props.currentList.id;
-    const { id } = data;
-    const stateParams = { state: 'to_buy' };
-    this.props.handleItemEdit(listId, id, stateParams);
+    if (data.list_id !== listId) {
+      const { id, list_id: otherList, ...remainingData } = data;
+      this.props.handleItemAdd(listId, remainingData);
+    } else {
+      const { id } = data;
+      const stateParams = { state: 'to_buy' };
+      this.props.handleItemEdit(listId, id, stateParams);
+    }
   }
 
   onItemEdit = (data) => {
