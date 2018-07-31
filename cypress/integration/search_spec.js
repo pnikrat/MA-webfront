@@ -121,8 +121,8 @@ describe('Search module', () => {
       cy.get('.first-sublist').contains('Brocolli');
       cy.get('.first-sublist').should('not.contain', 'flowers');
       cy.get('[data-cy=item-name]').children('input').type('Br');
-      // uncomment when search has its bug fixed
-      // cy.get('.search-absolute').should('not.contain', 'Brocolli');
+      cy.get('.search-absolute').contains('bReAD');
+      cy.get('.search-absolute').should('not.contain', 'Brocolli');
     });
 
     it('added item is still present on another list', () => {
