@@ -1,0 +1,40 @@
+.jumbo {
+  background: url('../assets/landing_unsplash.jpg') no-repeat;
+  position: relative;
+  min-height: 500px;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  margin-top: -1rem;
+  margin-bottom: 2rem;
+}
+
+.jumbo-content {
+  position: absolute;
+  right: 15%;
+  left: 15%;
+  bottom: 25px;
+  display: flex;
+  flex-direction: column;
+}
+
+.jumbo-header {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 30px;
+}
+
+.jumbo-buttons-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ui.button.jumbo-button {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.feature-segment {
+  margin-bottom: 1rem;
+}
