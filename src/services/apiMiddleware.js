@@ -18,6 +18,15 @@ const apiMiddleware = ({ dispatch }) => next => (action) => {
     dispatch(success(response));
   }).catch((error) => {
     dispatch(apiStop());
+    if (error.message === 'Network Error') {
+      return dispatch(apiThrowError(['Błąd serwera, proszę spróbować później']));
+    }
+    if (error.message === 'timeout of 5000ms exceeded') {
+      return dispatch(apiThrowError(['Serwer zbyt długo nie odpowiada']));
+    }
+    if (error.response === undefined) {
+      return dispatch(apiThrowError(['Brak odpowiedzi z serwera']));
+    }
     let { errors } = error.response.data;
     if (!Array.isArray(errors)) {
       errors = [errors];

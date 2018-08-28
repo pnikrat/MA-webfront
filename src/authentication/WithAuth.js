@@ -26,7 +26,7 @@ function withAuth(WrappedForm: React.ComponentType<P>) {
 
     handleInvalidAuth = (error: Object) => {
       const { errorCode } = this.props;
-      const { response: { status, data: { errors } }, response } = error;
+      const { response: { status, data: { errors } = {} } = {}, response } = error;
       if (response && status === errorCode) {
         if (errors.full_messages) {
           throw new SubmissionError(errors);
